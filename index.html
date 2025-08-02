@@ -516,38 +516,41 @@
         </div>
     </div>
 
-    <script>
-        // User credentials
-        const users = {
-            'rizqi': 'admin',
-            'lilis': 'admin',
-            'adit': 'admin',
-            'dudu': 'admin'
-        };
+<script>
+    // User credentials
+    const users = {
+        'rizqi': 'admin', // Mengganti 'dada' menjadi 'rizqi'
+        'lilis': 'admin',
+        'adit': 'admin',
+        'dudu': 'admin'
+    };
 
-        let currentUser = null;
-        let studentCounter = 0;
-        let attendanceData = [];
-        let attendanceChart = null;
-        let savedStudents = [];
+    let currentUser = null;
+    let studentCounter = 0;
+    let attendanceData = [];
+    let attendanceChart = null;
+    let savedStudents = [];
 
-        // Login functionality
-        function handleLogin(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    // Login functionality
+    function handleLogin(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-            if (users[username] && users[username] === password) {
-                currentUser = username;
-                
-                // Add title based on username
-                let displayName = username;
-                if (username === 'adit') {
-                    displayName = 'Ustad Adit';
-                } else if (username === 'lilis') {
-                    displayName = 'Ustadzah Lilis';
-                } else if (username === 'rizqi') {
-                    displayName = 'Ustad Rizqi';
+        if (users[username] && users[username] === password) {
+            currentUser = username;
+            
+            // Add title based on username
+            let displayName = username;
+            if (username === 'adit') {
+                displayName = 'Ustad Adit';
+            } else if (username === 'lilis') {
+                displayName = 'Ustadzah Lilis';
+            } else if (username === 'rizqi') { // Menambahkan kondisi untuk 'rizqi'
+                displayName = 'Ustad Rizqi';
+            } else if (username === 'dudu') {
+                displayName = 'Ustad Dudu';
+            }
                 
                 document.getElementById('currentUser').textContent = displayName;
                 document.getElementById('loginPage').classList.add('hidden');
@@ -1801,5 +1804,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969116ef270cfd27',t:'MTc1NDE3NDU1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969152ce817f37b5',t:'MTc1NDE3NzAxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
