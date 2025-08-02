@@ -1,0 +1,1510 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Madrasah Diniyah Nurul Yusuf - Akses Terbatas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQWJzZW5zaSBNYWRyYXNhaCBEaW5peWFoIE51cnVsIFl1c3VmIiwic2hvcnRfbmFtZSI6IkFic2Vuc2kgTWFkcmFzYWgiLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiMxMGI5ODEiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTWpRaUlHaGxhV2RvZEQwaU1qUWlJSFpwWlhkQ2IzZzlJakFnTUNBeU5DQXlOQ0lnWm1sc2JEMGlJekV3WWprNE1TSStQSEJoZEdnaVpEMGlUVEV5SURKRFFqRXlJREV1TlRNMklERXhMalEySURJdU1EUWdNVEV1TkRZZ01pNDFORU14TVM0ME5pQXpMakEwSURFeUlETWdNVElnTTBNeE1pNDFORU14TWk0MU5DQXpMakEwSURFekxqVTBJREl1TURRZ01UTWdNa014TXk0MU5DQXhMalUwSURFeUxqVTBJREVnTVRJZ01VTXhNUzQxTmlBeElERXhJREV1TlRNMklERXdMalUwSURJdU1EUWdNVEFnTWk0MU5FTTVMalEySURNdU1EUWdPUzQxTkNBekxqVTBJRGdnTkVNNElEUXVORFlnT0M0MU5DQTFMalUwSURrZ05rTTVMalUwSURZdU5EWWdNVEFnTnk0MU5DQXhNUzQxTmlBNElERXlJRGhETVRJdU5EWWdPUzQxTkNBeE15QTNMalUwSURFMElEWkRNVFFnTkM0ME5pQXhOQzQxTkNBekxqVTBJREUwSURKRE1UUWdNUzQxTkNBeE15NDFOQ0F4SURFeUlERmFJaTgrUEM5emRtYysifSx7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU5EZ2lJR2hsYVdkb2REMGlORGdpSUhacFpYZENiM2c5SWpBZ01DQTBPQ0EwT0NJZ1ptbHNiRDBpSXpFd1lqazRNU0krUEhCaGRHZ2daRDBpVFRJMElEUkRNalFnTVM0NU5qZ2dNak11TURNeUlERWdNakVnTVVNeE9TNHdOamdnTVNBeE5pNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdU9UWTRJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiNDh4NDgiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+    <meta name="theme-color" content="#10b981">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .access-code { 
+            background: linear-gradient(45deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Offline indicator styles */
+        .offline-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #f59e0b;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .offline-indicator.show {
+            transform: translateY(0);
+        }
+        
+        .offline-indicator.online {
+            background: #10b981;
+        }
+        
+        /* PWA install button */
+        .install-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .install-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+        
+        .install-button.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen">
+    <!-- Offline/Online Indicator -->
+    <div id="offlineIndicator" class="offline-indicator">
+        <span id="connectionStatus">Tidak ada koneksi internet - Mode offline aktif</span>
+    </div>
+    
+    <!-- PWA Install Button -->
+    <button id="installButton" class="install-button">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Install App
+    </button>
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-emerald-800 mb-2">Login Guru</h1>
+                <h2 class="text-xl font-semibold text-emerald-600">Madrasah Diniyah Nurul Yusuf</h2>
+                <div class="w-16 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                        placeholder="Masukkan username"
+                        required
+                    >
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                        placeholder="Masukkan password"
+                        required
+                    >
+                </div>
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
+                >
+                    Login
+                </button>
+            </form>
+            
+
+            
+            <div class="mt-4 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                <p class="text-xs text-emerald-700 text-center">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                    </svg>
+                    Link ini dapat dibagikan kepada guru lain
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="hidden">
+        <!-- Navigation -->
+        <nav class="bg-emerald-600 text-white p-4 shadow-lg">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <div>
+                        <h1 class="text-xl font-bold">Madrasah Diniyah Nurul Yusuf</h1>
+                        <p class="text-emerald-100 text-sm">Ahlan wa sahlan, <span id="currentUser"></span></p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button 
+                        onclick="showPage('attendance')" 
+                        id="attendanceBtn"
+                        class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 transition-colors"
+                    >
+                        Absensi
+                    </button>
+                    <button 
+                        onclick="showPage('dashboard')" 
+                        id="dashboardBtn"
+                        class="px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
+                    >
+                        Rekapan Absen
+                    </button>
+                    <button 
+                        onclick="logout()" 
+                        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors"
+                    >
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Attendance Page -->
+        <div id="attendancePage" class="container mx-auto px-4 py-8">
+            <!-- Date Selection -->
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3 text-center">Pilih Tanggal Absensi</h3>
+                <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-medium text-gray-700">Tanggal:</label>
+                        <input 
+                            type="date" 
+                            id="attendanceDate" 
+                            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                            onchange="updateDateDisplay()"
+                        >
+                    </div>
+                    <div class="text-center">
+                        <p class="text-lg font-medium text-gray-700" id="displayDate"></p>
+                        <p class="text-sm text-gray-500" id="dayName"></p>
+                    </div>
+                    <button 
+                        onclick="setToday()" 
+                        class="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors text-sm font-medium"
+                    >
+                        Hari Ini
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Student Form -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Tambah Siswa Baru
+                </h3>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input 
+                        type="text" 
+                        id="studentName" 
+                        placeholder="Nama Siswa" 
+                        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-sm"
+                    >
+                    <input 
+                        type="text" 
+                        id="studentClass" 
+                        placeholder="Kelas" 
+                        class="w-full sm:w-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-sm"
+                    >
+                    <button 
+                        onclick="addStudent()" 
+                        class="px-8 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all duration-200 font-semibold text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2 min-w-[120px]"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Tambah
+                    </button>
+                </div>
+            </div>
+
+            <!-- Attendance Table -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-4 bg-emerald-600 text-white">
+                    <h3 class="text-xl font-semibold">Daftar Absensi Siswa</h3>
+                    <p class="text-emerald-100 text-sm mt-1">Data siswa tersimpan otomatis</p>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Hadir</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Izin</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Alpha</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Students will be loaded from localStorage -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Summary and Save Button -->
+            <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <h4 class="font-semibold text-gray-800 mb-2">Ringkasan Absensi</h4>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-emerald-600" id="hadirCount">0</div>
+                            <div class="text-sm text-gray-600">Hadir</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-600" id="izinCount">0</div>
+                            <div class="text-sm text-gray-600">Izin</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-red-600" id="alphaCount">0</div>
+                            <div class="text-sm text-gray-600">Alpha</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button 
+                    onclick="saveAttendance()" 
+                    class="px-8 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-semibold shadow-md"
+                >
+                    Simpan Absensi
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="container mx-auto px-4 py-8 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Rekapan Absen</h2>
+                <p class="text-gray-600">Ringkasan dan analisis kehadiran siswa</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total Siswa</p>
+                            <p class="text-2xl font-semibold text-gray-900" id="totalStudents">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-emerald-100 text-emerald-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total Hadir</p>
+                            <p class="text-2xl font-semibold text-gray-900" id="totalHadir">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total Izin</p>
+                            <p class="text-2xl font-semibold text-gray-900" id="totalIzin">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-red-100 text-red-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total Alpha</p>
+                            <p class="text-2xl font-semibold text-gray-900" id="totalAlpha">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Aktivitas Terbaru</h3>
+                <div id="recentActivity" class="space-y-3">
+                    <!-- Recent activities will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Student Attendance Summary Table -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-800">Rekapan Absensi Per Siswa</h3>
+                        <div class="relative">
+                            <button 
+                                onclick="toggleExportMenu()" 
+                                class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium flex items-center gap-2 shadow-md"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Export Absen
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="exportMenu" class="hidden absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                        Pilih Aplikasi
+                                    </div>
+                                    <button onclick="exportToApp('word')" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 flex items-center gap-3 transition-colors border-b border-gray-50">
+                                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                                            <span class="text-white text-sm font-bold">W</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-medium text-gray-900">Microsoft Word</div>
+                                            <div class="text-xs text-gray-500">Buka langsung di aplikasi Word</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="exportToApp('sheets')" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-green-50 flex items-center gap-3 transition-colors border-b border-gray-50">
+                                        <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center shadow-sm">
+                                            <span class="text-white text-sm font-bold">G</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-medium text-gray-900">Google Sheets</div>
+                                            <div class="text-xs text-gray-500">Buka langsung di Google Sheets</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="exportToApp('excel')" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 flex items-center gap-3 transition-colors border-b border-gray-50">
+                                        <div class="w-10 h-10 bg-emerald-700 rounded-lg flex items-center justify-center shadow-sm">
+                                            <span class="text-white text-sm font-bold">E</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-medium text-gray-900">Microsoft Excel</div>
+                                            <div class="text-xs text-gray-500">Buka langsung di aplikasi Excel</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="exportSummaryData()" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors">
+                                        <div class="w-10 h-10 bg-gray-500 rounded-lg flex items-center justify-center shadow-sm">
+                                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-medium text-gray-900">Download CSV</div>
+                                            <div class="text-xs text-gray-500">Unduh file untuk backup</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User credentials
+        const users = {
+            'dada': 'admin',
+            'lilis': 'admin',
+            'adit': 'admin',
+            'dudu': 'admin'
+        };
+
+        let currentUser = null;
+        let studentCounter = 0;
+        let attendanceData = [];
+        let attendanceChart = null;
+        let savedStudents = [];
+
+        // Login functionality
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username] === password) {
+                currentUser = username;
+                document.getElementById('currentUser').textContent = username;
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                showPage('attendance');
+                initializeApp();
+            } else {
+                alert('Username atau password salah!');
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            currentUser = null;
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Page navigation
+        function showPage(page) {
+            document.getElementById('attendancePage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+            
+            document.getElementById('attendanceBtn').classList.remove('bg-emerald-700');
+            document.getElementById('dashboardBtn').classList.remove('bg-emerald-700');
+            
+            if (page === 'attendance') {
+                document.getElementById('attendancePage').classList.remove('hidden');
+                document.getElementById('attendanceBtn').classList.add('bg-emerald-700');
+            } else if (page === 'dashboard') {
+                document.getElementById('dashboardPage').classList.remove('hidden');
+                document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
+                updateDashboard();
+            }
+        }
+
+        // Initialize app
+        function initializeApp() {
+            setToday();
+            loadSavedData();
+            loadStudentsFromStorage();
+            updateSummary();
+        }
+
+        // Load saved data from localStorage for current user
+        function loadSavedData() {
+            const saved = localStorage.getItem(`attendanceData_${currentUser}`);
+            if (saved) {
+                attendanceData = JSON.parse(saved);
+            } else {
+                // Initialize empty data for new user
+                attendanceData = [];
+            }
+        }
+
+        // Save data to localStorage with user-specific keys
+        function saveDataToStorage() {
+            localStorage.setItem(`attendanceData_${currentUser}`, JSON.stringify(attendanceData));
+            localStorage.setItem(`savedStudents_${currentUser}`, JSON.stringify(savedStudents));
+            localStorage.setItem(`studentCounter_${currentUser}`, studentCounter.toString());
+        }
+
+        // Load students from localStorage for current user
+        function loadStudentsFromStorage() {
+            const savedStudentsData = localStorage.getItem(`savedStudents_${currentUser}`);
+            const savedCounter = localStorage.getItem(`studentCounter_${currentUser}`);
+            
+            if (savedStudentsData) {
+                savedStudents = JSON.parse(savedStudentsData);
+                studentCounter = savedCounter ? parseInt(savedCounter) : savedStudents.length;
+            } else {
+                // Initialize empty students for new user - each teacher starts fresh
+                savedStudents = [];
+                studentCounter = 0;
+            }
+            renderStudentTable();
+        }
+
+
+
+        // Render student table
+        function renderStudentTable() {
+            const tableBody = document.getElementById('studentTableBody');
+            tableBody.innerHTML = '';
+            
+            savedStudents.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" contenteditable="true" onblur="updateStudentName(${student.id}, this.textContent)">${student.nama}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" contenteditable="true" onblur="updateStudentClass(${student.id}, this.textContent)">${student.kelas}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <input type="radio" name="attendance_${student.id}" value="hadir" class="text-emerald-600 focus:ring-emerald-500" onchange="updateSummary()">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <input type="radio" name="attendance_${student.id}" value="izin" class="text-yellow-600 focus:ring-yellow-500" onchange="updateSummary()">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <input type="radio" name="attendance_${student.id}" value="alpha" class="text-red-600 focus:ring-red-500" onchange="updateSummary()">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="text" placeholder="Keterangan..." class="w-full px-3 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <button onclick="removeStudent(${student.id})" class="text-red-600 hover:text-red-800 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Update student name
+        function updateStudentName(id, newName) {
+            const student = savedStudents.find(s => s.id === id);
+            if (student) {
+                student.nama = newName.trim();
+                saveDataToStorage();
+            }
+        }
+
+        // Update student class
+        function updateStudentClass(id, newClass) {
+            const student = savedStudents.find(s => s.id === id);
+            if (student) {
+                student.kelas = newClass.trim();
+                saveDataToStorage();
+            }
+        }
+
+
+
+        // Set today's date
+        function setToday() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            
+            document.getElementById('attendanceDate').value = `${year}-${month}-${day}`;
+            updateDateDisplay();
+        }
+
+        // Update date display
+        function updateDateDisplay() {
+            const dateInput = document.getElementById('attendanceDate');
+            if (!dateInput.value) return;
+            
+            const selectedDate = new Date(dateInput.value + 'T00:00:00');
+            
+            const dateOptions = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            
+            const dayOptions = { 
+                weekday: 'long'
+            };
+            
+            document.getElementById('displayDate').textContent = 
+                selectedDate.toLocaleDateString('id-ID', dateOptions);
+            document.getElementById('dayName').textContent = 
+                selectedDate.toLocaleDateString('id-ID', dayOptions);
+        }
+
+        // Add new student
+        function addStudent() {
+            const nameInput = document.getElementById('studentName');
+            const classInput = document.getElementById('studentClass');
+            
+            if (!nameInput.value.trim() || !classInput.value.trim()) {
+                alert('Mohon isi nama siswa dan kelas!');
+                return;
+            }
+
+            studentCounter++;
+            const newStudent = {
+                id: studentCounter,
+                nama: nameInput.value.trim(),
+                kelas: classInput.value.trim()
+            };
+            
+            savedStudents.push(newStudent);
+            renderStudentTable();
+            saveDataToStorage();
+            
+            nameInput.value = '';
+            classInput.value = '';
+            alert('Siswa berhasil ditambahkan dan disimpan!');
+        }
+
+        // Remove student
+        function removeStudent(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus siswa ini?')) {
+                savedStudents = savedStudents.filter(student => student.id !== id);
+                renderStudentTable();
+                saveDataToStorage();
+                updateSummary();
+            }
+        }
+
+        // Update attendance summary
+        function updateSummary() {
+            const hadirInputs = document.querySelectorAll('input[value="hadir"]:checked');
+            const izinInputs = document.querySelectorAll('input[value="izin"]:checked');
+            const alphaInputs = document.querySelectorAll('input[value="alpha"]:checked');
+            
+            document.getElementById('hadirCount').textContent = hadirInputs.length;
+            document.getElementById('izinCount').textContent = izinInputs.length;
+            document.getElementById('alphaCount').textContent = alphaInputs.length;
+        }
+
+        // Save attendance
+        function saveAttendance() {
+            const dateInput = document.getElementById('attendanceDate');
+            if (!dateInput.value) {
+                alert('Mohon pilih tanggal absensi terlebih dahulu!');
+                return;
+            }
+            
+            const rows = document.querySelectorAll('#studentTableBody tr');
+            
+            rows.forEach((row, index) => {
+                const student = savedStudents[index];
+                if (!student) return;
+                
+                const attendanceRadios = row.querySelectorAll('input[type="radio"]');
+                const keterangan = row.querySelector('input[type="text"]').value;
+                
+                let status = null;
+                attendanceRadios.forEach(radio => {
+                    if (radio.checked) {
+                        status = radio.value;
+                    }
+                });
+                
+                if (status) {
+                    // Remove existing data for same date and student
+                    attendanceData = attendanceData.filter(data => 
+                        !(data.tanggal === dateInput.value && data.nama === student.nama)
+                    );
+                    
+                    // Add new data
+                    attendanceData.push({
+                        tanggal: dateInput.value,
+                        nama: student.nama,
+                        kelas: student.kelas,
+                        status: status,
+                        keterangan: keterangan
+                    });
+                }
+            });
+            
+            saveDataToStorage();
+            alert(`Absensi untuk tanggal ${document.getElementById('displayDate').textContent} berhasil disimpan!`);
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            updateDashboardStats();
+            updateDashboardTable();
+            updateRecentActivity();
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            const uniqueStudents = [...new Set(attendanceData.map(data => data.nama))];
+            const totalHadir = attendanceData.filter(data => data.status === 'hadir').length;
+            const totalIzin = attendanceData.filter(data => data.status === 'izin').length;
+            const totalAlpha = attendanceData.filter(data => data.status === 'alpha').length;
+            
+            document.getElementById('totalStudents').textContent = savedStudents.length;
+            document.getElementById('totalHadir').textContent = totalHadir;
+            document.getElementById('totalIzin').textContent = totalIzin;
+            document.getElementById('totalAlpha').textContent = totalAlpha;
+        }
+
+        // Update recent activity
+        function updateRecentActivity() {
+            const recentContainer = document.getElementById('recentActivity');
+            const recentData = attendanceData.slice(-5).reverse();
+            
+            recentContainer.innerHTML = '';
+            
+            if (recentData.length === 0) {
+                recentContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Belum ada aktivitas</p>';
+                return;
+            }
+            
+            recentData.forEach(data => {
+                const color = data.status === 'hadir' ? 'emerald' : 
+                             data.status === 'izin' ? 'yellow' : 'red';
+                
+                const activityDiv = document.createElement('div');
+                activityDiv.className = 'flex items-center p-3 bg-gray-50 rounded-lg';
+                activityDiv.innerHTML = `
+                    <div class="w-2 h-2 bg-${color}-500 rounded-full mr-3"></div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">${data.nama} - ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</p>
+                        <p class="text-xs text-gray-500">${data.tanggal}</p>
+                    </div>
+                `;
+                recentContainer.appendChild(activityDiv);
+            });
+        }
+
+
+
+        // Update dashboard table with attendance records
+        function updateDashboardTable() {
+            const tableBody = document.getElementById('dashboardTableBody');
+            tableBody.innerHTML = '';
+            
+            // Sort attendance data by date (newest first)
+            const sortedData = [...attendanceData].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+            
+            // Display all attendance records
+            sortedData.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                
+                // Format date to Indonesian format
+                const date = new Date(record.tanggal + 'T00:00:00');
+                const formattedDate = date.toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit', 
+                    year: 'numeric'
+                });
+                
+                // Status badge styling
+                let statusBadge = '';
+                if (record.status === 'hadir') {
+                    statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Hadir</span>';
+                } else if (record.status === 'izin') {
+                    statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Izin</span>';
+                } else if (record.status === 'alpha') {
+                    statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Alpha</span>';
+                }
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formattedDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${record.nama}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.kelas}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">${statusBadge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.keterangan || '-'}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add message if no attendance data
+            if (attendanceData.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        Belum ada data absensi. Silakan lakukan absensi terlebih dahulu.
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Export summary data
+        function exportSummaryData() {
+            let csvContent = "No,Nama Siswa,Kelas,Total Hadir,Total Izin,Total Alpha,Total Kehadiran,Persentase\n";
+            
+            savedStudents.forEach((student, index) => {
+                const studentAttendance = attendanceData.filter(data => data.nama === student.nama);
+                
+                const hadirCount = studentAttendance.filter(data => data.status === 'hadir').length;
+                const izinCount = studentAttendance.filter(data => data.status === 'izin').length;
+                const alphaCount = studentAttendance.filter(data => data.status === 'alpha').length;
+                const totalKehadiran = hadirCount + izinCount + alphaCount;
+                const persentase = totalKehadiran > 0 ? Math.round((hadirCount / totalKehadiran) * 100) : 0;
+                
+                csvContent += `${index + 1},${student.nama},${student.kelas},${hadirCount},${izinCount},${alphaCount},${totalKehadiran},${persentase}%\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `rekapan_absensi_${currentUser}_nurulyusuf.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+
+
+
+
+        // Toggle export menu
+        function toggleExportMenu() {
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('exportMenu').classList.add('hidden');
+            }
+        });
+
+        // Detect device type
+        function getDeviceType() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            if (/android/i.test(userAgent)) {
+                return 'android';
+            }
+            
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return 'ios';
+            }
+            
+            return 'desktop';
+        }
+
+        // Export to specific app
+        function exportToApp(appType) {
+            // Hide menu
+            document.getElementById('exportMenu').classList.add('hidden');
+            
+            // Prepare summary data
+            const csvData = generateSummaryCSV();
+            const deviceType = getDeviceType();
+            
+            // Try to open the app with data
+            if (appType === 'word') {
+                openWordApp(csvData, deviceType);
+            } else if (appType === 'sheets') {
+                openSheetsApp(csvData, deviceType);
+            } else if (appType === 'excel') {
+                openExcelApp(csvData, deviceType);
+            }
+        }
+
+        // Generate summary CSV data
+        function generateSummaryCSV() {
+            let csvContent = "No,Nama Siswa,Kelas,Total Hadir,Total Izin,Total Alpha,Total Kehadiran,Persentase\n";
+            
+            savedStudents.forEach((student, index) => {
+                const studentAttendance = attendanceData.filter(data => data.nama === student.nama);
+                
+                const hadirCount = studentAttendance.filter(data => data.status === 'hadir').length;
+                const izinCount = studentAttendance.filter(data => data.status === 'izin').length;
+                const alphaCount = studentAttendance.filter(data => data.status === 'alpha').length;
+                const totalKehadiran = hadirCount + izinCount + alphaCount;
+                const persentase = totalKehadiran > 0 ? Math.round((hadirCount / totalKehadiran) * 100) : 0;
+                
+                csvContent += `${index + 1},${student.nama},${student.kelas},${hadirCount},${izinCount},${alphaCount},${totalKehadiran},${persentase}%\n`;
+            });
+            
+            return csvContent;
+        }
+
+
+
+        // Open Microsoft Word
+        function openWordApp(csvData, deviceType) {
+            // Convert CSV to basic table format for Word
+            const lines = csvData.split('\n').filter(line => line.trim());
+            const tableData = lines.map(line => line.split(',').join('\t')).join('\n');
+            
+            // Copy data to clipboard first
+            copyToClipboard(tableData);
+            
+            if (deviceType === 'android') {
+                showExportMessage('Membuka Microsoft Word...');
+                
+                // Multiple attempts to open Word
+                const wordUrls = [
+                    'intent://create#Intent;scheme=ms-word;package=com.microsoft.office.word;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.microsoft.office.word;end',
+                    'intent://open#Intent;action=android.intent.action.VIEW;type=application/vnd.openxmlformats-officedocument.wordprocessingml.document;package=com.microsoft.office.word;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.microsoft.office.word;end',
+                    'ms-word://new',
+                    'ms-word://',
+                    'microsoft-word://new'
+                ];
+                
+                tryOpenApp(wordUrls, 'https://play.google.com/store/apps/details?id=com.microsoft.office.word');
+                
+            } else if (deviceType === 'ios') {
+                showExportMessage('Membuka Microsoft Word...');
+                
+                const wordUrls = [
+                    'ms-word://new',
+                    'ms-word://',
+                    'microsoft-word://new',
+                    'microsoft-word://'
+                ];
+                
+                tryOpenApp(wordUrls, 'https://apps.apple.com/app/microsoft-word/id586447913');
+                
+            } else {
+                // Desktop - open Word Online
+                showExportMessage('Membuka Word Online...');
+                window.open('https://office.live.com/start/Word.aspx', '_blank');
+                
+                setTimeout(() => {
+                    showSuccessMessage('Data sudah disalin ke clipboard! Paste di Word yang sudah terbuka dengan Ctrl+V');
+                }, 1000);
+            }
+        }
+
+        // Open Google Sheets
+        function openSheetsApp(csvData, deviceType) {
+            // Copy data to clipboard first
+            copyToClipboard(csvData);
+            
+            if (deviceType === 'android') {
+                showExportMessage('Membuka Google Sheets...');
+                
+                const sheetsUrls = [
+                    'intent://docs.google.com/spreadsheets/create#Intent;scheme=https;package=com.google.android.apps.docs.editors.sheets;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.docs.editors.sheets;end',
+                    'intent://create#Intent;action=android.intent.action.VIEW;package=com.google.android.apps.docs.editors.sheets;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.docs.editors.sheets;end',
+                    'googlesheets://create',
+                    'googlesheets://',
+                    'googledocs-sheets://create'
+                ];
+                
+                tryOpenApp(sheetsUrls, 'https://play.google.com/store/apps/details?id=com.google.android.apps.docs.editors.sheets');
+                
+            } else if (deviceType === 'ios') {
+                showExportMessage('Membuka Google Sheets...');
+                
+                const sheetsUrls = [
+                    'googlesheets://create',
+                    'googlesheets://',
+                    'googledocs-sheets://create',
+                    'googledocs-sheets://'
+                ];
+                
+                tryOpenApp(sheetsUrls, 'https://apps.apple.com/app/google-sheets/id842849113');
+                
+            } else {
+                // Desktop - open Google Sheets web
+                showExportMessage('Membuka Google Sheets...');
+                window.open('https://sheets.google.com/create', '_blank');
+                
+                setTimeout(() => {
+                    showSuccessMessage('Data sudah disalin ke clipboard! Paste di Google Sheets yang sudah terbuka dengan Ctrl+V');
+                }, 1000);
+            }
+        }
+
+        // Open Microsoft Excel
+        function openExcelApp(csvData, deviceType) {
+            // Copy data to clipboard first
+            copyToClipboard(csvData);
+            
+            if (deviceType === 'android') {
+                showExportMessage('Membuka Microsoft Excel...');
+                
+                const excelUrls = [
+                    'intent://create#Intent;scheme=ms-excel;package=com.microsoft.office.excel;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.microsoft.office.excel;end',
+                    'intent://open#Intent;action=android.intent.action.VIEW;type=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;package=com.microsoft.office.excel;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.microsoft.office.excel;end',
+                    'ms-excel://new',
+                    'ms-excel://',
+                    'microsoft-excel://new'
+                ];
+                
+                tryOpenApp(excelUrls, 'https://play.google.com/store/apps/details?id=com.microsoft.office.excel');
+                
+            } else if (deviceType === 'ios') {
+                showExportMessage('Membuka Microsoft Excel...');
+                
+                const excelUrls = [
+                    'ms-excel://new',
+                    'ms-excel://',
+                    'microsoft-excel://new',
+                    'microsoft-excel://'
+                ];
+                
+                tryOpenApp(excelUrls, 'https://apps.apple.com/app/microsoft-excel/id586683407');
+                
+            } else {
+                // Desktop - open Excel Online
+                showExportMessage('Membuka Excel Online...');
+                window.open('https://office.live.com/start/Excel.aspx', '_blank');
+                
+                setTimeout(() => {
+                    showSuccessMessage('Data sudah disalin ke clipboard! Paste di Excel yang sudah terbuka dengan Ctrl+V');
+                }, 1000);
+            }
+        }
+
+        // Helper function to try opening apps with multiple URLs
+        function tryOpenApp(urls, fallbackUrl) {
+            let currentIndex = 0;
+            let appOpened = false;
+            
+            function attemptOpen() {
+                if (currentIndex >= urls.length) {
+                    // All attempts failed, open fallback
+                    if (!appOpened) {
+                        setTimeout(() => {
+                            window.open(fallbackUrl, '_blank');
+                            showSuccessMessage('Aplikasi tidak ditemukan. Membuka store untuk download...');
+                        }, 500);
+                    }
+                    return;
+                }
+                
+                const url = urls[currentIndex];
+                
+                // Try different methods based on URL type
+                if (url.startsWith('intent://')) {
+                    // Android intent
+                    window.location.href = url;
+                    
+                    // Check if it worked after a delay
+                    setTimeout(() => {
+                        if (!document.hidden && !appOpened) {
+                            currentIndex++;
+                            attemptOpen();
+                        } else {
+                            appOpened = true;
+                            showSuccessMessage('Aplikasi terbuka! Data sudah disalin, silakan paste.');
+                        }
+                    }, 1500);
+                    
+                } else {
+                    // URL scheme
+                    const startTime = Date.now();
+                    
+                    // Create invisible iframe
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.style.width = '1px';
+                    iframe.style.height = '1px';
+                    iframe.src = url;
+                    
+                    document.body.appendChild(iframe);
+                    
+                    // Also try direct window location as backup
+                    setTimeout(() => {
+                        if (!appOpened) {
+                            window.location.href = url;
+                        }
+                    }, 100);
+                    
+                    // Check if app opened
+                    setTimeout(() => {
+                        const timeElapsed = Date.now() - startTime;
+                        
+                        // Remove iframe
+                        if (iframe.parentNode) {
+                            document.body.removeChild(iframe);
+                        }
+                        
+                        // If page became hidden or took long time, app likely opened
+                        if (document.hidden || timeElapsed > 2000) {
+                            if (!appOpened) {
+                                appOpened = true;
+                                showSuccessMessage('Aplikasi terbuka! Data sudah disalin, silakan paste.');
+                            }
+                        } else if (!appOpened) {
+                            // Try next URL
+                            currentIndex++;
+                            attemptOpen();
+                        }
+                    }, 2000);
+                }
+            }
+            
+            // Start the process
+            attemptOpen();
+            
+            // Fallback timer - if nothing worked after 8 seconds
+            setTimeout(() => {
+                if (!appOpened && currentIndex >= urls.length) {
+                    window.open(fallbackUrl, '_blank');
+                    showSuccessMessage('Membuka store untuk download aplikasi...');
+                }
+            }, 8000);
+        }
+        
+        // Helper function to copy data to clipboard
+        function copyToClipboard(data) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(data).catch(() => {
+                    // Fallback for older browsers
+                    fallbackCopyToClipboard(data);
+                });
+            } else {
+                fallbackCopyToClipboard(data);
+            }
+        }
+        
+        // Fallback copy function
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Fallback: Could not copy text: ', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Show export message
+        function showExportMessage(message) {
+            // Create temporary message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fixed top-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2';
+            messageDiv.innerHTML = `
+                <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                ${message}
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Remove message after 3 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 3000);
+        }
+        
+        // Show success message
+        function showSuccessMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2';
+            messageDiv.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                ${message}
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 4000);
+        }
+
+        // Add visibility change detection for better app detection
+        let visibilityChangeDetected = false;
+        
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                visibilityChangeDetected = true;
+            }
+        });
+        
+        // Add page focus/blur detection
+        let pageFocused = true;
+        
+        window.addEventListener('blur', function() {
+            pageFocused = false;
+        });
+        
+        window.addEventListener('focus', function() {
+            pageFocused = true;
+        });
+
+        // PWA and Offline functionality
+        let deferredPrompt;
+        let isOnline = navigator.onLine;
+        
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // Register service worker with inline code
+                const swCode = `
+                    const CACHE_NAME = 'absensi-madrasah-v1';
+                    const urlsToCache = [
+                        './',
+                        'https://cdn.tailwindcss.com',
+                        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+                    ];
+
+                    self.addEventListener('install', function(event) {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(function(cache) {
+                                    return cache.addAll(urlsToCache);
+                                })
+                        );
+                    });
+
+                    self.addEventListener('fetch', function(event) {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(function(response) {
+                                    if (response) {
+                                        return response;
+                                    }
+                                    return fetch(event.request);
+                                }
+                            )
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallButton();
+        });
+
+        function showInstallButton() {
+            const installButton = document.getElementById('installButton');
+            installButton.classList.add('show');
+            
+            installButton.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    
+                    if (outcome === 'accepted') {
+                        hideInstallButton();
+                    }
+                    deferredPrompt = null;
+                }
+            });
+        }
+
+        function hideInstallButton() {
+            const installButton = document.getElementById('installButton');
+            installButton.classList.remove('show');
+        }
+
+        // Online/Offline Detection
+        function updateConnectionStatus() {
+            const indicator = document.getElementById('offlineIndicator');
+            const statusText = document.getElementById('connectionStatus');
+            
+            if (navigator.onLine) {
+                statusText.textContent = 'Koneksi internet tersambung - Mode online';
+                indicator.classList.add('online');
+                indicator.classList.add('show');
+                
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 3000);
+            } else {
+                statusText.textContent = 'Tidak ada koneksi internet - Mode offline aktif';
+                indicator.classList.remove('online');
+                indicator.classList.add('show');
+            }
+            
+            isOnline = navigator.onLine;
+        }
+
+        // Connection event listeners
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            updateConnectionStatus();
+            
+            // Show install button after 5 seconds if not installed
+            setTimeout(() => {
+                if (!window.matchMedia('(display-mode: standalone)').matches && !deferredPrompt) {
+                    // Check if it's a mobile device
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        showInstallPrompt();
+                    }
+                }
+            }, 5000);
+        });
+
+        function showInstallPrompt() {
+            const installButton = document.getElementById('installButton');
+            installButton.innerHTML = `
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Tambah ke Home Screen
+            `;
+            installButton.classList.add('show');
+            
+            installButton.onclick = function() {
+                showManualInstallInstructions();
+            };
+        }
+
+        function showManualInstallInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
+            let instructions = '';
+            
+            if (isIOS) {
+                instructions = `
+                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+                            <h3 class="text-lg font-semibold mb-4">Install Aplikasi</h3>
+                            <div class="space-y-3 text-sm">
+                                <p>1. Tap tombol Share di Safari</p>
+                                <p>2. Pilih "Add to Home Screen"</p>
+                                <p>3. Tap "Add" untuk install</p>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg">
+                                Mengerti
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (isAndroid) {
+                instructions = `
+                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+                            <h3 class="text-lg font-semibold mb-4">Install Aplikasi</h3>
+                            <div class="space-y-3 text-sm">
+                                <p>1. Tap menu (⋮) di Chrome</p>
+                                <p>2. Pilih "Add to Home screen"</p>
+                                <p>3. Tap "Add" untuk install</p>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg">
+                                Mengerti
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                instructions = `
+                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+                            <h3 class="text-lg font-semibold mb-4">Bookmark Halaman</h3>
+                            <div class="space-y-3 text-sm">
+                                <p>Tekan Ctrl+D (Windows) atau Cmd+D (Mac) untuk bookmark halaman ini agar mudah diakses.</p>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg">
+                                Mengerti
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.body.insertAdjacentHTML('beforeend', instructions);
+            hideInstallButton();
+        }
+
+        // Enhanced localStorage with offline sync
+        function saveDataToStorageEnhanced() {
+            try {
+                const data = {
+                    attendanceData: attendanceData,
+                    savedStudents: savedStudents,
+                    studentCounter: studentCounter,
+                    lastSync: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                localStorage.setItem(`attendanceData_${currentUser}`, JSON.stringify(data.attendanceData));
+                localStorage.setItem(`savedStudents_${currentUser}`, JSON.stringify(data.savedStudents));
+                localStorage.setItem(`studentCounter_${currentUser}`, data.studentCounter.toString());
+                localStorage.setItem(`lastSync_${currentUser}`, data.lastSync);
+                
+                // Show sync status
+                showSyncStatus('Data tersimpan secara lokal', 'success');
+                
+            } catch (error) {
+                showSyncStatus('Gagal menyimpan data', 'error');
+                console.error('Storage error:', error);
+            }
+        }
+
+        function showSyncStatus(message, type) {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `fixed bottom-4 left-4 px-4 py-2 rounded-lg text-white text-sm z-50 ${
+                type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            }`;
+            statusDiv.textContent = message;
+            
+            document.body.appendChild(statusDiv);
+            
+            setTimeout(() => {
+                if (statusDiv.parentNode) {
+                    statusDiv.parentNode.removeChild(statusDiv);
+                }
+            }, 3000);
+        }
+
+        // Override the original saveDataToStorage function
+        function saveDataToStorage() {
+            saveDataToStorageEnhanced();
+        }
+
+        // Add event listeners for attendance radio buttons
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'radio' && e.target.name.startsWith('attendance_')) {
+                updateSummary();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967fafbc57739b9f',t:'MTc1Mzk5MjA3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
