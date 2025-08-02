@@ -519,7 +519,7 @@
     <script>
         // User credentials
         const users = {
-            'dada': 'admin',
+            'rizqi': 'admin',
             'lilis': 'admin',
             'adit': 'admin',
             'dudu': 'admin'
@@ -546,7 +546,8 @@
                     displayName = 'Ustad Adit';
                 } else if (username === 'lilis') {
                     displayName = 'Ustadzah Lilis';
-                }
+                } else if (username === 'rizqi') {
+                    displayName = 'Ustad Rizqi';
                 
                 document.getElementById('currentUser').textContent = displayName;
                 document.getElementById('loginPage').classList.add('hidden');
