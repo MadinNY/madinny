@@ -235,9 +235,11 @@
                     >
                         Absensi
                     </button>
+                    <!-- Tombol Rekapan Absen akan disembunyikan atau dihapus jika fitur dashboard dihilangkan -->
                     <button 
                         id="dashboardBtn"
                         class="px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
+                        style="display: none;"
                     >
                         Rekapan Absen
                     </button>
@@ -412,190 +414,9 @@
                 </div>
             </div>
 
-            <!-- Dashboard Page -->
+            <!-- Dashboard Page (Removed for now) -->
             <div id="dashboardPage" class="container mx-auto px-4 py-8 hidden">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Rekapan Absen</h2>
-                    <p class="text-gray-600">Ringkasan dan analisis kehadiran santri</p>
-                </div>
-
-                <!-- Statistics Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Santri</p>
-                                <p class="text-2xl font-semibold text-gray-900" id="totalStudents">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-emerald-100 text-emerald-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Hadir</p>
-                                <p class="text-2xl font-semibold text-gray-900" id="totalHadir">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Izin</p>
-                                <p class="text-2xl font-semibold text-gray-900" id="totalIzin">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Sakit</p>
-                                <p class="text-2xl font-semibold text-gray-900" id="totalSakit">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-red-100 text-red-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Alpha</p>
-                                <p class="text-2xl font-semibold text-gray-900" id="totalAlpha">0</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Export/Import Buttons -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button 
-                        id="exportDataBtn"
-                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md flex items-center justify-center gap-2 w-full sm:w-auto"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        Ekspor Data
-                    </button>
-                    <input type="file" id="importFileInput" accept=".json" class="hidden">
-                    <button 
-                        id="importDataBtn"
-                        class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-md flex items-center justify-center gap-2 w-full sm:w-auto"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                        </svg>
-                        Impor Data
-                    </button>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Aktivitas Terbaru</h3>
-                    <div id="recentActivity" class="space-y-3">
-                        <!-- Recent activities will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Student Summary Table -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-                    <div class="px-6 py-4 bg-gray-50 border-b">
-                        <h3 class="text-lg font-semibold text-gray-800">Ringkasan Kehadiran Santri</h3>
-                    </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Santri</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Hadir</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Sakit</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Izin</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Alpha</th>
-                                </tr>
-                            </thead>
-                            <tbody id="summaryTableBody" class="bg-white divide-y divide-gray-200">
-                                <!-- Summary data will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Student Attendance Detail Table -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="px-6 py-4 bg-gray-50 border-b">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-lg font-semibold text-gray-800">Rekapan Absensi Per Santri</h3>
-                            <!-- Search Box -->
-                            <div class="flex items-center gap-3">
-                                <div class="relative">
-                                    <input 
-                                        type="text" 
-                                        id="searchInput" 
-                                        placeholder="Cari nama santri, tanggal, atau kelas..." 
-                                        class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-sm w-72 shadow-sm"
-                                    >
-                                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                </div>
-                                <button 
-                                    id="clearSearchBtn"
-                                    class="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium border border-gray-300 shadow-sm"
-                                >
-                                    Reset
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-16">No</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">Tanggal</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Nama Santri</th>
-                                    <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">Kelas</th>
-                                    <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider w-24">Status</th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[150px]">Keterangan</th>
-                                    <th class="px-4 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">Aksi</th>
-                                    <th class="px-4 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider w-24">Feedback</th> <!-- New column for feedback -->
-                                </tr>
-                            </thead>
-                            <tbody id="dashboardTableBody" class="bg-white divide-y divide-gray-200">
-                                <!-- Data will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <!-- Konten dashboard dihapus sementara -->
             </div>
         </div>
 
@@ -823,22 +644,25 @@
 
             function showPage(page) {
                 document.getElementById('attendancePage').classList.add('hidden');
-                document.getElementById('dashboardPage').classList.add('hidden'); // Ensure dashboard is hidden initially
+                // dashboardPageElement tidak lagi diperlukan karena dashboardPage selalu hidden
+                // const dashboardPageElement = document.getElementById('dashboardPage'); 
 
                 document.getElementById('attendanceBtn').classList.remove('bg-emerald-700');
                 document.getElementById('dashboardBtn').classList.remove('bg-emerald-700');
                 
                 if (page === 'attendance') {
                     document.getElementById('attendancePage').classList.remove('hidden');
+                    // dashboardPageElement.classList.add('hidden'); // Tidak lagi diperlukan
                     document.getElementById('attendanceBtn').classList.add('bg-emerald-700');
-                } else if (page === 'dashboard') {
-                    // FIX: This line was incorrectly adding 'hidden', it should remove it.
-                    document.getElementById('dashboardPage').classList.remove('hidden'); 
-                    document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
-                    // updateDashboard() will be called by checkAllDataLoaded
-                    // Pastikan data sudah dimuat sebelum memanggil updateDashboard
-                    checkAllDataLoaded(); 
-                }
+                } 
+                // else if (page === 'dashboard') { // Bagian ini tidak lagi relevan
+                //     console.log("Attempting to show dashboardPage.");
+                //     console.log("dashboardPageElement before removal:", dashboardPageElement.classList.contains('hidden'));
+                //     dashboardPageElement.classList.remove('hidden'); 
+                //     console.log("dashboardPageElement after removal:", dashboardPageElement.classList.contains('hidden'));
+                //     document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
+                //     checkAllDataLoaded(); 
+                // }
             }
 
             // --- Initialization & Data Loading ---
@@ -893,7 +717,7 @@
                     savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     savedStudents.sort((a, b) => a.nama.localeCompare(b.nama));
                     renderStudentTable();
-                    updateDashboardStats(); // Ini bisa diupdate kapan saja karena hanya bergantung pada savedStudents
+                    // updateDashboardStats(); // Tidak lagi diperlukan karena dashboard dihapus
                     studentsLoaded = true;
                     console.log("studentsLoaded set to true:", studentsLoaded);
                     checkAllDataLoaded();
@@ -924,7 +748,7 @@
             function checkAllDataLoaded() {
                 if (studentsLoaded && attendanceLoaded) {
                     console.log("Both students and attendance data loaded. Updating dashboard.");
-                    updateDashboard();
+                    // updateDashboard(); // Tidak lagi diperlukan karena dashboard dihapus
                     const currentDate = document.getElementById('attendanceDate').value;
                     restoreAttendanceState(currentDate);
                 } else {
@@ -1458,7 +1282,7 @@
                 });
             }
 
-            // --- Dashboard & Reporting ---
+            // --- Dashboard & Reporting (Fungsi-fungsi ini tidak lagi dipanggil, tapi tetap ada jika ingin diaktifkan lagi) ---
 
             function updateDashboard() {
                 console.log("Updating Dashboard. Current attendanceData:", attendanceData);
@@ -1977,7 +1801,7 @@
                 
                 // Navigation Buttons
                 document.getElementById('attendanceBtn').addEventListener('click', () => showPage('attendance'));
-                document.getElementById('dashboardBtn').addEventListener('click', () => showPage('dashboard'));
+                // document.getElementById('dashboardBtn').addEventListener('click', () => showPage('dashboard')); // Dihapus sementara
                 document.getElementById('logoutBtn').addEventListener('click', logout);
 
                 // Attendance Page Elements
@@ -1986,12 +1810,12 @@
                 document.getElementById('addStudentBtn').addEventListener('click', addStudent);
                 document.getElementById('saveAttendanceBtn').addEventListener('click', saveAttendance);
 
-                // Dashboard Page Elements
-                document.getElementById('exportDataBtn').addEventListener('click', exportData);
-                document.getElementById('importFileInput').addEventListener('change', handleImportFile);
-                document.getElementById('importDataBtn').addEventListener('click', () => document.getElementById('importFileInput').click()); // Re-attach for clarity
-                document.getElementById('searchInput').addEventListener('keyup', searchAttendance);
-                document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
+                // Dashboard Page Elements (Event listeners ini tidak lagi relevan karena dashboard dihapus)
+                // document.getElementById('exportDataBtn').addEventListener('click', exportData);
+                // document.getElementById('importFileInput').addEventListener('change', handleImportFile);
+                // document.getElementById('importDataBtn').addEventListener('click', () => document.getElementById('importFileInput').click());
+                // document.getElementById('searchInput').addEventListener('keyup', searchAttendance);
+                // document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
 
                 // Event Delegation for dynamically added rows/buttons in Attendance Table
                 document.getElementById('studentTableBody').addEventListener('click', function(event) {
@@ -2013,23 +1837,23 @@
                     }
                 });
 
-                // Event Delegation for dynamically added rows/buttons in Dashboard Table
-                document.getElementById('dashboardTableBody').addEventListener('click', function(event) {
-                    const target = event.target;
-                    const recordId = target.dataset.recordId;
-                    const studentId = target.dataset.studentId;
-                    const studentName = target.dataset.studentName;
-                    const studentClass = target.dataset.studentClass;
-                    const recordTanggal = target.dataset.tanggal;
+                // Event Delegation for dynamically added rows/buttons in Dashboard Table (Dihapus sementara)
+                // document.getElementById('dashboardTableBody').addEventListener('click', function(event) {
+                //     const target = event.target;
+                //     const recordId = target.dataset.recordId;
+                //     const studentId = target.dataset.studentId;
+                //     const studentName = target.dataset.studentName;
+                //     const studentClass = target.dataset.studentClass;
+                //     const recordTanggal = target.dataset.tanggal;
 
-                    if (target.dataset.action === 'edit-attendance') {
-                        editAttendanceRecord(recordId);
-                    } else if (target.dataset.action === 'delete-attendance') {
-                        deleteAttendanceRecord(recordId, studentName, recordTanggal);
-                    } else if (target.dataset.action === 'generate-feedback') {
-                        generateFeedback(studentId, studentName, studentClass);
-                    }
-                });
+                //     if (target.dataset.action === 'edit-attendance') {
+                //         editAttendanceRecord(recordId);
+                //     } else if (target.dataset.action === 'delete-attendance') {
+                //         deleteAttendanceRecord(recordId, studentName, recordTanggal);
+                //     } else if (target.dataset.action === 'generate-feedback') {
+                //         generateFeedback(studentId, studentName, studentClass);
+                //     }
+                // });
 
 
                 if (localStorage.getItem('currentUser')) {
