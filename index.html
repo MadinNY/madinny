@@ -823,8 +823,8 @@
 
             function showPage(page) {
                 document.getElementById('attendancePage').classList.add('hidden');
-                document.getElementById('dashboardPage').classList.add('hidden');
-                
+                document.getElementById('dashboardPage').classList.add('hidden'); // Ensure dashboard is hidden initially
+
                 document.getElementById('attendanceBtn').classList.remove('bg-emerald-700');
                 document.getElementById('dashboardBtn').classList.remove('bg-emerald-700');
                 
@@ -832,9 +832,10 @@
                     document.getElementById('attendancePage').classList.remove('hidden');
                     document.getElementById('attendanceBtn').classList.add('bg-emerald-700');
                 } else if (page === 'dashboard') {
-                    document.getElementById('dashboardPage').classList.remove('hidden');
+                    // FIX: This line was incorrectly adding 'hidden', it should remove it.
+                    document.getElementById('dashboardPage').classList.remove('hidden'); 
                     document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
-                    // updateDashboard() akan dipanggil oleh checkAllDataLoaded
+                    // updateDashboard() will be called by checkAllDataLoaded
                     // Pastikan data sudah dimuat sebelum memanggil updateDashboard
                     checkAllDataLoaded(); 
                 }
