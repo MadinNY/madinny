@@ -655,10 +655,15 @@
             // Login functionality
             async function handleLogin(event) {
                 event.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
+                const username = document.getElementById('username').value.trim(); // Ditambahkan .trim()
+                const password = document.getElementById('password').value.trim(); // Ditambahkan .trim()
+
+                console.log("Attempting login for username:", username);
+                console.log("Password entered:", password);
+                console.log("Stored password for username:", users[username]);
 
                 if (users[username] && users[username] === password) {
+                    console.log("Login credentials matched!");
                     currentUser = username;
                     localStorage.setItem('currentUser', currentUser); // Simpan current user ke localStorage
                     
@@ -678,10 +683,21 @@
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('mainApp').classList.remove('hidden');
                     showPage('attendance');
-                    await initializeAppLogic(); // Panggil logika inisialisasi aplikasi
+                    console.log("UI updated, calling initializeAppLogic...");
+                    try {
+                        await initializeAppLogic(); // Panggil logika inisialisasi aplikasi
+                        console.log("initializeAppLogic completed successfully after login.");
+                    } catch (error) {
+                        console.error("Error during initializeAppLogic after login:", error);
+                        showMessageModal('error', 'Gagal Inisialisasi Aplikasi!', 'Terjadi kesalahan saat menyiapkan aplikasi setelah login. Silakan coba lagi. Error: ' + error.message, 'OK');
+                        // Optionally, revert to login page if app init fails critically
+                        logout();
+                    }
                 } else if (!users[username]) {
+                    console.log("Login failed: Username not found.");
                     showMessageModal('error', 'Login Gagal!', 'Username salah! Silakan periksa kembali username Anda.', 'OK');
                 } else {
+                    console.log("Login failed: Incorrect password.");
                     showMessageModal('error', 'Login Gagal!', 'Password salah! Silakan periksa kembali password Anda.', 'OK');
                 }
             }
@@ -1934,7 +1950,7 @@
             }
 
             // Initial app load (updated for Firebase)
-            window.addEventListener('DOMContentLoaded', () => {
+            window.addEventListener('DOMContentLoaded', async () => { // Ditambahkan 'async'
                 // Check for existing login (still using localStorage for current user for now)
                 if (localStorage.getItem('currentUser')) {
                     currentUser = localStorage.getItem('currentUser');
@@ -1953,7 +1969,15 @@
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('mainApp').classList.remove('hidden');
                     showPage('attendance'); // Default to attendance page
-                    initializeAppLogic(); // Panggil logika inisialisasi aplikasi
+                    try {
+                        await initializeAppLogic(); // Ditambahkan 'await'
+                        console.log("initializeAppLogic completed successfully on DOMContentLoaded.");
+                    } catch (error) {
+                        console.error("Error during initializeAppLogic on DOMContentLoaded:", error);
+                        showMessageModal('error', 'Gagal Memuat Aplikasi!', 'Terjadi kesalahan saat memuat aplikasi. Silakan coba lagi. Error: ' + error.message, 'OK');
+                        // If app init fails on load, revert to login page
+                        logout();
+                    }
                 } else {
                     // If no current user, show login page
                     document.getElementById('loginPage').classList.remove('hidden');
