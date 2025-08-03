@@ -888,11 +888,13 @@
 
                 const studentsColRef = collection(db, `users/${currentUser}/students`);
                 onSnapshot(studentsColRef, (snapshot) => {
+                    console.log("Students onSnapshot fired!");
                     savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     savedStudents.sort((a, b) => a.nama.localeCompare(b.nama));
                     renderStudentTable();
                     updateDashboardStats(); // Ini bisa diupdate kapan saja karena hanya bergantung pada savedStudents
                     studentsLoaded = true;
+                    console.log("studentsLoaded set to true:", studentsLoaded);
                     checkAllDataLoaded();
                     showSyncStatus('Daftar santri diperbarui', 'success');
                 }, (error) => {
@@ -902,9 +904,13 @@
 
                 const attendanceColRef = collection(db, `users/${currentUser}/attendance`);
                 onSnapshot(attendanceColRef, (snapshot) => {
+                    console.log("Attendance onSnapshot fired!");
+                    console.log("Snapshot docs length for attendance:", snapshot.docs.length);
                     attendanceData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     attendanceData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                    console.log("attendanceData after update:", attendanceData);
                     attendanceLoaded = true;
+                    console.log("attendanceLoaded set to true:", attendanceLoaded);
                     checkAllDataLoaded();
                     showSyncStatus('Data absensi diperbarui', 'success');
                 }, (error) => {
@@ -2006,20 +2012,6 @@
                     }
                 });
 
-                // Removed contenteditable blur listener as per simplification
-                // document.getElementById('studentTableBody').addEventListener('blur', function(event) {
-                //     const target = event.target;
-                //     const row = target.closest('tr');
-                //     if (!row) return;
-                //     const studentId = row.dataset.studentId;
-
-                //     if (target.classList.contains('editable-name')) {
-                //         updateStudentName(studentId, target.textContent);
-                //     } else if (target.classList.contains('editable-class')) {
-                //         updateStudentClass(studentId, target.textContent);
-                //     }
-                // }, true); // Use capture phase for blur event
-
                 // Event Delegation for dynamically added rows/buttons in Dashboard Table
                 document.getElementById('dashboardTableBody').addEventListener('click', function(event) {
                     const target = event.target;
@@ -2069,107 +2061,6 @@
                     document.getElementById('username').focus();
                 }
             });
-
-            // This event listener is for the radio buttons, now handled by delegation on studentTableBody
-            // document.addEventListener('change', function(e) {
-            //     if (e.target.type === 'radio' && e.target.name.startsWith('attendance_')) {
-            //         updateSummary();
-            //     }
-            // });
-
-            // ====================================================================
-            // FITUR BARU: GENERATE FEEDBACK DENGAN GEMINI API ✨
-            // ====================================================================
-
-            function showLoadingModal(title = 'Memproses...', message = 'Mohon tunggu sebentar.') {
-                showMessageModal('info', title, message, 'Tutup');
-                document.getElementById('messageModalButton').classList.add('hidden');
-                document.getElementById('messageModalCancelButton').classList.add('hidden');
-                messageModalIcon.innerHTML = `<svg class="animate-spin h-12 w-12 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
-            }
-
-            async function generateFeedback(studentId, studentName, studentClass) {
-                if (!currentUser) {
-                    showMessageModal('error', 'Login Dibutuhkan!', 'Anda harus login untuk menggunakan fitur ini.', 'OK');
-                    return;
-                }
-
-                showLoadingModal('Membuat Pesan Feedback ✨', 'Sedang menganalisis data absensi santri...');
-
-                const studentAttendance = attendanceData.filter(data => data.studentId === studentId);
-                if (studentAttendance.length === 0) {
-                    showMessageModal('error', 'Data Absensi Tidak Ditemukan!', `Tidak ada data absensi untuk santri ${studentName}.`, 'OK');
-                    return;
-                }
-
-                const hadirCount = studentAttendance.filter(data => data.status === 'hadir').length;
-                const sakitCount = studentAttendance.filter(data => data.status === 'sakit').length;
-                const izinCount = studentAttendance.filter(data => data.status === 'izin').length;
-                const alphaCount = studentAttendance.filter(data => data.status === 'alpha').length;
-                const totalRecords = studentAttendance.length;
-
-                const prompt = `Sebagai seorang guru madrasah, buatlah pesan singkat dan membangun untuk orang tua/wali santri bernama ${studentName} (Kelas ${studentClass}) mengenai rekap absensi mereka.
-Total kehadiran: ${hadirCount} kali dari ${totalRecords} catatan.
-Total sakit: ${sakitCount} kali.
-Total izin: ${izinCount} kali.
-Total alpha: ${alphaCount} kali.
-Tekankan pentingnya kehadiran dan berikan semangat. Gunakan bahasa yang sopan dan positif. Jangan terlalu panjang, maksimal 3-4 kalimat.`;
-
-                let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                const payload = { contents: chatHistory };
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                let retryCount = 0;
-                const maxRetries = 3;
-                const baseDelay = 1000;
-
-                while (retryCount < maxRetries) {
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!response.ok) {
-                            if (response.status === 429 && retryCount < maxRetries - 1) {
-                                const delay = baseDelay * Math.pow(2, retryCount);
-                                console.warn(`Rate limit hit. Retrying in ${delay / 1000} seconds...`);
-                                await new Promise(resolve => setTimeout(resolve, delay));
-                                retryCount++;
-                                continue;
-                            } else {
-                                throw new Error(`HTTP error! status: ${response.status}`);
-                            }
-                        }
-
-                        const result = await response.json();
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            const text = result.candidates[0].content.parts[0].text;
-                            showMessageModal('success', 'Pesan Feedback Santri ✨', text, 'OK');
-                        } else {
-                            showMessageModal('error', 'Gagal Membuat Feedback!', 'Tidak dapat menghasilkan pesan feedback. Respon dari AI tidak valid.', 'OK');
-                            console.error('Invalid AI response structure:', result);
-                        }
-                        return;
-                    } catch (error) {
-                        console.error('Error calling Gemini API:', error);
-                        if (retryCount < maxRetries - 1) {
-                            const delay = baseDelay * Math.pow(2, retryCount);
-                            console.warn(`API call failed. Retrying in ${delay / 1000} seconds...`);
-                            await new Promise(resolve => setTimeout(resolve, delay));
-                            retryCount++;
-                        } else {
-                            showMessageModal('error', 'Gagal Membuat Feedback!', 'Terjadi kesalahan saat menghubungi AI. Silakan coba lagi nanti. Error: ' + error.message, 'OK');
-                            return;
-                        }
-                    }
-                }
-            }
         </script>
     </body>
     </html>
