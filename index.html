@@ -646,6 +646,10 @@
             let savedStudents = [];
             let attendanceData = [];
             let studentCounter = 0; // Still used for unique IDs for new students before saving to Firestore
+            
+            // Flags untuk memastikan data sudah dimuat sebelum update dashboard
+            let studentsLoaded = false;
+            let attendanceLoaded = false;
 
             // --- UI Feedback (Messages & Modals) ---
 
@@ -830,7 +834,9 @@
                 } else if (page === 'dashboard') {
                     document.getElementById('dashboardPage').classList.remove('hidden');
                     document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
-                    updateDashboard();
+                    // updateDashboard() akan dipanggil oleh checkAllDataLoaded
+                    // Pastikan data sudah dimuat sebelum memanggil updateDashboard
+                    checkAllDataLoaded(); 
                 }
             }
 
@@ -843,13 +849,12 @@
                 try {
                     if (db) {
                         await setupFirestoreListeners();
-                        // updateSummary() is called by restoreAttendanceState now, which is called by setupFirestoreListeners
                     } else {
                         console.error("Firestore database not initialized, cannot set up listeners.");
                         showMessageModal('error', 'Firestore Belum Siap!', 'Firestore database belum diinisialisasi. Coba refresh halaman atau periksa konfigurasi Firebase Anda.', 'OK');
                     }
                 } catch (error) {
-                    console.error("Error setting up Firestore listeners:", error);
+                    console.error("Error during initializeAppLogic:", error);
                     showMessageModal('error', 'Gagal Sinkronisasi Data!', 'Gagal menyiapkan sinkronisasi data dari cloud. Silakan coba lagi. Error: ' + error.message, 'OK');
                 }
             };
@@ -886,7 +891,9 @@
                     savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     savedStudents.sort((a, b) => a.nama.localeCompare(b.nama));
                     renderStudentTable();
-                    updateDashboardStats();
+                    updateDashboardStats(); // Ini bisa diupdate kapan saja karena hanya bergantung pada savedStudents
+                    studentsLoaded = true;
+                    checkAllDataLoaded();
                     showSyncStatus('Daftar santri diperbarui', 'success');
                 }, (error) => {
                     console.error("Error fetching students:", error);
@@ -897,18 +904,27 @@
                 onSnapshot(attendanceColRef, (snapshot) => {
                     attendanceData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     attendanceData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                    // Add a small delay to ensure attendanceData is fully updated before calling updateDashboard
-                    setTimeout(() => {
-                        updateDashboard();
-                        const currentDate = document.getElementById('attendanceDate').value;
-                        restoreAttendanceState(currentDate);
-                    }, 100); // 100ms delay
+                    attendanceLoaded = true;
+                    checkAllDataLoaded();
                     showSyncStatus('Data absensi diperbarui', 'success');
                 }, (error) => {
                     console.error("Error fetching attendance:", error);
                     showSyncStatus('Gagal memuat data absensi dari cloud. Error: ' + error.message, 'error');
                 });
             }
+
+            // Fungsi ini akan memastikan kedua data (students dan attendance) sudah dimuat
+            function checkAllDataLoaded() {
+                if (studentsLoaded && attendanceLoaded) {
+                    console.log("Both students and attendance data loaded. Updating dashboard.");
+                    updateDashboard();
+                    const currentDate = document.getElementById('attendanceDate').value;
+                    restoreAttendanceState(currentDate);
+                } else {
+                    console.log("Waiting for all data to load. Students loaded:", studentsLoaded, "Attendance loaded:", attendanceLoaded);
+                }
+            }
+
 
             function setToday() {
                 const today = new Date();
@@ -1045,8 +1061,8 @@
                     row.setAttribute('data-student-id', student.id);
                     row.innerHTML = `
                         <td class="px-4 py-4 text-sm text-gray-900 font-medium">${index + 1}</td>
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 editable-name" contenteditable="true" style="background-color: #f9fafb; border-radius: 4px; margin: 2px;">${student.nama}</td>
-                        <td class="px-4 py-4 text-sm text-gray-900 text-center editable-class" contenteditable="true" style="background-color: #f9fafb; border-radius: 4px; margin: 2px;">${student.kelas}</td>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${student.nama}</td>
+                        <td class="px-4 py-4 text-sm text-gray-900 text-center">${student.kelas}</td>
                         <td class="px-4 py-4 text-center">
                             <input type="radio" name="attendance_${student.id}" value="hadir" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 focus:ring-2 attendance-radio">
                         </td>
@@ -1452,7 +1468,7 @@
                 const tableBody = document.getElementById('summaryTableBody');
                 tableBody.innerHTML = '';
                 
-                if (savedStudents.length === 0) {
+                if (!savedStudents || savedStudents.length === 0) {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td colspan="6" class="px-6 py-8 text-center text-gray-500">
@@ -1537,19 +1553,21 @@
             }
 
             async function updateDashboardTable(filteredData = null) {
-                console.log("Updating Dashboard Table. Data to show (filtered or full):", filteredData || attendanceData);
+                console.log("Updating Dashboard Table. Input filteredData:", filteredData);
+                console.log("Updating Dashboard Table. Global attendanceData:", attendanceData);
+
                 const tableBody = document.getElementById('dashboardTableBody');
                 tableBody.innerHTML = '';
                 
                 const dataToShow = filteredData || attendanceData;
                 
                 // Debugging logs for sortedData
-                console.log("Before sorting, dataToShow:", dataToShow);
+                console.log("Before sorting, dataToShow length:", dataToShow.length, "Data:", dataToShow);
                 const sortedData = [...dataToShow].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                console.log("After sorting, sortedData:", sortedData);
+                console.log("After sorting, sortedData length:", sortedData.length, "Data:", sortedData);
 
 
-                if (sortedData.length === 0) {
+                if (!sortedData || sortedData.length === 0) {
                     const message = filteredData !== null ? 'Tidak ada data yang sesuai dengan pencarian.' : 'Belum ada data absensi. Silakan lakukan absensi terlebih dahulu.';
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -1988,18 +2006,19 @@
                     }
                 });
 
-                document.getElementById('studentTableBody').addEventListener('blur', function(event) {
-                    const target = event.target;
-                    const row = target.closest('tr');
-                    if (!row) return;
-                    const studentId = row.dataset.studentId;
+                // Removed contenteditable blur listener as per simplification
+                // document.getElementById('studentTableBody').addEventListener('blur', function(event) {
+                //     const target = event.target;
+                //     const row = target.closest('tr');
+                //     if (!row) return;
+                //     const studentId = row.dataset.studentId;
 
-                    if (target.classList.contains('editable-name')) {
-                        updateStudentName(studentId, target.textContent);
-                    } else if (target.classList.contains('editable-class')) {
-                        updateStudentClass(studentId, target.textContent);
-                    }
-                }, true); // Use capture phase for blur event
+                //     if (target.classList.contains('editable-name')) {
+                //         updateStudentName(studentId, target.textContent);
+                //     } else if (target.classList.contains('editable-class')) {
+                //         updateStudentClass(studentId, target.textContent);
+                //     }
+                // }, true); // Use capture phase for blur event
 
                 // Event Delegation for dynamically added rows/buttons in Dashboard Table
                 document.getElementById('dashboardTableBody').addEventListener('click', function(event) {
