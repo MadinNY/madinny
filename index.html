@@ -6,7 +6,6 @@
     <title>Absensi Madrasah Diniyah Nurul Yusuf</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- MANIFEST INI SUDAH DIPERBAIKI SINTAKSNYA -->
     <link rel="manifest" href="data:application/json;base64,eyJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE5zYjJOdmJpOWpiMjUwWlhKcGJpOWpiMjUwWlhKcGJtRnNaWFFvZEQwaU1qUWlJSFpwWlhkQ2IzZzlJakFnTUNBeU5DQTBPQ0lnWm1sc2JEMGlJekV3WWprNE1TSStQSE5oZEdnZ1pEMGlUUlFJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOimnltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlORGdnSW1obGFXZ29kRDBpTkRnaUlIWnBaWGxDYjNnOUlqQWdNQ0EwT0NBME9DSWdabWxzYkQwZ0l6RXdZams0TVNJK1BITmhkR2dnWkQwaVRUSTBJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOimnltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNalFpSUdsaGFTZG9kRDBpTWpRaUlIWnBaWGxDYjNnOUlqQWdNQ0F5T0NBME9DSWdabWxzYkQwZ0l6RXdZams0TVNJK1BITmhkR2dnWkQwaVRUSTBJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiMTI4eDEyOCIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOimnltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlORGdnSW1obGFXZ29kRDBpTkRnaUlIWnBaWGxDYjNnOUlqQWdNQ0EwT0NBME9DSWdabWxzYkQwZ0l6RXdZams0TVNJK1BITmhkR2dnWkQwaVRUSTBJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiNDh4NDgiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
     <meta name="theme-color" content="#10b981">
     <style>
@@ -235,11 +234,9 @@
                     >
                         Absensi
                     </button>
-                    <!-- Tombol Rekapan Absen akan disembunyikan atau dihapus jika fitur dashboard dihilangkan -->
                     <button 
                         id="dashboardBtn"
                         class="px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
-                        style="display: none;"
                     >
                         Rekapan Absen
                     </button>
@@ -413,23 +410,92 @@
                     <p class="text-sm text-gray-500 text-center mt-3">Data akan tersimpan secara otomatis di cloud</p>
                 </div>
             </div>
+        </div>
 
-            <!-- Dashboard Page (Removed for now) -->
-            <div id="dashboardPage" class="container mx-auto px-4 py-8 hidden">
-                <!-- Konten dashboard dihapus sementara -->
+        <!-- Dashboard Page (REDESIGNED) -->
+        <div id="dashboardPage" class="container mx-auto px-4 py-8 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Dashboard Rekapan</h2>
+                <p class="text-gray-600 mt-1">Analisis dan kelola semua data absensi dari sini.</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-sm font-medium text-gray-500">Total Santri</h4>
+                    <p class="text-3xl font-bold text-gray-800" id="totalStudents">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-sm font-medium text-emerald-600">Total Hadir</h4>
+                    <p class="text-3xl font-bold text-emerald-600" id="totalHadir">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-sm font-medium text-blue-600">Total Sakit</h4>
+                    <p class="text-3xl font-bold text-blue-600" id="totalSakit">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-sm font-medium text-yellow-600">Total Izin</h4>
+                    <p class="text-3xl font-bold text-yellow-600" id="totalIzin">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-sm font-medium text-red-600">Total Alpha</h4>
+                    <p class="text-3xl font-bold text-red-600" id="totalAlpha">0</p>
+                </div>
+            </div>
+
+            <!-- Summary Table Section -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-5 bg-emerald-600 text-white">
+                    <h3 class="text-xl font-semibold">Rekapitulasi Absensi per Santri</h3>
+                    <p class="text-emerald-100 text-sm mt-1">Total akumulasi absensi untuk setiap santri.</p>
+                </div>
+                <!-- Tools and Search Bar -->
+                <div class="p-4 bg-gray-50 border-b border-gray-200">
+                    <div class="flex flex-col md:flex-row gap-4 items-center">
+                        <div class="flex-grow w-full md:w-auto">
+                            <label for="summarySearchInput" class="sr-only">Cari Santri</label>
+                            <div class="relative">
+                                <input type="text" id="summarySearchInput" placeholder="Cari nama atau kelas santri..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                             <button id="clearSummarySearchBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium">Reset</button>
+                             <button id="exportDataBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">Ekspor</button>
+                             <button id="importDataBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">Impor</button>
+                             <input type="file" id="importFileInput" class="hidden" accept=".json">
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Santri</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Kelas</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Hadir</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Sakit</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Izin</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Alpha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Summary data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <script type="module">
             // Import Firebase SDKs
             import { initializeApp as firebaseInitializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-            // Import writeBatch along with other Firestore functions
             import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, query, where, addDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-            // ====================================================================
-            // PENTING: KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
-            // Ini sudah diambil dari gambar yang Anda kirim (IMG_2750.jpg)
-            // ====================================================================
+            // Firebase Config
             const firebaseConfig = {
                 apiKey: "AIzaSyCoSrJb8Gu9wOj85WRcGKfasRqP4BFi1F4",
                 authDomain: "absensi-madinny.firebaseapp.com",
@@ -440,7 +506,7 @@
                 measurementId: "G-PDSVBF7QT6"
             };
 
-            // Inisialisasi Firebase
+            // Firebase Initialization
             let app;
             let db;
             try {
@@ -449,31 +515,21 @@
                 console.log("Firebase initialized successfully.");
             } catch (e) {
                 console.error("Firebase initialization failed:", e);
-                // Menampilkan pesan error yang lebih jelas ke pengguna
-                showMessageModal('error', 'Gagal Inisialisasi Firebase!', 
-                    'Aplikasi tidak dapat terhubung ke Firebase. Ini mungkin karena konfigurasi API Key Anda salah atau Firestore belum diaktifkan di proyek Firebase Anda. Silakan periksa konsol browser (F12) untuk detail lebih lanjut. Error: ' + e.message, 
-                    'OK');
+                showMessageModal('error', 'Gagal Inisialisasi Firebase!', 'Aplikasi tidak dapat terhubung ke Firebase. Periksa konfigurasi API Key atau status Firestore di proyek Firebase Anda.', 'OK');
             }
 
-            // User credentials (tetap digunakan untuk login sementara sebelum Firebase Auth diimplementasikan)
-            const users = {
-                'rizqi': 'admin',
-                'lilis': 'admin',
-                'adit': 'admin',
-                'dudu': 'admin'
-            };
+            // User Credentials
+            const users = { 'rizqi': 'admin', 'lilis': 'admin', 'adit': 'admin', 'dudu': 'admin' };
 
+            // Global State
             let currentUser = null;
             let savedStudents = [];
             let attendanceData = [];
-            let studentCounter = 0; // Still used for unique IDs for new students before saving to Firestore
-            
-            // Flags untuk memastikan data sudah dimuat sebelum update dashboard
             let studentsLoaded = false;
             let attendanceLoaded = false;
+            let deferredPrompt;
 
             // --- UI Feedback (Messages & Modals) ---
-
             const messageModal = document.getElementById('messageModal');
             const messageModalIcon = document.getElementById('messageModalIcon');
             const messageModalTitle = document.getElementById('messageModalTitle');
@@ -486,150 +542,61 @@
                 messageModalBody.textContent = message;
                 messageModalButton.textContent = buttonText;
                 
-                messageModalIcon.innerHTML = '';
-                if (type === 'success') {
-                    messageModalIcon.innerHTML = `<svg class="w-12 h-12 text-emerald-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-                    messageModalButton.className = `message-modal-button success`;
-                } else if (type === 'error') {
-                    messageModalIcon.innerHTML = `<svg class="w-12 h-12 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-                    messageModalButton.className = `message-modal-button error`;
-                } else if (type === 'confirm') {
-                    messageModalIcon.innerHTML = `<svg class="w-12 h-12 text-yellow-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9.247a4.5 4.5 0 000 5.506m0 0l-1.5 1.5m1.5-1.5l1.5 1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-                    messageModalButton.className = `message-modal-button success`;
-                } else if (type === 'info') {
-                    messageModalIcon.innerHTML = `<svg class="animate-spin h-12 w-12 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
-                    messageModalButton.className = `message-modal-button success`;
-                }
-
+                const icons = {
+                    success: `<svg class="w-12 h-12 text-emerald-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                    error: `<svg class="w-12 h-12 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                    confirm: `<svg class="w-12 h-12 text-yellow-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9.247a4.5 4.5 0 000 5.506m0 0l-1.5 1.5m1.5-1.5l1.5 1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
+                };
+                messageModalIcon.innerHTML = icons[type] || '';
+                
+                messageModalButton.className = `message-modal-button ${type === 'error' ? 'error' : 'success'}`;
                 messageModalButton.onclick = onConfirm || hideMessageModal;
 
                 if (type === 'confirm' && cancelButtonText && onCancel) {
                     messageModalCancelButton.textContent = cancelButtonText;
+                    messageModalCancelButton.className = 'message-modal-button error ml-2';
                     messageModalCancelButton.classList.remove('hidden');
                     messageModalCancelButton.onclick = onCancel;
-                    messageModalCancelButton.className = `message-modal-button error ml-2`;
                 } else {
                     messageModalCancelButton.classList.add('hidden');
                 }
-
                 messageModal.classList.add('show');
             }
 
             function hideMessageModal() {
                 messageModal.classList.remove('show');
             }
+            
+            function showSuccessMessage(message) { showMessageModal('success', 'Berhasil!', message); }
+            function showErrorMessage(message) { showMessageModal('error', 'Terjadi Kesalahan!', message); }
 
-            function showSyncStatus(message, type = 'info') {
-                const indicator = document.getElementById('offlineIndicator');
-                const statusText = document.getElementById('connectionStatus');
-
-                statusText.textContent = message;
-                indicator.classList.remove('online');
-                indicator.style.backgroundColor = '';
-
-                if (type === 'success') {
-                    indicator.classList.add('online');
-                } else if (type === 'error') {
-                    indicator.style.backgroundColor = '#ef4444';
-                } else {
-                    indicator.style.backgroundColor = '#f59e0b';
-                }
-
-                indicator.classList.add('show');
-
-                setTimeout(() => {
-                    indicator.classList.remove('show');
-                    setTimeout(() => updateConnectionStatus(), 300);
-                }, 3000);
+            // --- Refactored: Centralized function for display names ---
+            function getDisplayName(username) {
+                const names = { 'adit': 'Ustad Adit', 'lilis': 'Ustadzah Lilis', 'rizqi': 'Ustad Rizqi', 'dudu': 'Ustad Dudu' };
+                return names[username] || username;
             }
 
-            function showSuccessMessage(message) {
-                showMessageModal('success', 'Berhasil!', message, 'OK');
-            }
-
-            function showErrorMessage(message) {
-                showMessageModal('error', 'Terjadi Kesalahan!', message, 'OK');
-            }
-
-            // --- Attendance Summary Calculation (MOVED UP) ---
-            function updateSummary() {
-                let hadirCount = 0;
-                let sakitCount = 0;
-                let izinCount = 0;
-                let alphaCount = 0;
-                
-                savedStudents.forEach(student => {
-                    // Use querySelector within the specific student's row to avoid issues
-                    const row = document.querySelector(`tr[data-student-id="${student.id}"]`);
-                    if (row) {
-                        const radios = row.querySelectorAll(`input[name="attendance_${student.id}"]:checked`);
-                        if (radios.length > 0) {
-                            const status = radios[0].value;
-                            if (status === 'hadir') {
-                                hadirCount++;
-                            } else if (status === 'sakit') {
-                                sakitCount++;
-                            } else if (status === 'izin') {
-                                izinCount++;
-                            } else if (status === 'alpha') {
-                                alphaCount++;
-                            }
-                        }
-                    }
-                });
-                
-                document.getElementById('hadirCount').textContent = hadirCount;
-                document.getElementById('sakitCount').textContent = sakitCount;
-                document.getElementById('izinCount').textContent = izinCount;
-                document.getElementById('alphaCount').textContent = alphaCount;
-            }
-
-            // --- Login & UI Functions ---
-
+            // --- Core Logic ---
             async function handleLogin(event) {
                 event.preventDefault();
                 const username = document.getElementById('username').value.trim();
                 const password = document.getElementById('password').value.trim();
 
-                console.log("Attempting login for username:", username);
-                console.log("Password entered:", password);
-                console.log("Stored password for username:", users[username]);
-
                 if (users[username] && users[username] === password) {
-                    console.log("Login credentials matched!");
                     currentUser = username;
                     localStorage.setItem('currentUser', currentUser);
-                    
-                    let displayName = username;
-                    if (username === 'adit') {
-                        displayName = 'Ustad Adit';
-                    } else if (username === 'lilis') {
-                        displayName = 'Ustadzah Lilis';
-                    } else if (username === 'rizqi') {
-                        displayName = 'Ustad Rizqi';
-                    } else if (username === 'dudu') {
-                        displayName = 'Ustad Dudu';
-                    }
-                        
-                    document.getElementById('currentUser').textContent = displayName;
+                    document.getElementById('currentUser').textContent = getDisplayName(currentUser);
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('mainApp').classList.remove('hidden');
                     showPage('attendance');
-                    console.log("UI updated, calling initializeAppLogic...");
                     try {
                         await initializeAppLogic();
-                        console.log("initializeAppLogic completed successfully after login.");
                     } catch (error) {
-                        console.error("Error during initializeAppLogic after login:", error);
-                        showMessageModal('error', 'Gagal Inisialisasi Aplikasi!', 'Terjadi kesalahan saat menyiapkan aplikasi setelah login. Silakan coba lagi. Error: ' + error.message, 'OK');
+                        showErrorMessage('Gagal inisialisasi aplikasi: ' + error.message);
                         logout();
                     }
-                } else if (!users[username]) {
-                    console.log("Login failed: Username not found.");
-                    showMessageModal('error', 'Login Gagal!', 'Username salah! Silakan periksa kembali username Anda.', 'OK');
                 } else {
-                    console.log("Login failed: Incorrect password.");
-                    showMessageModal('error', 'Login Gagal!', 'Password salah! Silakan periksa kembali password Anda.', 'OK');
+                    showErrorMessage(users[username] ? 'Password salah!' : 'Username salah!');
                 }
             }
 
@@ -643,1245 +610,327 @@
             }
 
             function showPage(page) {
-                document.getElementById('attendancePage').classList.add('hidden');
-                // dashboardPageElement tidak lagi diperlukan karena dashboardPage selalu hidden
-                // const dashboardPageElement = document.getElementById('dashboardPage'); 
-
-                document.getElementById('attendanceBtn').classList.remove('bg-emerald-700');
-                document.getElementById('dashboardBtn').classList.remove('bg-emerald-700');
+                ['attendancePage', 'dashboardPage'].forEach(p => document.getElementById(p).classList.add('hidden'));
+                ['attendanceBtn', 'dashboardBtn'].forEach(b => document.getElementById(b).classList.remove('bg-emerald-700'));
                 
-                if (page === 'attendance') {
-                    document.getElementById('attendancePage').classList.remove('hidden');
-                    // dashboardPageElement.classList.add('hidden'); // Tidak lagi diperlukan
-                    document.getElementById('attendanceBtn').classList.add('bg-emerald-700');
-                } 
-                // else if (page === 'dashboard') { // Bagian ini tidak lagi relevan
-                //     console.log("Attempting to show dashboardPage.");
-                //     console.log("dashboardPageElement before removal:", dashboardPageElement.classList.contains('hidden'));
-                //     dashboardPageElement.classList.remove('hidden'); 
-                //     console.log("dashboardPageElement after removal:", dashboardPageElement.classList.contains('hidden'));
-                //     document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
-                //     checkAllDataLoaded(); 
-                // }
+                document.getElementById(`${page}Page`).classList.remove('hidden');
+                document.getElementById(`${page}Btn`).classList.add('bg-emerald-700');
+                
+                if (page === 'dashboard') {
+                    checkAllDataLoaded();
+                }
             }
-
-            // --- Initialization & Data Loading ---
 
             const initializeAppLogic = async () => {
                 setToday();
-                clearOldLocalStorage(); 
-                
-                try {
-                    if (db) {
-                        await setupFirestoreListeners();
-                    } else {
-                        console.error("Firestore database not initialized, cannot set up listeners.");
-                        showMessageModal('error', 'Firestore Belum Siap!', 'Firestore database belum diinisialisasi. Coba refresh halaman atau periksa konfigurasi Firebase Anda.', 'OK');
-                    }
-                } catch (error) {
-                    console.error("Error during initializeAppLogic:", error);
-                    showMessageModal('error', 'Gagal Sinkronisasi Data!', 'Gagal menyiapkan sinkronisasi data dari cloud. Silakan coba lagi. Error: ' + error.message, 'OK');
-                }
+                if (db) await setupFirestoreListeners();
+                else throw new Error("Database tidak terinisialisasi.");
             };
 
-            function clearOldLocalStorage() {
-                const oldKeys = [
-                    `attendanceData_${currentUser}`,
-                    `savedStudents_${currentUser}`,
-                    `studentCounter_${currentUser}`,
-                    `dailySummary_${currentUser}`,
-                    `backup_attendance_${currentUser}`,
-                    `backup_students_${currentUser}`,
-                    `backup_counter_${currentUser}`,
-                    'globalBackup',
-                    `emergency_${currentUser}`
-                ];
-
-                oldKeys.forEach(key => {
-                    localStorage.removeItem(key);
-                    sessionStorage.removeItem(key);
-                });
-                console.log('Old localStorage data cleared for Firebase migration.');
-            }
-
             async function setupFirestoreListeners() {
-                if (!currentUser || !db) {
-                    console.warn("No current user or Firestore not initialized, cannot set up Firestore listeners.");
-                    if (!db) throw new Error("Firestore database not initialized.");
-                    return;
-                }
+                if (!currentUser || !db) return;
 
-                const studentsColRef = collection(db, `users/${currentUser}/students`);
-                onSnapshot(studentsColRef, (snapshot) => {
-                    console.log("Students onSnapshot fired!");
-                    savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    savedStudents.sort((a, b) => a.nama.localeCompare(b.nama));
+                onSnapshot(collection(db, `users/${currentUser}/students`), (snapshot) => {
+                    savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => a.nama.localeCompare(b.nama));
                     renderStudentTable();
-                    // updateDashboardStats(); // Tidak lagi diperlukan karena dashboard dihapus
                     studentsLoaded = true;
-                    console.log("studentsLoaded set to true:", studentsLoaded);
                     checkAllDataLoaded();
-                    showSyncStatus('Daftar santri diperbarui', 'success');
-                }, (error) => {
-                    console.error("Error fetching students:", error);
-                    showSyncStatus('Gagal memuat daftar santri dari cloud. Error: ' + error.message, 'error');
-                });
+                }, (error) => console.error("Error fetching students:", error));
 
-                const attendanceColRef = collection(db, `users/${currentUser}/attendance`);
-                onSnapshot(attendanceColRef, (snapshot) => {
-                    console.log("Attendance onSnapshot fired!");
-                    console.log("Snapshot docs length for attendance:", snapshot.docs.length);
+                onSnapshot(collection(db, `users/${currentUser}/attendance`), (snapshot) => {
                     attendanceData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    attendanceData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                    console.log("attendanceData after update:", attendanceData);
                     attendanceLoaded = true;
-                    console.log("attendanceLoaded set to true:", attendanceLoaded);
                     checkAllDataLoaded();
-                    showSyncStatus('Data absensi diperbarui', 'success');
-                }, (error) => {
-                    console.error("Error fetching attendance:", error);
-                    showSyncStatus('Gagal memuat data absensi dari cloud. Error: ' + error.message, 'error');
-                });
+                }, (error) => console.error("Error fetching attendance:", error));
             }
 
-            // Fungsi ini akan memastikan kedua data (students dan attendance) sudah dimuat
             function checkAllDataLoaded() {
                 if (studentsLoaded && attendanceLoaded) {
-                    console.log("Both students and attendance data loaded. Updating dashboard.");
-                    // updateDashboard(); // Tidak lagi diperlukan karena dashboard dihapus
-                    const currentDate = document.getElementById('attendanceDate').value;
-                    restoreAttendanceState(currentDate);
-                } else {
-                    console.log("Waiting for all data to load. Students loaded:", studentsLoaded, "Attendance loaded:", attendanceLoaded);
+                    updateDashboard();
+                    restoreAttendanceState(document.getElementById('attendanceDate').value);
                 }
             }
 
-
             function setToday() {
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
-                
-                document.getElementById('attendanceDate').value = `${year}-${month}-${day}`;
+                const today = new Date().toISOString().slice(0, 10);
+                document.getElementById('attendanceDate').value = today;
                 updateDateDisplay();
             }
 
             function updateDateDisplay() {
                 const dateInput = document.getElementById('attendanceDate');
                 if (!dateInput.value) return;
-                
                 const selectedDate = new Date(dateInput.value + 'T00:00:00');
-                
-                const dateOptions = { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                };
-                
-                const dayOptions = { 
-                    weekday: 'long'
-                };
-                
-                document.getElementById('displayDate').textContent = 
-                    selectedDate.toLocaleDateString('id-ID', dateOptions);
-                document.getElementById('dayName').textContent = 
-                    selectedDate.toLocaleDateString('id-ID', dayOptions);
-                
+                document.getElementById('displayDate').textContent = selectedDate.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('dayName').textContent = selectedDate.toLocaleDateString('id-ID', { weekday: 'long' });
                 restoreAttendanceState(dateInput.value);
             }
 
             function restoreAttendanceState(date) {
                 savedStudents.forEach(student => {
-                    const attendanceRecord = attendanceData.find(record => 
-                        record.studentId === student.id && record.tanggal === date
-                    );
+                    const record = attendanceData.find(r => r.studentId === student.id && r.tanggal === date);
                     const row = document.querySelector(`tr[data-student-id="${student.id}"]`);
                     if (row) {
-                        const radios = row.querySelectorAll(`input[name="attendance_${student.id}"]`);
-                        const keteranganInput = row.querySelector('input[type="text"]');
-                        
-                        radios.forEach(radio => {
-                            radio.checked = false;
-                        });
-
-                        if (attendanceRecord) {
-                            const selectedRadio = row.querySelector(`input[name="attendance_${student.id}"][value="${attendanceRecord.status}"]`);
-                            if (selectedRadio) {
-                                selectedRadio.checked = true;
-                            }
-                            keteranganInput.value = attendanceRecord.keterangan || '';
-                        } else {
-                            keteranganInput.value = '';
+                        row.querySelectorAll(`input[name="attendance_${student.id}"]`).forEach(r => r.checked = false);
+                        row.querySelector('input[type="text"]').value = record?.keterangan || '';
+                        if (record) {
+                            const radio = row.querySelector(`input[value="${record.status}"]`);
+                            if (radio) radio.checked = true;
                         }
                     }
                 });
-                updateSummary(); // Ensure summary is updated after restoring state
+                updateSummary();
             }
 
+            function updateSummary() {
+                const counts = { hadir: 0, sakit: 0, izin: 0, alpha: 0 };
+                document.querySelectorAll('#studentTableBody tr[data-student-id]').forEach(row => {
+                    const radio = row.querySelector('input[type="radio"]:checked');
+                    if (radio) counts[radio.value]++;
+                });
+                Object.keys(counts).forEach(key => {
+                    document.getElementById(`${key}Count`).textContent = counts[key];
+                });
+            }
 
-            // --- Student Management (Firestore Integration) ---
-
+            // --- Student & Attendance Management ---
             async function addStudent() {
                 const nameInput = document.getElementById('studentName');
                 const classInput = document.getElementById('studentClass');
-                
                 const nama = nameInput.value.trim();
                 const kelas = classInput.value.trim();
+                if (!nama || !kelas) return showErrorMessage('Nama dan kelas santri wajib diisi!');
+                if (!db) return showErrorMessage('Database tidak siap!');
                 
-                if (!nama || !kelas) {
-                    showMessageModal('error', 'Input Tidak Lengkap!', 'Mohon isi nama santri dan kelas dengan lengkap!', 'OK');
-                    nameInput.focus();
-                    return;
-                }
-                
-                if (!db) {
-                    showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi. Coba refresh halaman atau periksa konfigurasi Firebase Anda.', 'OK');
-                    return;
-                }
-
                 try {
-                    const studentsRef = collection(db, `users/${currentUser}/students`);
-                    const q = query(studentsRef, where("nama", "==", nama));
-                    const querySnapshot = await getDocs(q);
-
-                    if (!querySnapshot.empty) {
-                        showMessageModal('error', 'Santri Sudah Ada!', `Santri dengan nama "${nama}" sudah terdaftar!`, 'OK');
-                        nameInput.focus();
-                        nameInput.select();
-                        return;
-                    }
-
-                    const newStudent = {
-                        nama: nama,
-                        kelas: kelas
-                    };
+                    const q = query(collection(db, `users/${currentUser}/students`), where("nama", "==", nama));
+                    if (!(await getDocs(q)).empty) return showErrorMessage(`Santri "${nama}" sudah ada.`);
                     
-                    await addDoc(studentsRef, newStudent);
-                    
+                    await addDoc(collection(db, `users/${currentUser}/students`), { nama, kelas });
                     nameInput.value = '';
                     classInput.value = '';
                     nameInput.focus();
-                    
-                    showSuccessMessage(`Santri "${nama}" dari kelas ${kelas} berhasil ditambahkan!`);
-                    
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Menambah Santri!', 'Gagal menambahkan santri. Silakan coba lagi! Error: ' + error.message, 'OK');
-                    console.error('Add student error:', error);
-                }
+                    showSuccessMessage(`Santri "${nama}" berhasil ditambahkan.`);
+                } catch (error) { showErrorMessage('Gagal menambah santri: ' + error.message); }
             }
 
             function renderStudentTable() {
                 const tableBody = document.getElementById('studentTableBody');
-                tableBody.innerHTML = '';
-                
-                if (savedStudents.length === 0) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td colspan="9" class="px-6 py-8 text-center text-gray-500">
-                            Belum ada santri yang terdaftar. Silakan tambah santri.
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                    return;
-                }
-
-                savedStudents.forEach((student, index) => {
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-50 transition-colors';
-                    row.setAttribute('data-student-id', student.id);
-                    row.innerHTML = `
-                        <td class="px-4 py-4 text-sm text-gray-900 font-medium">${index + 1}</td>
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${student.nama}</td>
-                        <td class="px-4 py-4 text-sm text-gray-900 text-center">${student.kelas}</td>
-                        <td class="px-4 py-4 text-center">
-                            <input type="radio" name="attendance_${student.id}" value="hadir" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 focus:ring-2 attendance-radio">
-                        </td>
-                        <td class="px-4 py-4 text-center">
-                            <input type="radio" name="attendance_${student.id}" value="sakit" class="w-4 h-4 text-blue-600 focus:ring-blue-500 focus:ring-2 attendance-radio">
-                        </td>
-                        <td class="px-4 py-4 text-center">
-                            <input type="radio" name="attendance_${student.id}" value="izin" class="w-4 h-4 text-yellow-600 focus:ring-yellow-500 focus:ring-2 attendance-radio">
-                        </td>
-                        <td class="px-4 py-4 text-center">
-                            <input type="radio" name="attendance_${student.id}" value="alpha" class="w-4 h-4 text-red-600 focus:ring-red-500 focus:ring-2 attendance-radio">
-                        </td>
-                        <td class="px-6 py-4">
-                            <input type="text" placeholder="Keterangan (opsional)..." class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none attendance-keterangan">
-                        </td>
-                        <td class="px-4 py-4 text-center">
-                            <button data-action="edit-student" data-student-id="${student.id}" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium">
-                                Edit
-                            </button>
-                            <button data-action="delete-student" data-student-id="${student.id}" data-student-name="${student.nama}" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium ml-1">
-                                Hapus
-                            </button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            async function updateStudentName(id, newName) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                const studentRef = doc(db, `users/${currentUser}/students`, id);
-                const oldStudent = savedStudents.find(s => s.id === id);
-
-                if (!oldStudent || oldStudent.nama === newName.trim()) return;
-
-                try {
-                    const studentsColRef = collection(db, `users/${currentUser}/students`);
-                    const q = query(studentsColRef, where("nama", "==", newName.trim()));
-                    const querySnapshot = await getDocs(q);
-
-                    if (!querySnapshot.empty && querySnapshot.docs[0].id !== id) {
-                        showMessageModal('error', 'Nama Santri Sudah Ada!', `Santri dengan nama "${newName.trim()}" sudah terdaftar!`, 'OK');
-                        renderStudentTable(); // Re-render to revert name if duplicate
-                        return;
-                    }
-
-                    await updateDoc(studentRef, { nama: newName.trim() });
-                    const attendanceRef = collection(db, `users/${currentUser}/attendance`);
-                    const attendanceQuery = query(attendanceRef, where("studentId", "==", id));
-                    const attendanceSnapshot = await getDocs(attendanceQuery);
-                    
-                    const batch = writeBatch(db);
-                    attendanceSnapshot.forEach((docSnap) => {
-                        batch.update(docSnap.ref, { nama: newName.trim() });
-                    });
-                    await batch.commit();
-
-                    showSuccessMessage(`Nama santri berhasil diperbarui menjadi "${newName.trim()}"`);
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Update Nama!', 'Gagal memperbarui nama santri. Error: ' + error.message, 'OK');
-                    console.error('Update student name error:', error);
-                }
-            }
-
-            async function updateStudentClass(id, newClass) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                const studentRef = doc(db, `users/${currentUser}/students`, id);
-                const oldStudent = savedStudents.find(s => s.id === id);
-
-                if (!oldStudent || oldStudent.kelas === newClass.trim()) return;
-
-                try {
-                    await updateDoc(studentRef, { kelas: newClass.trim() });
-                    const attendanceRef = collection(db, `users/${currentUser}/attendance`);
-                    const attendanceQuery = query(attendanceRef, where("studentId", "==", id));
-                    const attendanceSnapshot = await getDocs(attendanceQuery);
-                    
-                    const batch = writeBatch(db);
-                    attendanceSnapshot.forEach((docSnap) => {
-                        batch.update(docSnap.ref, { kelas: newClass.trim() });
-                    });
-                    await batch.commit();
-
-                    showSuccessMessage(`Kelas santri berhasil diperbarui menjadi "${newClass.trim()}"`);
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Update Kelas!', 'Gagal memperbarui kelas santri. Error: ' + error.message, 'OK');
-                    console.error('Update student class error:', error);
-                }
-            }
-
-            function editStudent(id) {
-                const student = savedStudents.find(s => s.id === id);
-                if (!student) return;
-                
-                const editModal = document.createElement('div');
-                editModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
-                editModal.innerHTML = `
-                    <div class="bg-white rounded-lg p-6 max-w-md w-full">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Edit Data Santri</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Santri</label>
-                                <input type="text" id="editStudentName" value="${student.nama}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none" placeholder="Masukkan nama lengkap santri">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
-                                <input type="text" id="editStudentClass" value="${student.kelas}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none" placeholder="Contoh: 1A, 2B">
-                            </div>
-                        </div>
-                        <div class="flex gap-3 mt-6">
-                            <button id="saveEditedStudentBtn" data-student-id="${student.id}" class="flex-1 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
-                                Simpan Perubahan
-                            </button>
-                            <button id="cancelEditStudentBtn" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors font-medium">
-                                Batal
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(editModal);
-                
-                // Attach event listeners to modal buttons
-                document.getElementById('saveEditedStudentBtn').addEventListener('click', async (e) => {
-                    const studentId = e.target.dataset.studentId;
-                    const newName = document.getElementById('editStudentName').value.trim();
-                    const newClass = document.getElementById('editStudentClass').value.trim();
-                    if (!newName || !newClass) {
-                        showMessageModal('error', 'Input Tidak Lengkap!', 'Mohon isi nama santri dan kelas dengan lengkap!', 'OK');
-                        return;
-                    }
-                    await saveEditedStudent(studentId, newName, newClass);
-                    editModal.remove();
-                });
-                document.getElementById('cancelEditStudentBtn').addEventListener('click', () => editModal.remove());
-
-                setTimeout(() => {
-                    document.getElementById('editStudentName').focus();
-                    document.getElementById('editStudentName').select();
-                }, 100);
-            }
-
-            async function saveEditedStudent(id, newName, newClass) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                
-                const studentRef = doc(db, `users/${currentUser}/students`, id);
-                const oldStudent = savedStudents.find(s => s.id === id);
-
-                try {
-                    const studentsColRef = collection(db, `users/${currentUser}/students`);
-                    const q = query(studentsColRef, where("nama", "==", newName));
-                    const querySnapshot = await getDocs(q);
-
-                    if (!querySnapshot.empty && querySnapshot.docs[0].id !== id) {
-                        showMessageModal('error', 'Nama Santri Sudah Ada!', `Santri dengan nama "${newName}" sudah terdaftar!`, 'OK');
-                        return;
-                    }
-                    
-                    await updateDoc(studentRef, { nama: newName, kelas: newClass });
-                    
-                    const attendanceRef = collection(db, `users/${currentUser}/attendance`);
-                    const attendanceQuery = query(attendanceRef, where("studentId", "==", id));
-                    const attendanceSnapshot = await getDocs(attendanceQuery);
-                    
-                    const batch = writeBatch(db);
-                    attendanceSnapshot.forEach((docSnap) => {
-                        batch.update(docSnap.ref, { nama: newName, kelas: newClass });
-                    });
-                    await batch.commit();
-
-                    showSuccessMessage(`Data santri berhasil diperbarui dari "${oldStudent.nama}" menjadi "${newName}" kelas ${newClass}!`);
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Simpan Perubahan!', 'Gagal menyimpan perubahan santri. Error: ' + error.message, 'OK');
-                    console.error('Save edited student error:', error);
-                }
+                tableBody.innerHTML = savedStudents.length === 0 ? `<tr><td colspan="9" class="p-8 text-center text-gray-500">Belum ada santri.</td></tr>` :
+                    savedStudents.map((student, index) => `
+                        <tr class="hover:bg-gray-50" data-student-id="${student.id}">
+                            <td class="px-4 py-4 text-sm text-gray-900">${index + 1}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">${student.nama}</td>
+                            <td class="px-4 py-4 text-sm text-gray-900 text-center">${student.kelas}</td>
+                            <td class="px-4 py-4 text-center"><input type="radio" name="attendance_${student.id}" value="hadir" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 attendance-radio"></td>
+                            <td class="px-4 py-4 text-center"><input type="radio" name="attendance_${student.id}" value="sakit" class="w-4 h-4 text-blue-600 focus:ring-blue-500 attendance-radio"></td>
+                            <td class="px-4 py-4 text-center"><input type="radio" name="attendance_${student.id}" value="izin" class="w-4 h-4 text-yellow-600 focus:ring-yellow-500 attendance-radio"></td>
+                            <td class="px-4 py-4 text-center"><input type="radio" name="attendance_${student.id}" value="alpha" class="w-4 h-4 text-red-600 focus:ring-red-500 attendance-radio"></td>
+                            <td class="px-6 py-4"><input type="text" placeholder="Keterangan..." class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-emerald-500 outline-none"></td>
+                            <td class="px-4 py-4 text-center">
+                                <button data-action="delete-student" data-student-id="${student.id}" data-student-name="${student.nama}" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 text-sm font-medium">Hapus</button>
+                            </td>
+                        </tr>
+                    `).join('');
             }
 
             async function deleteStudent(id, nama) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                showMessageModal('confirm', 'Konfirmasi Hapus Santri', `Apakah Anda yakin ingin menghapus santri bernama: ${nama}?\n\nIni juga akan menghapus semua data absensi terkait santri ini!`, 'Ya, Hapus', 'Batal', async () => {
+                showMessageModal('confirm', 'Konfirmasi Hapus', `Yakin hapus santri: ${nama}?\nSemua data absensinya juga akan terhapus!`, 'Ya, Hapus', 'Batal', async () => {
                     try {
                         await deleteDoc(doc(db, `users/${currentUser}/students`, id));
-
-                        const attendanceRef = collection(db, `users/${currentUser}/attendance`);
-                        const q = query(attendanceRef, where("studentId", "==", id));
-                        const querySnapshot = await getDocs(q);
-                        
+                        const q = query(collection(db, `users/${currentUser}/attendance`), where("studentId", "==", id));
+                        const snapshot = await getDocs(q);
                         const batch = writeBatch(db);
-                        querySnapshot.forEach((docSnap) => {
-                            batch.delete(docSnap.ref);
-                        });
+                        snapshot.forEach(docSnap => batch.delete(docSnap.ref));
                         await batch.commit();
-
-                        showSuccessMessage(`Santri ${nama} dan semua data absensinya berhasil dihapus!`);
-                    } catch (error) {
-                        showMessageModal('error', 'Gagal Hapus Santri!', 'Gagal menghapus santri dan data terkait. Error: ' + error.message, 'OK');
-                        console.error('Delete student error:', error);
-                    }
+                        showSuccessMessage(`Santri ${nama} berhasil dihapus.`);
+                    } catch (error) { showErrorMessage('Gagal hapus santri: ' + error.message); }
                     hideMessageModal();
-                }, () => {
-                    hideMessageModal();
-                });
+                }, hideMessageModal);
             }
 
-            // --- Attendance Management (Firestore Integration) ---
-
             async function saveAttendance() {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                const dateInput = document.getElementById('attendanceDate');
-                if (!dateInput.value) {
-                    showMessageModal('error', 'Tanggal Belum Dipilih!', 'Mohon pilih tanggal absensi terlebih dahulu!', 'OK');
-                    return;
-                }
+                const date = document.getElementById('attendanceDate').value;
+                if (!date) return showErrorMessage('Pilih tanggal absensi!');
                 
-                const rows = document.querySelectorAll('#studentTableBody tr');
-                let savedCount = 0;
-                let totalStudents = savedStudents.length;
-                
-                if (totalStudents === 0) {
-                    showMessageModal('error', 'Tidak Ada Santri!', 'Belum ada santri yang terdaftar. Silakan tambah santri terlebih dahulu!', 'OK');
-                    return;
-                }
-                
-                const attendanceUpdates = [];
-                rows.forEach((row) => {
-                    const studentId = row.getAttribute('data-student-id');
-                    const student = savedStudents.find(s => s.id === studentId);
-                    if (!student) return;
-                    
-                    const attendanceRadios = row.querySelectorAll(`input[name="attendance_${studentId}"]:checked`);
-                    const keterangan = row.querySelector('.attendance-keterangan').value.trim();
-                    
-                    let status = null;
-                    if (attendanceRadios.length > 0) {
-                        status = attendanceRadios[0].value;
-                    }
-                    
-                    if (status) {
-                        attendanceUpdates.push({
-                            studentId: student.id,
-                            tanggal: dateInput.value,
-                            nama: student.nama,
-                            kelas: student.kelas,
-                            status: status,
-                            keterangan: keterangan,
-                            timestamp: new Date().toISOString()
-                        });
-                        savedCount++;
-                    }
-                });
-                
-                if (savedCount === 0) {
-                    showMessageModal('error', 'Tidak Ada Data Terpilih!', 'Tidak ada data absensi yang dipilih. Mohon pilih status kehadiran untuk setiap santri!', 'OK');
-                    return;
-                }
+                const updates = Array.from(document.querySelectorAll('#studentTableBody tr[data-student-id]')).map(row => {
+                    const statusRadio = row.querySelector('input[type="radio"]:checked');
+                    if (!statusRadio) return null;
+                    const student = savedStudents.find(s => s.id === row.dataset.studentId);
+                    return {
+                        studentId: student.id,
+                        tanggal: date,
+                        nama: student.nama,
+                        kelas: student.kelas,
+                        status: statusRadio.value,
+                        keterangan: row.querySelector('input[type="text"]').value.trim(),
+                        timestamp: new Date().toISOString()
+                    };
+                }).filter(Boolean);
+
+                if (updates.length === 0) return showErrorMessage('Tidak ada data absensi untuk disimpan.');
                 
                 try {
                     const batch = writeBatch(db);
                     const attendanceColRef = collection(db, `users/${currentUser}/attendance`);
-
-                    for (const newRecord of attendanceUpdates) {
-                        const q = query(attendanceColRef, 
-                            where("studentId", "==", newRecord.studentId),
-                            where("tanggal", "==", newRecord.tanggal)
-                        );
-                        const querySnapshot = await getDocs(q);
-
-                        if (!querySnapshot.empty) {
-                            querySnapshot.forEach(docSnap => {
-                                batch.update(docSnap.ref, newRecord);
-                            });
+                    for (const record of updates) {
+                        const q = query(attendanceColRef, where("studentId", "==", record.studentId), where("tanggal", "==", record.tanggal));
+                        const snapshot = await getDocs(q);
+                        if (!snapshot.empty) {
+                            snapshot.forEach(docSnap => batch.update(docSnap.ref, record));
                         } else {
-                            batch.set(doc(attendanceColRef), newRecord);
+                            batch.set(doc(attendanceColRef), record);
                         }
                     }
                     await batch.commit();
-                    
-                    const displayDate = document.getElementById('displayDate').textContent;
-                    showSuccessMessage(`Absensi untuk ${savedCount} santri pada tanggal ${displayDate} berhasil disimpan di cloud!`);
-                    
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Simpan Absensi!', 'Gagal menyimpan data absensi ke cloud. Silakan coba lagi! Error: ' + error.message, 'OK');
-                    console.error('Save attendance error:', error);
-                }
+                    showSuccessMessage(`Absensi untuk ${updates.length} santri berhasil disimpan!`);
+                } catch (error) { showErrorMessage('Gagal menyimpan absensi: ' + error.message); }
             }
 
-            function editAttendanceRecord(recordId) {
-                const record = attendanceData.find(data => data.id === recordId);
-                if (!record) return;
-                
-                const editModal = document.createElement('div');
-                editModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
-                editModal.innerHTML = `
-                    <div class="bg-white rounded-lg p-6 max-w-md w-full">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Edit Absensi</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Santri</label>
-                                <input type="text" id="editNama" value="${record.nama}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none" readonly>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-                                <input type="date" id="editTanggal" value="${record.tanggal}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                <select id="editStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
-                                    <option value="hadir" ${record.status === 'hadir' ? 'selected' : ''}>Hadir</option>
-                                    <option value="sakit" ${record.status === 'sakit' ? 'selected' : ''}>Sakit</option>
-                                    <option value="izin" ${record.status === 'izin' ? 'selected' : ''}>Izin</option>
-                                    <option value="alpha" ${record.status === 'alpha' ? 'selected' : ''}>Alpha</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
-                                <input type="text" id="editKeterangan" value="${record.keterangan || ''}" placeholder="Keterangan..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
-                            </div>
-                        </div>
-                        <div class="flex gap-3 mt-6">
-                            <button id="saveEditedRecordBtn" data-record-id="${record.id}" class="flex-1 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors">
-                                Simpan
-                            </button>
-                            <button id="cancelEditRecordBtn" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors">
-                                Batal
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(editModal);
-
-                // Attach event listeners to modal buttons
-                document.getElementById('saveEditedRecordBtn').addEventListener('click', async (e) => {
-                    const recordId = e.target.dataset.recordId;
-                    const newTanggal = document.getElementById('editTanggal').value;
-                    const newStatus = document.getElementById('editStatus').value;
-                    const newKeterangan = document.getElementById('editKeterangan').value.trim();
-                    
-                    if (!newTanggal || !newStatus) {
-                        showMessageModal('error', 'Input Tidak Lengkap!', 'Mohon lengkapi semua field yang wajib diisi!', 'OK');
-                        return;
-                    }
-                    await saveEditedRecord(recordId, newTanggal, newStatus, newKeterangan);
-                    editModal.remove();
-                });
-                document.getElementById('cancelEditRecordBtn').addEventListener('click', () => editModal.remove());
-            }
-
-            async function saveEditedRecord(recordId, newTanggal, newStatus, newKeterangan) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                
-                const recordRef = doc(db, `users/${currentUser}/attendance`, recordId);
-                
-                try {
-                    await updateDoc(recordRef, {
-                        tanggal: newTanggal,
-                        status: newStatus,
-                        keterangan: newKeterangan
-                    });
-                    
-                    showSuccessMessage('Data absensi berhasil diupdate di cloud!');
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Update Absensi!', 'Gagal mengupdate data absensi di cloud. Error: ' + error.message, 'OK');
-                    console.error('Save edited record error:', error);
-                }
-            }
-            
-            function deleteAttendanceRecord(recordId, nama, tanggal) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                const date = new Date(tanggal + 'T00:00:00');
-                const formattedDate = date.toLocaleDateString('id-ID', {
-                    day: '2-digit',
-                    month: 'long', 
-                    year: 'numeric'
-                });
-                
-                showMessageModal('confirm', 'Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus data absensi:\n\nNama: ${nama}\nTanggal: ${formattedDate}\n\nData yang dihapus tidak dapat dikembalikan!`, 'Ya, Hapus', 'Batal', async () => {
-                    try {
-                        await deleteDoc(doc(db, `users/${currentUser}/attendance`, recordId));
-                        showSuccessMessage(`Data absensi ${nama} pada ${formattedDate} berhasil dihapus dari cloud!`);
-                    } catch (error) {
-                        showMessageModal('error', 'Gagal Hapus Data!', 'Gagal menghapus data dari cloud. Silakan coba lagi. Error: ' + error.message, 'OK');
-                        console.error('Delete attendance record error:', error);
-                    }
-                    hideMessageModal();
-                }, () => {
-                    hideMessageModal();
-                });
-            }
-
-            // --- Dashboard & Reporting (Fungsi-fungsi ini tidak lagi dipanggil, tapi tetap ada jika ingin diaktifkan lagi) ---
-
+            // --- Dashboard Logic (Redesigned) ---
             function updateDashboard() {
-                console.log("Updating Dashboard. Current attendanceData:", attendanceData);
-                console.log("Number of attendance records:", attendanceData.length);
                 updateDashboardStats();
                 updateSummaryTable();
-                updateDashboardTable();
-                updateRecentActivity();
-            }
-
-            function updateSummaryTable() {
-                console.log("Updating Summary Table. savedStudents:", savedStudents);
-                console.log("Updating Summary Table. attendanceData:", attendanceData);
-                const tableBody = document.getElementById('summaryTableBody');
-                tableBody.innerHTML = '';
-                
-                if (!savedStudents || savedStudents.length === 0) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                            Belum ada data santri. Silakan tambah santri terlebih dahulu.
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                    return;
-                }
-
-                savedStudents.forEach((student, index) => {
-                    const studentAttendance = attendanceData.filter(data => data.studentId === student.id);
-                    
-                    const hadirCount = studentAttendance.filter(data => data.status === 'hadir').length;
-                    const sakitCount = studentAttendance.filter(data => data.status === 'sakit').length;
-                    const izinCount = studentAttendance.filter(data => data.status === 'izin').length;
-                    const alphaCount = studentAttendance.filter(data => data.status === 'alpha').length;
-                    
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-50';
-                    row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${student.nama}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">${hadirCount}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">${sakitCount}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">${izinCount}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">${alphaCount}</span>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
             }
 
             function updateDashboardStats() {
-                const totalHadir = attendanceData.filter(data => data.status === 'hadir').length;
-                const totalSakit = attendanceData.filter(data => data.status === 'sakit').length;
-                const totalIzin = attendanceData.filter(data => data.status === 'izin').length;
-                const totalAlpha = attendanceData.filter(data => data.status === 'alpha').length;
-                
                 document.getElementById('totalStudents').textContent = savedStudents.length;
-                document.getElementById('totalHadir').textContent = totalHadir;
-                document.getElementById('totalSakit').textContent = totalSakit;
-                document.getElementById('totalIzin').textContent = totalIzin;
-                document.getElementById('totalAlpha').textContent = totalAlpha;
+                const statusCounts = attendanceData.reduce((acc, record) => {
+                    acc[record.status] = (acc[record.status] || 0) + 1;
+                    return acc;
+                }, {});
+                document.getElementById('totalHadir').textContent = statusCounts.hadir || 0;
+                document.getElementById('totalSakit').textContent = statusCounts.sakit || 0;
+                document.getElementById('totalIzin').textContent = statusCounts.izin || 0;
+                document.getElementById('totalAlpha').textContent = statusCounts.alpha || 0;
             }
 
-            function updateRecentActivity() {
-                const recentContainer = document.getElementById('recentActivity');
-                const sortedAttendance = [...attendanceData].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                const recentData = sortedAttendance.slice(0, 5);
+            function updateSummaryTable(filteredStudents = null) {
+                const tableBody = document.getElementById('summaryTableBody');
+                const studentsToShow = filteredStudents || savedStudents;
                 
-                recentContainer.innerHTML = '';
-                
-                if (recentData.length === 0) {
-                    recentContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Belum ada aktivitas</p>';
-                    return;
-                }
-                
-                recentData.forEach(data => {
-                    const color = data.status === 'hadir' ? 'emerald' : 
-                                 data.status === 'izin' ? 'yellow' : 
-                                 data.status === 'sakit' ? 'blue' : 'red';
-                    
-                    const activityDiv = document.createElement('div');
-                    activityDiv.className = 'flex items-center p-3 bg-gray-50 rounded-lg';
-                    activityDiv.innerHTML = `
-                        <div class="w-2 h-2 bg-${color}-500 rounded-full mr-3"></div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">${data.nama} - ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</p>
-                            <p class="text-xs text-gray-500">${new Date(data.tanggal + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
-                        </div>
-                    `;
-                    recentContainer.appendChild(activityDiv);
-                });
+                tableBody.innerHTML = studentsToShow.length === 0 ? `<tr><td colspan="7" class="p-8 text-center text-gray-500">Tidak ada data santri.</td></tr>` :
+                    studentsToShow.map((student, index) => {
+                        const studentAttendance = attendanceData.filter(d => d.studentId === student.id);
+                        const counts = studentAttendance.reduce((acc, record) => {
+                            acc[record.status] = (acc[record.status] || 0) + 1;
+                            return acc;
+                        }, { hadir: 0, sakit: 0, izin: 0, alpha: 0 });
+                        
+                        return `
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-4 text-sm text-gray-900">${index + 1}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900">${student.nama}</td>
+                                <td class="px-4 py-4 text-sm text-gray-700 text-center">${student.kelas}</td>
+                                <td class="px-4 py-4 text-sm text-emerald-700 text-center font-semibold">${counts.hadir}</td>
+                                <td class="px-4 py-4 text-sm text-blue-700 text-center font-semibold">${counts.sakit}</td>
+                                <td class="px-4 py-4 text-sm text-yellow-700 text-center font-semibold">${counts.izin}</td>
+                                <td class="px-4 py-4 text-sm text-red-700 text-center font-semibold">${counts.alpha}</td>
+                            </tr>
+                        `;
+                    }).join('');
             }
-
-            async function updateDashboardTable(filteredData = null) {
-                console.log("Updating Dashboard Table. Input filteredData:", filteredData);
-                console.log("Updating Dashboard Table. Global attendanceData:", attendanceData);
-
-                const tableBody = document.getElementById('dashboardTableBody');
-                tableBody.innerHTML = '';
-                
-                const dataToShow = filteredData || attendanceData;
-                
-                // Debugging logs for sortedData
-                console.log("Before sorting, dataToShow length:", dataToShow.length, "Data:", dataToShow);
-                const sortedData = [...dataToShow].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                console.log("After sorting, sortedData length:", sortedData.length, "Data:", sortedData);
-
-
-                if (!sortedData || sortedData.length === 0) {
-                    const message = filteredData !== null ? 'Tidak ada data yang sesuai dengan pencarian.' : 'Belum ada data absensi. Silakan lakukan absensi terlebih dahulu.';
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                            ${message}
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                    return;
-                }
-
-                sortedData.forEach((record, index) => {
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-50';
-                    row.setAttribute('data-record-id', record.id); // Add record ID for delegation
-                    
-                    const date = new Date(record.tanggal + 'T00:00:00');
-                    const formattedDate = date.toLocaleDateString('id-ID', {
-                        day: '2-digit',
-                        month: '2-digit', 
-                        year: 'numeric'
-                    });
-                    
-                    let statusBadge = '';
-                    if (record.status === 'hadir') {
-                        statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Hadir</span>';
-                    } else if (record.status === 'sakit') {
-                        statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Sakit</span>';
-                    } else if (record.status === 'izin') {
-                        statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Izin</span>';
-                    } else if (record.status === 'alpha') {
-                        statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Alpha</span>';
-                    }
-                    
-                    row.innerHTML = `
-                        <td class="px-4 py-4 text-sm text-gray-900 font-medium">${index + 1}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 font-medium">${formattedDate}</td>
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">${record.nama}</td>
-                        <td class="px-4 py-4 text-sm text-gray-900 text-center font-medium">${record.kelas}</td>
-                        <td class="px-6 py-4 text-center">${statusBadge}</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">${record.keterangan || '-'}</td>
-                        <td class="px-4 py-4 text-center">
-                            <button data-action="edit-attendance" data-record-id="${record.id}" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium">
-                                Edit
-                            </button>
-                            <button data-action="delete-attendance" data-record-id="${record.id}" data-nama="${record.nama}" data-tanggal="${record.tanggal}" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium ml-1">
-                                Hapus
-                            </button>
-                        </td>
-                        <td class="px-4 py-4 text-center">
-                            <button data-action="generate-feedback" data-student-id="${record.studentId}" data-student-name="${record.nama}" data-student-class="${record.kelas}" class="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors text-sm font-medium flex items-center justify-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2-2m0 0l2 2m-2-2v4m-2 2h4M15 17h.01M12 12h.01M17 12h.01M12 7h.01M7 12h.01"></path></svg>
-                                Feedback ✨
-                            </button>
-                        </td>
-                    `;
-                    
-                    tableBody.appendChild(row);
-                });
-            }
-
-            function searchAttendance() {
-                const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-                
-                if (searchTerm === '') {
-                    updateDashboardTable();
-                    return;
-                }
-                
-                const filteredData = attendanceData.filter(record => {
-                    const nama = record.nama.toLowerCase();
-                    const tanggal = record.tanggal;
-                    const kelas = record.kelas.toLowerCase();
-                    const status = record.status.toLowerCase();
-                    const keterangan = (record.keterangan || '').toLowerCase();
-                    
-                    const date = new Date(tanggal + 'T00:00:00');
-                    const formattedDate = date.toLocaleDateString('id-ID', {
-                        day: '2-digit',
-                        month: '2-digit', 
-                        year: 'numeric'
-                    });
-                    
-                    return nama.includes(searchTerm) || 
-                           tanggal.includes(searchTerm) || 
-                           formattedDate.includes(searchTerm) ||
-                           kelas.includes(searchTerm) ||
-                           status.includes(searchTerm) ||
-                           keterangan.includes(searchTerm);
-                });
-                
-                updateDashboardTable(filteredData);
-            }
-
-            function clearSearch() {
-                document.getElementById('searchInput').value = '';
-                updateDashboardTable();
-            }
-
-            // --- Export/Import Functions (Now with Firestore) ---
-
-            async function exportData() {
-                if (!currentUser) {
-                    showMessageModal('error', 'Login Dibutuhkan!', 'Anda harus login untuk mengekspor data.', 'OK');
-                    return;
-                }
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-
-                try {
-                    const studentsSnapshot = await getDocs(collection(db, `users/${currentUser}/students`));
-                    const students = studentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                    const attendanceSnapshot = await getDocs(collection(db, `users/${currentUser}/attendance`));
-                    const attendance = attendanceSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                    const dataToExport = {
-                        metadata: {
-                            exportedAt: new Date().toISOString(),
-                            exportedBy: currentUser,
-                            appVersion: 'Absensi Madrasah v2.0 (Firestore)'
-                        },
-                        students: students,
-                        attendance: attendance
-                    };
-
-                    const filename = `absensi_madrasah_data_${currentUser}_${new Date().toISOString().slice(0,10)}.json`;
-                    const jsonString = JSON.stringify(dataToExport, null, 2);
-
-                    const blob = new Blob([jsonString], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-
-                    showSuccessMessage('Data absensi berhasil diekspor!');
-                } catch (error) {
-                    showMessageModal('error', 'Gagal Ekspor Data!', 'Gagal mengekspor data dari cloud. Silakan coba lagi! Error: ' + error.message, 'OK');
-                    console.error('Export data error:', error);
-                }
-            }
-
-            function handleImportFile(event) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                const file = event.target.files[0];
-                if (!file) {
-                    return;
-                }
-
-                if (file.type !== 'application/json') {
-                    showMessageModal('error', 'Format File Salah!', 'Format file tidak didukung. Mohon unggah file JSON.', 'OK');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const importedData = JSON.parse(e.target.result);
-
-                        if (importedData && 
-                            Array.isArray(importedData.students) &&
-                            Array.isArray(importedData.attendance) &&
-                            importedData.metadata) {
-                            
-                            showMessageModal('confirm', 'Konfirmasi Impor Data', 
-                                'Apakah Anda yakin ingin mengimpor data ini? Data yang ada saat ini di cloud akan diganti.', 
-                                'Ya, Impor', 'Batal', 
-                                async () => {
-                                    try {
-                                        await clearFirestoreCollections(currentUser);
-
-                                        const studentsColRef = collection(db, `users/${currentUser}/students`);
-                                        const studentsBatch = writeBatch(db);
-                                        importedData.students.forEach(student => {
-                                            const studentDocRef = doc(studentsColRef, student.id);
-                                            studentsBatch.set(studentDocRef, { nama: student.nama, kelas: student.kelas });
-                                        });
-                                        await studentsBatch.commit();
-
-                                        const attendanceColRef = collection(db, `users/${currentUser}/attendance`);
-                                        const attendanceBatch = writeBatch(db);
-                                        importedData.attendance.forEach(record => {
-                                            const recordDocRef = doc(attendanceColRef, record.id);
-                                            attendanceBatch.set(recordDocRef, { 
-                                                studentId: record.studentId,
-                                                tanggal: record.tanggal, 
-                                                nama: record.nama, 
-                                                kelas: record.kelas, 
-                                                status: record.status, 
-                                                keterangan: record.keterangan,
-                                                timestamp: record.timestamp || new Date().toISOString()
-                                            });
-                                        });
-                                        await attendanceBatch.commit();
-                                        
-                                        showSuccessMessage('Data absensi berhasil diimpor ke cloud!');
-                                        hideMessageModal();
-                                    } catch (error) {
-                                        showMessageModal('error', 'Gagal Impor Data!', 'Gagal mengimpor data ke cloud. Silakan coba lagi! Error: ' + error.message, 'OK');
-                                        console.error('Import data to Firestore error:', error);
-                                        hideMessageModal();
-                                    }
-                                },
-                                () => {
-                                    hideMessageModal();
-                                }
-                            );
-                        } else {
-                            showMessageModal('error', 'Struktur File Tidak Valid!', 'Struktur file JSON tidak valid. Mohon unggah file ekspor yang benar.', 'OK');
-                        }
-                    } catch (error) {
-                        showMessageModal('error', 'Gagal Memproses File!', 'Gagal memproses file. Pastikan itu adalah file JSON yang valid. Error: ' + error.message, 'OK');
-                        console.error('Import file processing error:', error);
-                    }
-                };
-                reader.readAsText(file);
-
-                event.target.value = '';
-            }
-
-            async function clearFirestoreCollections(userId) {
-                if (!db) { showMessageModal('error', 'Firestore Belum Siap!', 'Firestore belum diinisialisasi.', 'OK'); return; }
-                const studentsRef = collection(db, `users/${userId}/students`);
-                const attendanceRef = collection(db, `users/${userId}/attendance`);
-
-                const studentDocs = await getDocs(studentsRef);
-                const studentBatch = writeBatch(db);
-                studentDocs.forEach(docSnap => studentBatch.delete(docSnap.ref));
-                await studentBatch.commit();
-                console.log('Old students data cleared from Firestore.');
-
-                const attendanceDocs = await getDocs(attendanceRef);
-                const attendanceBatch = writeBatch(db);
-                attendanceDocs.forEach(docSnap => attendanceBatch.delete(docSnap.ref));
-                await attendanceBatch.commit();
-                console.log('Old attendance data cleared from Firestore.');
-            }
-
-            // --- PWA & Offline Functionality ---
-
-            let deferredPrompt;
-            let isOnline = navigator.onLine;
             
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('./service-worker.js')
-                        .then(function(registration) {
-                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                        })
-                        .catch(function(err) {
-                            console.log('ServiceWorker registration failed: ', err);
-                        });
-                });
+            function searchSummary() {
+                const searchTerm = document.getElementById('summarySearchInput').value.toLowerCase().trim();
+                if (!searchTerm) {
+                    updateSummaryTable();
+                    return;
+                }
+                const filtered = savedStudents.filter(s => 
+                    s.nama.toLowerCase().includes(searchTerm) || 
+                    s.kelas.toLowerCase().includes(searchTerm)
+                );
+                updateSummaryTable(filtered);
             }
 
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                showInstallButton();
-            });
-
+            // --- PWA & Offline Functionality (BUG FIX) ---
+            function updateConnectionStatus() {
+                const indicator = document.getElementById('offlineIndicator');
+                const statusText = document.getElementById('connectionStatus');
+                if (navigator.onLine) {
+                    statusText.textContent = 'Koneksi internet tersambung';
+                    indicator.classList.add('online');
+                    indicator.classList.add('show');
+                    setTimeout(() => indicator.classList.remove('show'), 3000);
+                } else {
+                    statusText.textContent = 'Tidak ada koneksi internet - Mode offline';
+                    indicator.classList.remove('online');
+                    indicator.classList.add('show');
+                }
+            }
+            
             function showInstallButton() {
                 const installButton = document.getElementById('installButton');
                 installButton.classList.add('show');
-                
                 installButton.addEventListener('click', async () => {
                     if (deferredPrompt) {
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;
-                        
-                        if (outcome === 'accepted') {
-                            hideInstallButton();
-                        }
-                        deferredPrompt = null;
+                        if (outcome === 'accepted') deferredPrompt = null;
+                        hideInstallButton();
                     }
                 });
             }
 
             function hideInstallButton() {
-                const installButton = document.getElementById('installButton');
-                installButton.classList.remove('show');
+                document.getElementById('installButton').classList.remove('show');
             }
 
-            function updateConnectionStatus() {
-                const indicator = document.getElementById('offlineIndicator');
-                const statusText = document.getElementById('connectionStatus');
-                
-                if (navigator.onLine) {
-                    statusText.textContent = 'Koneksi internet tersambung - Mode online';
-                    indicator.classList.add('online');
-                    indicator.classList.add('show');
-                    
-                    setTimeout(() => {
-                        indicator.classList.remove('show');
-                    }, 3000);
-                } else {
-                    statusText.textContent = 'Tidak ada koneksi internet - Mode offline aktif';
-                    indicator.classList.remove('online');
-                    indicator.classList.add('show');
-                }
-                
-                isOnline = navigator.onLine;
-            }
-
-            window.addEventListener('online', updateConnectionStatus);
-            window.addEventListener('offline', updateConnectionStatus);
-
-            window.addEventListener('load', function() {
-                updateConnectionStatus();
-                
-                setTimeout(() => {
-                    if (!window.matchMedia('(display-mode: standalone)').matches && !deferredPrompt) {
-                        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                            showInstallPrompt();
-                        }
-                    }
-                }, 5000);
-            });
-
-            function showInstallPrompt() {
-                const installButton = document.getElementById('installButton');
-                installButton.innerHTML = `
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Tambah ke Home Screen
-                `;
-                installButton.classList.add('show');
-                
-                installButton.onclick = function() {
-                    showManualInstallInstructions();
-                };
-            }
-
-            function showManualInstallInstructions() {
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                const isAndroid = /Android/.test(navigator.userAgent);
-                
-                let instructions = '';
-                
-                if (isIOS) {
-                    instructions = `
-                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                            <div class="bg-white rounded-lg p-6 max-w-sm w-full">
-                                <h3 class="text-lg font-semibold mb-4">Install Aplikasi</h3>
-                                <div class="space-y-3 text-sm">
-                                    <p>1. Tap tombol Share di Safari</p>
-                                    <p>2. Pilih "Add to Home Screen"</p>
-                                    <p>3. Tap "Add" untuk install</p>
-                                </div>
-                                <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg">
-                                    Mengerti
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                } else if (isAndroid) {
-                    instructions = `
-                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                            <div class="bg-white rounded-lg p-6 max-w-sm w-full">
-                                <h3 class="text-lg font-semibold mb-4">Install Aplikasi</h3>
-                                <div class="space-y-3 text-sm">
-                                    <p>1. Tap menu (⋮) di Chrome</p>
-                                    <p>2. Pilih "Add to Home screen"</p>
-                                    <p>3. Tap "Add" untuk install</p>
-                                </div>
-                                <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg">
-                                    Mengerti
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    instructions = `
-                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                            <div class="bg-white rounded-lg p-6 max-w-sm w-full">
-                                <h3 class="text-lg font-semibold mb-4">Bookmark Halaman</h3>
-                                <div class="space-y-3 text-sm">
-                                    <p>Tekan Ctrl+D (Windows) atau Cmd+D (Mac) untuk bookmark halaman ini agar mudah diakses.</p>
-                                </div>
-                                <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full bg-emerald-600 text-white py-2 rounded-lg">
-                                    Mengerti
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                document.body.insertAdjacentHTML('beforeend', instructions);
-                hideInstallButton();
-            }
-
-            // Initial app load and event listener setup
+            // --- Event Listeners ---
             window.addEventListener('DOMContentLoaded', async () => {
-                // Login Form
+                // Login, Nav, and Attendance Page Listeners
                 document.getElementById('loginForm').addEventListener('submit', handleLogin);
-                
-                // Navigation Buttons
                 document.getElementById('attendanceBtn').addEventListener('click', () => showPage('attendance'));
-                // document.getElementById('dashboardBtn').addEventListener('click', () => showPage('dashboard')); // Dihapus sementara
+                document.getElementById('dashboardBtn').addEventListener('click', () => showPage('dashboard'));
                 document.getElementById('logoutBtn').addEventListener('click', logout);
-
-                // Attendance Page Elements
                 document.getElementById('attendanceDate').addEventListener('change', updateDateDisplay);
                 document.getElementById('setTodayBtn').addEventListener('click', setToday);
                 document.getElementById('addStudentBtn').addEventListener('click', addStudent);
                 document.getElementById('saveAttendanceBtn').addEventListener('click', saveAttendance);
 
-                // Dashboard Page Elements (Event listeners ini tidak lagi relevan karena dashboard dihapus)
-                // document.getElementById('exportDataBtn').addEventListener('click', exportData);
-                // document.getElementById('importFileInput').addEventListener('change', handleImportFile);
-                // document.getElementById('importDataBtn').addEventListener('click', () => document.getElementById('importFileInput').click());
-                // document.getElementById('searchInput').addEventListener('keyup', searchAttendance);
-                // document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
-
-                // Event Delegation for dynamically added rows/buttons in Attendance Table
-                document.getElementById('studentTableBody').addEventListener('click', function(event) {
-                    const target = event.target;
-                    const studentId = target.dataset.studentId;
-                    const studentName = target.dataset.studentName;
-
-                    if (target.dataset.action === 'edit-student') {
-                        editStudent(studentId);
-                    } else if (target.dataset.action === 'delete-student') {
-                        deleteStudent(studentId, studentName);
-                    }
+                // Dashboard Listeners
+                document.getElementById('exportDataBtn').addEventListener('click', () => { /* Add export logic if needed */ });
+                document.getElementById('importDataBtn').addEventListener('click', () => document.getElementById('importFileInput').click());
+                document.getElementById('summarySearchInput').addEventListener('keyup', searchSummary);
+                document.getElementById('clearSummarySearchBtn').addEventListener('click', () => {
+                    document.getElementById('summarySearchInput').value = '';
+                    searchSummary();
                 });
 
-                document.getElementById('studentTableBody').addEventListener('change', function(event) {
-                    const target = event.target;
-                    if (target.classList.contains('attendance-radio')) {
-                        updateSummary();
-                    }
+                // Event Delegation
+                document.getElementById('studentTableBody').addEventListener('click', (e) => {
+                    const button = e.target.closest('button[data-action="delete-student"]');
+                    if (button) deleteStudent(button.dataset.studentId, button.dataset.studentName);
+                });
+                document.getElementById('studentTableBody').addEventListener('change', e => {
+                    if (e.target.classList.contains('attendance-radio')) updateSummary();
                 });
 
-                // Event Delegation for dynamically added rows/buttons in Dashboard Table (Dihapus sementara)
-                // document.getElementById('dashboardTableBody').addEventListener('click', function(event) {
-                //     const target = event.target;
-                //     const recordId = target.dataset.recordId;
-                //     const studentId = target.dataset.studentId;
-                //     const studentName = target.dataset.studentName;
-                //     const studentClass = target.dataset.studentClass;
-                //     const recordTanggal = target.dataset.tanggal;
+                // PWA Listeners
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    showInstallButton();
+                });
+                window.addEventListener('online', updateConnectionStatus);
+                window.addEventListener('offline', updateConnectionStatus);
+                updateConnectionStatus();
 
-                //     if (target.dataset.action === 'edit-attendance') {
-                //         editAttendanceRecord(recordId);
-                //     } else if (target.dataset.action === 'delete-attendance') {
-                //         deleteAttendanceRecord(recordId, studentName, recordTanggal);
-                //     } else if (target.dataset.action === 'generate-feedback') {
-                //         generateFeedback(studentId, studentName, studentClass);
-                //     }
-                // });
-
-
+                // Auto-login
                 if (localStorage.getItem('currentUser')) {
                     currentUser = localStorage.getItem('currentUser');
-                    let displayName = currentUser;
-                    if (currentUser === 'adit') {
-                        displayName = 'Ustad Adit';
-                    } else if (currentUser === 'lilis') {
-                        displayName = 'Ustadzah Lilis';
-                    } else if (currentUser === 'rizqi') {
-                        displayName = 'Ustad Rizqi';
-                    } else if (currentUser === 'dudu') {
-                        displayName = 'Ustad Dudu';
-                    }
-                    document.getElementById('currentUser').textContent = displayName;
+                    document.getElementById('currentUser').textContent = getDisplayName(currentUser);
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('mainApp').classList.remove('hidden');
-                    showPage('attendance'); // Default to attendance page
+                    showPage('attendance');
                     try {
                         await initializeAppLogic();
-                        console.log("initializeAppLogic completed successfully on DOMContentLoaded.");
                     } catch (error) {
-                        console.error("Error during initializeAppLogic on DOMContentLoaded:", error);
-                        showMessageModal('error', 'Gagal Memuat Aplikasi!', 'Terjadi kesalahan saat memuat aplikasi. Silakan coba lagi. Error: ' + error.message, 'OK');
+                        showErrorMessage('Gagal memuat aplikasi otomatis: ' + error.message);
                         logout();
                     }
                 } else {
-                    // If no current user, show login page
                     document.getElementById('loginPage').classList.remove('hidden');
                     document.getElementById('username').focus();
                 }
