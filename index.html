@@ -224,29 +224,30 @@
     <div id="mainApp" class="hidden">
         <!-- Navigasi -->
         <nav class="bg-emerald-600 text-white p-4 shadow-lg">
-            <div class="container mx-auto flex justify-between items-center">
-                <div class="flex items-center gap-4">
+            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+                <div class="flex items-center gap-4 mb-2 sm:mb-0">
                     <div>
                         <h1 class="text-xl font-bold">Madrasah Diniyah Nurul Yusuf</h1>
                         <p class="text-emerald-100 text-sm">Ahlan wa sahlan, <span id="currentUser"></span></p>
                     </div>
                 </div>
-                <div class="flex gap-4">
+                <!-- Perbaikan Responsif: Tombol Navigasi -->
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end mt-2 sm:mt-0">
                     <button 
                         id="attendanceBtn"
-                        class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 transition-colors"
+                        class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 transition-colors text-sm sm:text-base"
                     >
                         Absensi
                     </button>
                     <button 
                         id="dashboardBtn"
-                        class="px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
+                        class="px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm sm:text-base"
                     >
                         Rekapan Absen
                     </button>
                     <button 
                         id="logoutBtn" 
-                        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors"
+                        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-sm sm:text-base"
                     >
                         Logout
                     </button>
@@ -721,8 +722,9 @@
              * @param {string} page - ID halaman yang akan ditampilkan ('attendance' atau 'dashboard').
              */
             function showPage(page) {
+                // Perbaikan: Gunakan document.getElementById untuk mendapatkan elemen DOM
                 ['attendancePage', 'dashboardPage'].forEach(p => document.getElementById(p).classList.add('hidden'));
-                ['attendanceBtn', 'dashboardBtn'].forEach(b => document.getElementById(b).classList.remove('bg-emerald-700'));
+                ['attendanceBtn', 'dashboardBtn'].forEach(bId => document.getElementById(bId).classList.remove('bg-emerald-700')); // Perbaikan di sini
                 
                 document.getElementById(`${page}Page`).classList.remove('hidden');
                 document.getElementById(`${page}Btn`).classList.add('bg-emerald-700');
@@ -1087,6 +1089,157 @@
                 updateSummaryTable(filtered);
             }
 
+            // --- Fungsionalitas Ekspor/Impor Data ---
+
+            /**
+             * Mengekspor semua data santri dan absensi pengguna saat ini ke file JSON.
+             */
+            async function exportData() {
+                if (!appState.currentUser) {
+                    showErrorMessage('Anda harus login untuk mengekspor data.');
+                    return;
+                }
+                if (!db) {
+                    showErrorMessage('Database tidak siap.');
+                    return;
+                }
+
+                try {
+                    // Ambil semua data santri
+                    const studentsSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/students`));
+                    const studentsData = studentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                    // Ambil semua data absensi
+                    const attendanceSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/attendance`));
+                    const attendanceData = attendanceSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                    const exportObject = {
+                        students: studentsData,
+                        attendance: attendanceData,
+                        exportedAt: new Date().toISOString(),
+                        userId: appState.currentUser
+                    };
+
+                    const jsonString = JSON.stringify(exportObject, null, 2); // Format JSON dengan indentasi
+                    const blob = new Blob([jsonString], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const date = new Date().toISOString().slice(0, 10);
+                    a.download = `absensi_data_${appState.currentUser}_${date}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    showSuccessMessage('Data berhasil diekspor!');
+
+                } catch (error) {
+                    console.error("Error exporting data:", error);
+                    showErrorMessage('Gagal mengekspor data: ' + error.message);
+                }
+            }
+
+            /**
+             * Mengimpor data santri dan absensi dari file JSON.
+             * Data yang ada di Firestore akan dihapus dan diganti dengan data dari file.
+             */
+            async function importData(event) {
+                if (!appState.currentUser) {
+                    showErrorMessage('Anda harus login untuk mengimpor data.');
+                    return;
+                }
+                if (!db) {
+                    showErrorMessage('Database tidak siap.');
+                    return;
+                }
+
+                const file = event.target.files[0];
+                if (!file) {
+                    return; // Tidak ada file yang dipilih
+                }
+
+                if (file.type !== 'application/json') {
+                    showErrorMessage('Format file tidak didukung. Harap unggah file JSON.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+
+                        // Validasi struktur data yang diimpor
+                        if (!importedData.students || !Array.isArray(importedData.students) ||
+                            !importedData.attendance || !Array.isArray(importedData.attendance)) {
+                            showErrorMessage('Struktur file JSON tidak valid. Pastikan berisi array "students" dan "attendance".');
+                            return;
+                        }
+
+                        showMessageModal('confirm', 'Konfirmasi Impor Data', 
+                            'Data yang ada di cloud akan dihapus dan diganti dengan data dari file ini. Lanjutkan?', 
+                            'Ya, Impor', 'Batal', 
+                            async () => {
+                                try {
+                                    const batch = writeBatch(db);
+
+                                    // Hapus semua data santri yang ada untuk pengguna ini
+                                    const currentStudentsSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/students`));
+                                    currentStudentsSnapshot.forEach(docSnap => batch.delete(docSnap.ref));
+
+                                    // Hapus semua data absensi yang ada untuk pengguna ini
+                                    const currentAttendanceSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/attendance`));
+                                    currentAttendanceSnapshot.forEach(docSnap => batch.delete(docSnap.ref));
+
+                                    // Tambahkan data santri dari file yang diimpor
+                                    importedData.students.forEach(student => {
+                                        // Gunakan ID asli jika ada, jika tidak biarkan Firestore membuat ID baru
+                                        const studentRef = student.id ? doc(db, `users/${appState.currentUser}/students`, student.id) : doc(collection(db, `users/${appState.currentUser}/students`));
+                                        batch.set(studentRef, { nama: student.nama, kelas: student.kelas });
+                                    });
+
+                                    // Tambahkan data absensi dari file yang diimpor
+                                    importedData.attendance.forEach(record => {
+                                        // Gunakan ID asli jika ada, jika tidak biarkan Firestore membuat ID baru
+                                        const attendanceRef = record.id ? doc(db, `users/${appState.currentUser}/attendance`, record.id) : doc(collection(db, `users/${appState.currentUser}/attendance`));
+                                        batch.set(attendanceRef, { 
+                                            studentId: record.studentId, 
+                                            tanggal: record.tanggal, 
+                                            nama: record.nama, 
+                                            kelas: record.kelas, 
+                                            status: record.status, 
+                                            keterangan: record.keterangan, 
+                                            timestamp: record.timestamp 
+                                        });
+                                    });
+
+                                    await batch.commit();
+                                    showSuccessMessage('Data berhasil diimpor dan diperbarui!');
+                                    // Memuat ulang data setelah impor
+                                    initializeAppLogic(); 
+
+                                } catch (error) {
+                                    console.error("Error importing data to Firestore:", error);
+                                    showErrorMessage('Gagal mengimpor data ke cloud: ' + error.message);
+                                } finally {
+                                    hideMessageModal();
+                                }
+                            }, 
+                            () => {
+                                hideMessageModal(); // Tutup modal jika dibatalkan
+                                showErrorMessage('Impor data dibatalkan.');
+                            }
+                        );
+
+                    } catch (error) {
+                        console.error("Error parsing imported JSON:", error);
+                        showErrorMessage('Gagal membaca file JSON. Pastikan formatnya benar.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+
             // --- Fungsionalitas PWA & Offline ---
             let deferredPrompt; // Variabel untuk menyimpan event beforeinstallprompt
 
@@ -1150,15 +1303,12 @@
                 document.getElementById('saveAttendanceBtn').addEventListener('click', saveAttendance);
 
                 // Listener Dashboard
-                document.getElementById('exportDataBtn').addEventListener('click', () => {
-                    // TODO: Implementasi logika ekspor data
-                    showErrorMessage('Fitur ekspor data belum diimplementasikan.');
-                });
+                document.getElementById('exportDataBtn').addEventListener('click', exportData); // Menggunakan fungsi exportData
                 document.getElementById('importDataBtn').addEventListener('click', () => {
                     document.getElementById('importFileInput').click();
-                    // TODO: Implementasi logika impor data
-                    showErrorMessage('Fitur impor data belum diimplementasikan.');
                 });
+                document.getElementById('importFileInput').addEventListener('change', importData); // Menggunakan fungsi importData
+                
                 document.getElementById('summarySearchInput').addEventListener('keyup', searchSummary);
                 document.getElementById('clearSummarySearchBtn').addEventListener('click', () => {
                     document.getElementById('summarySearchInput').value = '';
