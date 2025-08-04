@@ -180,12 +180,12 @@
             
             <form id="loginForm"> 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Email</label>
                     <input 
-                        type="text" 
+                        type="email" 
                         id="username" 
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                        placeholder="Masukkan username"
+                        placeholder="Masukkan email"
                         required
                     >
                 </div>
@@ -497,6 +497,8 @@
         <script type="module">
             // Mengimpor SDK Firebase
             import { initializeApp as firebaseInitializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+            // Impor modul Authentication
+            import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
             import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, query, where, addDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
             // Konfigurasi Firebase (tetap hardcoded sesuai permintaan)
@@ -513,9 +515,11 @@
             // Inisialisasi Firebase
             let app;
             let db;
+            let auth; // Deklarasi variabel auth
             try {
                 app = firebaseInitializeApp(firebaseConfig);
                 db = getFirestore(app);
+                auth = getAuth(app); // Inisialisasi Firebase Authentication
                 console.log("Firebase berhasil diinisialisasi.");
             } catch (e) {
                 console.error("Gagal inisialisasi Firebase:", e);
@@ -523,13 +527,13 @@
                 showMessageModal('error', 'Gagal Inisialisasi Firebase!', 'Aplikasi tidak dapat terhubung ke Firebase. Periksa konfigurasi API Key atau status Firestore di proyek Firebase Anda.', 'OK');
             }
 
-            // Kredensial Pengguna (tetap hardcoded sesuai permintaan)
-            const users = { 'rizqi': 'admin', 'lilis': 'admin', 'adit': 'admin', 'dudu': 'admin' };
+            // Kredensial Pengguna (DIHAPUS - tidak lagi hardcoded)
+            // const users = { 'rizqi': 'admin', 'lilis': 'admin', 'adit': 'admin', 'dudu': 'admin' };
 
             // --- Pengelolaan State Global dengan Proxy untuk Reaktivitas UI ---
             // Menggunakan Proxy untuk memantau perubahan pada state dan memicu pembaruan UI secara otomatis
             const appState = new Proxy({
-                currentUser: null,
+                currentUser: null, // Sekarang akan menyimpan UID Firebase
                 savedStudents: [],
                 attendanceData: [],
                 studentsLoaded: false,
@@ -553,11 +557,13 @@
                         restoreAttendanceState(appState.currentAttendanceDate); // Pastikan status absensi pulih setelah data absensi dimuat
                     } else if (property === 'currentUser') {
                         if (value) {
-                            document.getElementById('currentUser').textContent = getDisplayName(value);
+                            // Jika currentUser diatur (berhasil login)
                             document.getElementById('loginPage').classList.add('hidden');
                             document.getElementById('mainApp').classList.remove('hidden');
-                            showPage('attendance');
+                            showPage('attendance'); // Tampilkan halaman absensi
+                            initializeAppLogic(); // Inisialisasi logika aplikasi (memuat data dari Firestore)
                         } else {
+                            // Jika currentUser menjadi null (logout)
                             document.getElementById('mainApp').classList.add('hidden');
                             document.getElementById('loginPage').classList.remove('hidden');
                             document.getElementById('username').value = '';
@@ -632,45 +638,82 @@
 
             // --- Fungsi Pusat untuk Nama Tampilan ---
             /**
-             * Mendapatkan nama tampilan guru berdasarkan username.
-             * @param {string} username - Username guru.
-             * @returns {string} Nama tampilan yang sesuai.
+             * Mendapatkan nama tampilan guru dari Firestore atau menggunakan email sebagai fallback.
+             * @param {string} uid - UID pengguna dari Firebase Authentication.
+             * @returns {Promise<string>} Nama tampilan yang sesuai.
              */
-            function getDisplayName(username) {
-                const names = { 'adit': 'Ustad Adit', 'lilis': 'Ustadzah Lilis', 'rizqi': 'Ustad Rizqi', 'dudu': 'Ustad Dudu' };
-                return names[username] || username;
+            async function getDisplayName(uid) {
+                // Mencoba mendapatkan nama tampilan dari dokumen profil pengguna di Firestore
+                const userProfileRef = doc(db, `users/${uid}/profile/info`);
+                try {
+                    const docSnap = await getDoc(userProfileRef);
+                    if (docSnap.exists() && docSnap.data().displayName) {
+                        return docSnap.data().displayName;
+                    }
+                } catch (error) {
+                    console.error("Error fetching user display name:", error);
+                    // Lanjutkan dengan UID jika gagal mengambil display name
+                }
+                // Jika tidak ada display name di Firestore, gunakan UID sebagai fallback
+                return uid; 
             }
 
             // --- Logika Inti Aplikasi ---
             /**
-             * Menangani proses login pengguna.
+             * Menangani proses login pengguna menggunakan Firebase Authentication.
              * @param {Event} event - Objek event submit form.
              */
             async function handleLogin(event) {
                 event.preventDefault();
-                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('username').value.trim(); // Username sekarang adalah email
                 const password = document.getElementById('password').value.trim();
 
-                if (users[username] && users[username] === password) {
-                    appState.currentUser = username; // Perbarui state melalui Proxy
-                    localStorage.setItem('currentUser', appState.currentUser);
-                    try {
-                        await initializeAppLogic();
-                    } catch (error) {
-                        showErrorMessage('Gagal inisialisasi aplikasi: ' + error.message);
-                        logout();
+                if (!email || !password) {
+                    return showErrorMessage('Email dan password wajib diisi!');
+                }
+
+                try {
+                    // Melakukan proses login dengan email dan password menggunakan Firebase Auth
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user; // Objek pengguna yang berhasil login
+                    
+                    // Simpan UID Firebase sebagai currentUser di appState
+                    appState.currentUser = user.uid; 
+                    localStorage.setItem('currentUser', user.uid); // Simpan UID di localStorage
+
+                    // Ambil dan tampilkan nama pengguna
+                    const displayName = await getDisplayName(user.uid);
+                    document.getElementById('currentUser').textContent = displayName;
+                    
+                    // appState.currentUser Proxy akan menangani tampilan halaman
+                    showSuccessMessage('Login berhasil!');
+
+                } catch (error) {
+                    console.error("Error during login:", error);
+                    let errorMessage = 'Terjadi kesalahan saat login.';
+                    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                        errorMessage = 'Email atau password salah!';
+                    } else if (error.code === 'auth/invalid-email') {
+                        errorMessage = 'Format email tidak valid!';
+                    } else if (error.code === 'auth/too-many-requests') {
+                        errorMessage = 'Terlalu banyak percobaan login. Coba lagi nanti.';
                     }
-                } else {
-                    showErrorMessage(users[username] ? 'Password salah!' : 'Username salah!');
+                    showErrorMessage(errorMessage);
                 }
             }
 
             /**
-             * Menangani proses logout pengguna.
+             * Menangani proses logout pengguna menggunakan Firebase Authentication.
              */
-            function logout() {
-                appState.currentUser = null; // Perbarui state melalui Proxy
-                localStorage.removeItem('currentUser');
+            async function logout() {
+                try {
+                    await signOut(auth); // Melakukan proses logout dari Firebase
+                    // appState.currentUser Proxy akan menangani tampilan halaman
+                    showSuccessMessage('Anda telah logout.');
+                } catch (error) {
+                    console.error("Error during logout:", error);
+                    showErrorMessage('Gagal logout: ' + error.message);
+                }
             }
 
             /**
@@ -691,24 +734,39 @@
             }
 
             /**
-             * Menginisialisasi logika aplikasi setelah login.
+             * Menginisialisasi logika aplikasi setelah login berhasil.
+             * Memuat data santri dan absensi dari Firestore.
              */
             const initializeAppLogic = async () => {
-                appState.currentAttendanceDate = new Date().toISOString().slice(0, 10); // Set tanggal hari ini
-                if (db) {
+                // Set tanggal absensi saat ini ke hari ini
+                appState.currentAttendanceDate = new Date().toISOString().slice(0, 10); 
+                document.getElementById('attendanceDate').value = appState.currentAttendanceDate; // Update input tanggal
+
+                if (db && auth.currentUser) { // Pastikan db dan user sudah ada
                     await setupFirestoreListeners();
+                    // Setelah listener disiapkan, panggil getDisplayName untuk memperbarui UI dengan nama guru
+                    const displayName = await getDisplayName(auth.currentUser.uid);
+                    document.getElementById('currentUser').textContent = displayName;
                 } else {
-                    throw new Error("Database tidak terinisialisasi.");
+                    // Jika tidak ada user atau db tidak siap, pastikan halaman login ditampilkan
+                    document.getElementById('mainApp').classList.add('hidden');
+                    document.getElementById('loginPage').classList.remove('hidden');
+                    throw new Error("Database atau pengguna tidak terinisialisasi.");
                 }
             };
 
             /**
              * Menyiapkan listener Firestore untuk data santri dan absensi.
+             * Data akan dimuat berdasarkan UID pengguna yang sedang login.
              */
             async function setupFirestoreListeners() {
-                if (!appState.currentUser || !db) return;
+                // Pastikan currentUser sudah ada (UID dari Firebase Auth)
+                if (!appState.currentUser || !db) {
+                    console.warn("Firestore listeners not set up: currentUser or db not ready.");
+                    return;
+                }
 
-                // Listener untuk data santri
+                // Listener untuk data santri (berdasarkan UID pengguna)
                 onSnapshot(collection(db, `users/${appState.currentUser}/students`), (snapshot) => {
                     appState.savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => a.nama.localeCompare(b.nama));
                     appState.studentsLoaded = true;
@@ -717,7 +775,7 @@
                     showErrorMessage('Gagal memuat data santri: ' + error.message);
                 });
 
-                // Listener untuk data absensi
+                // Listener untuk data absensi (berdasarkan UID pengguna)
                 onSnapshot(collection(db, `users/${appState.currentUser}/attendance`), (snapshot) => {
                     appState.attendanceData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     appState.attendanceLoaded = true;
@@ -797,19 +855,19 @@
                 const sanitizedNama = nama.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 const sanitizedKelas = kelas.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-                if (!db) {
-                    return showErrorMessage('Database tidak siap!');
+                if (!db || !appState.currentUser) { // Pastikan db dan user sudah ada
+                    return showErrorMessage('Database tidak siap atau pengguna belum login!');
                 }
                 
                 try {
-                    // Memeriksa apakah santri dengan nama yang sama sudah ada
+                    // Memeriksa apakah santri dengan nama yang sama sudah ada untuk pengguna saat ini
                     const q = query(collection(db, `users/${appState.currentUser}/students`), where("nama", "==", sanitizedNama));
                     const querySnapshot = await getDocs(q);
                     if (!querySnapshot.empty) {
                         return showErrorMessage(`Santri "${sanitizedNama}" sudah ada.`);
                     }
                     
-                    // Menambahkan santri ke Firestore
+                    // Menambahkan santri ke Firestore di bawah UID pengguna yang login
                     await addDoc(collection(db, `users/${appState.currentUser}/students`), { nama: sanitizedNama, kelas: sanitizedKelas });
                     nameInput.value = '';
                     classInput.value = '';
@@ -866,10 +924,15 @@
             async function deleteStudent(id, nama) {
                 showMessageModal('confirm', 'Konfirmasi Hapus', `Yakin hapus santri: ${nama}?\nSemua data absensinya juga akan terhapus!`, 'Ya, Hapus', 'Batal', async () => {
                     try {
-                        // Hapus dokumen santri
+                        if (!appState.currentUser) {
+                            showErrorMessage('Pengguna belum login.');
+                            hideMessageModal();
+                            return;
+                        }
+                        // Hapus dokumen santri dari koleksi pengguna yang login
                         await deleteDoc(doc(db, `users/${appState.currentUser}/students`, id));
                         
-                        // Hapus semua data absensi terkait santri ini
+                        // Hapus semua data absensi terkait santri ini dari koleksi pengguna yang login
                         const q = query(collection(db, `users/${appState.currentUser}/attendance`), where("studentId", "==", id));
                         const snapshot = await getDocs(q);
                         const batch = writeBatch(db);
@@ -923,6 +986,10 @@
                 }
                 
                 try {
+                    if (!appState.currentUser) {
+                        showErrorMessage('Pengguna belum login.');
+                        return;
+                    }
                     const batch = writeBatch(db);
                     const attendanceColRef = collection(db, `users/${appState.currentUser}/attendance`);
 
@@ -1121,19 +1188,22 @@
                 window.addEventListener('offline', updateConnectionStatus);
                 updateConnectionStatus(); // Perbarui status koneksi saat aplikasi dimuat
 
-                // Auto-login jika ada currentUser di localStorage
-                if (localStorage.getItem('currentUser')) {
-                    appState.currentUser = localStorage.getItem('currentUser'); // Set currentUser melalui Proxy
-                    try {
-                        await initializeAppLogic();
-                    } catch (error) {
-                        showErrorMessage('Gagal memuat aplikasi otomatis: ' + error.message);
-                        logout();
+                // Menggunakan onAuthStateChanged untuk menangani status login secara real-time
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        // Pengguna sedang login
+                        appState.currentUser = user.uid; // Set UID ke appState
+                        localStorage.setItem('currentUser', user.uid); // Simpan UID di localStorage
+                        const displayName = await getDisplayName(user.uid);
+                        document.getElementById('currentUser').textContent = displayName;
+                        // appState.currentUser Proxy akan menangani tampilan halaman
+                    } else {
+                        // Pengguna tidak login
+                        appState.currentUser = null; // Set null ke appState
+                        localStorage.removeItem('currentUser'); // Hapus dari localStorage
+                        // appState.currentUser Proxy akan menangani tampilan halaman
                     }
-                } else {
-                    document.getElementById('loginPage').classList.remove('hidden');
-                    document.getElementById('username').focus();
-                }
+                });
             });
         </script>
     </body>
