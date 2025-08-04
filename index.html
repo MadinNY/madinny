@@ -1144,6 +1144,7 @@
             /**
              * Mengimpor data santri dan absensi dari file JSON.
              * Data yang ada di Firestore akan dihapus dan diganti dengan data dari file.
+             * Termasuk validasi dan sanitasi yang lebih ketat.
              */
             async function importData(event) {
                 if (!appState.currentUser) {
@@ -1170,13 +1171,71 @@
                     try {
                         const importedData = JSON.parse(e.target.result);
 
-                        // Validasi struktur data yang diimpor
+                        // --- FUNGSI SANITASI TEKS ---
+                        // Fungsi pembantu untuk membersihkan string dari karakter berbahaya HTML
+                        const sanitizeString = (str) => {
+                            if (typeof str !== 'string') return ''; // Pastikan input adalah string
+                            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").trim();
+                        };
+
+                        // --- VALIDASI STRUKTUR DASAR ---
                         if (!importedData.students || !Array.isArray(importedData.students) ||
                             !importedData.attendance || !Array.isArray(importedData.attendance)) {
                             showErrorMessage('Struktur file JSON tidak valid. Pastikan berisi array "students" dan "attendance".');
                             return;
                         }
 
+                        // --- VALIDASI DAN SANITASI DATA SANTRI ---
+                        const sanitizedStudents = [];
+                        for (const student of importedData.students) {
+                            // Validasi keberadaan dan tipe field wajib
+                            if (!student.id || typeof student.id !== 'string' || student.id.trim() === '' ||
+                                !student.nama || typeof student.nama !== 'string' || student.nama.trim() === '' ||
+                                !student.kelas || typeof student.kelas !== 'string' || student.kelas.trim() === '') {
+                                showErrorMessage(`Data santri tidak valid: Santri dengan ID '${student.id || 'unknown'}' memiliki field wajib yang hilang atau salah tipe.`);
+                                return; // Tolak seluruh impor jika ada satu santri yang salah
+                            }
+                            
+                            // Sanitasi field teks
+                            sanitizedStudents.push({
+                                id: sanitizeString(student.id),
+                                nama: sanitizeString(student.nama),
+                                kelas: sanitizeString(student.kelas)
+                            });
+                        }
+
+                        // --- VALIDASI DAN SANITASI DATA ABSENSI ---
+                        const sanitizedAttendance = [];
+                        const validStatuses = ['hadir', 'sakit', 'izin', 'alpha'];
+                        // Regex untuk format tanggal YYYY-MM-DD
+                        const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/; 
+
+                        for (const record of importedData.attendance) {
+                            // Validasi keberadaan dan tipe field wajib
+                            if (!record.studentId || typeof record.studentId !== 'string' || record.studentId.trim() === '' ||
+                                !record.tanggal || typeof record.tanggal !== 'string' || !dateFormatRegex.test(record.tanggal) || // Validasi format tanggal
+                                !record.status || !validStatuses.includes(record.status) || // Validasi status hanya nilai yang diizinkan
+                                !record.nama || typeof record.nama !== 'string' || record.nama.trim() === '' || // Nama santri di record absensi juga penting
+                                !record.kelas || typeof record.kelas !== 'string' || record.kelas.trim() === '' || // Kelas santri di record absensi juga penting
+                                !record.timestamp || typeof record.timestamp !== 'string' || record.timestamp.trim() === '' // Validasi timestamp
+                            ) {
+                                showErrorMessage(`Data absensi tidak valid: Record untuk santri ID '${record.studentId || 'unknown'}' pada tanggal '${record.tanggal || 'unknown'}' memiliki field wajib yang hilang, salah tipe, atau status tidak valid.`);
+                                return; // Tolak seluruh impor jika ada satu record absensi yang salah
+                            }
+
+                            // Sanitasi field teks
+                            sanitizedAttendance.push({
+                                studentId: sanitizeString(record.studentId),
+                                tanggal: sanitizeString(record.tanggal),
+                                nama: sanitizeString(record.nama),
+                                kelas: sanitizeString(record.kelas),
+                                status: sanitizeString(record.status),
+                                keterangan: sanitizeString(record.keterangan || ''), // Keterangan bisa kosong
+                                timestamp: sanitizeString(record.timestamp)
+                            });
+                        }
+
+                        // --- KONFIRMASI IMPOR ---
                         showMessageModal('confirm', 'Konfirmasi Impor Data', 
                             'Data yang ada di cloud akan dihapus dan diganti dengan data dari file ini. Lanjutkan?', 
                             'Ya, Impor', 'Batal', 
@@ -1192,17 +1251,16 @@
                                     const currentAttendanceSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/attendance`));
                                     currentAttendanceSnapshot.forEach(docSnap => batch.delete(docSnap.ref));
 
-                                    // Tambahkan data santri dari file yang diimpor
-                                    importedData.students.forEach(student => {
-                                        // Gunakan ID asli jika ada, jika tidak biarkan Firestore membuat ID baru
-                                        const studentRef = student.id ? doc(db, `users/${appState.currentUser}/students`, student.id) : doc(collection(db, `users/${appState.currentUser}/students`));
+                                    // Tambahkan data santri dari file yang sudah divalidasi dan disanitasi
+                                    sanitizedStudents.forEach(student => {
+                                        const studentRef = doc(db, `users/${appState.currentUser}/students`, student.id); // Gunakan ID asli
                                         batch.set(studentRef, { nama: student.nama, kelas: student.kelas });
                                     });
 
-                                    // Tambahkan data absensi dari file yang diimpor
-                                    importedData.attendance.forEach(record => {
-                                        // Gunakan ID asli jika ada, jika tidak biarkan Firestore membuat ID baru
-                                        const attendanceRef = record.id ? doc(db, `users/${appState.currentUser}/attendance`, record.id) : doc(collection(db, `users/${appState.currentUser}/attendance`));
+                                    // Tambahkan data absensi dari file yang sudah divalidasi dan disanitasi
+                                    sanitizedAttendance.forEach(record => {
+                                        // Firestore akan membuat ID dokumen absensi baru
+                                        const attendanceRef = doc(collection(db, `users/${appState.currentUser}/attendance`)); 
                                         batch.set(attendanceRef, { 
                                             studentId: record.studentId, 
                                             tanggal: record.tanggal, 
