@@ -6,7 +6,8 @@
     <title>Absensi Madrasah Diniyah Nurul Yusuf</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="manifest" href="data:application/json;base64,eyJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE5zYjJOdmJpOWpiMjUwWlhKcGJpOWpiMjUwWlhKcGJtRnNaWFFvZEQwaU1qUWlJSFpwWlhkQ2IzZzlJakFnTUNBeU5DQTBPQ0lnWm1sc2JEMGlJekV3WWprNE1TSStQSE5oZEdnZ1pEMG" + "iUUlJDRGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOimnltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlORGdnSW1obGFXZ29kRDBpTkRnaUlIWnBaWGxDYjNnOUlqQWdNQ0EwT0NBME9DSWdabWxzYkQwZ0l6RXdZams0TVNJK1BITmhkR2dnWkQwaVRUSTBJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOimnltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNalFpSUdsaGFTZG9kRDBpTWpRaUlIWnBaWGxDYjNnOUlqQWdNQ0F5T0NBME9DSWdabWxzYkQwZ0l6RXdZams0TVNJK1BITmhkR2dnWkQwaVRUSTBJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiMTI4eDEyOCIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOimnltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlORGdnSW1obGFXZ29kRDBpTkRnaUlIWnBaWGxDYjNnOUlqQWdNQ0EwT0NBME9DSWdabWxzYkQwZ0l6RXdZams0TVNJK1BITmhkR2dnWkQwaVRUSTBJRFJGTWpRZ01TNDVOamdnTWpNdVJTMjBJREVnTWpFaU1VTXhPUzR3TjJnaU1TQXlOaTRVTmpnaU1TNDVOamdnTVM0NU5qZ2dNVFlnTkVNMVRqRXVPVFk0SURFMklERWdNVGtnTVNBeU5DQXhRekkyTGprek1pQXhJREkwSURFdVIyNDBJREkwSURSYUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiNDh4NDgiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+    <!-- Menghubungkan ke manifest.json untuk PWA -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#10b981">
     <style>
         /* Mengimpor font Inter dari Google Fonts */
@@ -141,9 +142,51 @@
         .install-button.show {
             display: flex;
         }
+
+        /* Gaya untuk indikator loading */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001; /* Lebih tinggi dari modal */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #10b981;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 16px;
+            font-size: 1rem;
+            color: #4a5568;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen">
+    <!-- Overlay Loading -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Memuat...</p>
+    </div>
+
     <!-- Modal Pesan Kustom (untuk alert/confirm) -->
     <div id="messageModal" class="message-modal">
         <div class="message-modal-content">
@@ -641,6 +684,23 @@
             // Fungsi shortcut untuk menampilkan pesan error
             function showErrorMessage(message) { showMessageModal('error', 'Terjadi Kesalahan!', message); }
 
+            // --- Indikator Loading ---
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            /**
+             * Menampilkan overlay loading.
+             */
+            function showLoading() {
+                loadingOverlay.classList.add('show');
+            }
+
+            /**
+             * Menyembunyikan overlay loading.
+             */
+            function hideLoading() {
+                loadingOverlay.classList.remove('show');
+            }
+
             // --- Fungsi Pusat untuk Nama Tampilan ---
             /**
              * Mendapatkan nama tampilan guru dari Firestore atau menggunakan email sebagai fallback.
@@ -670,10 +730,12 @@
              */
             async function handleLogin(event) {
                 event.preventDefault();
+                showLoading(); // Tampilkan loading
                 const email = document.getElementById('username').value.trim(); // Username sekarang adalah email
                 const password = document.getElementById('password').value.trim();
 
                 if (!email || !password) {
+                    hideLoading(); // Sembunyikan loading jika validasi gagal
                     return showErrorMessage('Email dan password wajib diisi!');
                 }
 
@@ -704,6 +766,8 @@
                         errorMessage = 'Terlalu banyak percobaan login. Coba lagi nanti.';
                     }
                     showErrorMessage(errorMessage);
+                } finally {
+                    hideLoading(); // Sembunyikan loading setelah proses selesai (berhasil/gagal)
                 }
             }
 
@@ -711,6 +775,7 @@
              * Menangani proses logout pengguna menggunakan Firebase Authentication.
              */
             async function logout() {
+                showLoading(); // Tampilkan loading
                 try {
                     await signOut(auth); // Melakukan proses logout dari Firebase
                     // appState.currentUser Proxy akan menangani tampilan halaman
@@ -718,6 +783,8 @@
                 } catch (error) {
                     console.error("Error during logout:", error);
                     showErrorMessage('Gagal logout: ' + error.message);
+                } finally {
+                    hideLoading(); // Sembunyikan loading
                 }
             }
 
@@ -744,20 +811,30 @@
              * Memuat data santri dan absensi dari Firestore.
              */
             const initializeAppLogic = async () => {
-                // Set tanggal absensi saat ini ke hari ini
-                appState.currentAttendanceDate = new Date().toISOString().slice(0, 10); 
-                document.getElementById('attendanceDate').value = appState.currentAttendanceDate; // Update input tanggal
+                showLoading(); // Tampilkan loading saat inisialisasi
+                try {
+                    // Set tanggal absensi saat ini ke hari ini
+                    appState.currentAttendanceDate = new Date().toISOString().slice(0, 10); 
+                    document.getElementById('attendanceDate').value = appState.currentAttendanceDate; // Update input tanggal
 
-                if (db && auth.currentUser) { // Pastikan db dan user sudah ada
-                    await setupFirestoreListeners();
-                    // Setelah listener disiapkan, panggil getDisplayName untuk memperbarui UI dengan nama guru
-                    const displayName = await getDisplayName(auth.currentUser.uid);
-                    document.getElementById('currentUser').textContent = displayName;
-                } else {
-                    // Jika tidak ada user atau db tidak siap, pastikan halaman login ditampilkan
-                    document.getElementById('mainApp').classList.add('hidden');
-                    document.getElementById('loginPage').classList.remove('hidden');
-                    throw new Error("Database atau pengguna tidak terinisialisasi.");
+                    if (db && auth.currentUser) { // Pastikan db dan user sudah ada
+                        await setupFirestoreListeners();
+                        // Setelah listener disiapkan, panggil getDisplayName untuk memperbarui UI dengan nama guru
+                        const displayName = await getDisplayName(auth.currentUser.uid);
+                        document.getElementById('currentUser').textContent = displayName;
+                    } else {
+                        // Jika tidak ada user atau db tidak siap, pastikan halaman login ditampilkan
+                        document.getElementById('mainApp').classList.add('hidden');
+                        document.getElementById('loginPage').classList.remove('hidden');
+                        throw new Error("Database atau pengguna tidak terinisialisasi.");
+                    }
+                } catch (error) {
+                    console.error("Error during app initialization:", error);
+                    showErrorMessage('Gagal memuat aplikasi: ' + error.message);
+                    // Jika inisialisasi gagal, pastikan logout atau kembali ke login
+                    logout(); 
+                } finally {
+                    hideLoading(); // Sembunyikan loading
                 }
             };
 
@@ -772,8 +849,12 @@
                     return;
                 }
 
+                // Hentikan listener sebelumnya jika ada (untuk mencegah error "Missing or insufficient permissions")
+                if (appState.studentUnsubscribe) appState.studentUnsubscribe();
+                if (appState.attendanceUnsubscribe) appState.attendanceUnsubscribe();
+
                 // Listener untuk data santri (berdasarkan UID pengguna)
-                onSnapshot(collection(db, `users/${appState.currentUser}/students`), (snapshot) => {
+                appState.studentUnsubscribe = onSnapshot(collection(db, `users/${appState.currentUser}/students`), (snapshot) => {
                     appState.savedStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => a.nama.localeCompare(b.nama));
                     appState.studentsLoaded = true;
                 }, (error) => {
@@ -782,7 +863,7 @@
                 });
 
                 // Listener untuk data absensi (berdasarkan UID pengguna)
-                onSnapshot(collection(db, `users/${appState.currentUser}/attendance`), (snapshot) => {
+                appState.attendanceUnsubscribe = onSnapshot(collection(db, `users/${appState.currentUser}/attendance`), (snapshot) => {
                     appState.attendanceData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     appState.attendanceLoaded = true;
                 }, (error) => {
@@ -848,6 +929,7 @@
              * Menambahkan santri baru ke Firestore.
              */
             async function addStudent() {
+                showLoading(); // Tampilkan loading
                 const nameInput = document.getElementById('studentName');
                 const classInput = document.getElementById('studentClass');
                 const nama = nameInput.value.trim();
@@ -855,6 +937,7 @@
 
                 // Validasi input
                 if (!nama || !kelas) {
+                    hideLoading(); // Sembunyikan loading jika validasi gagal
                     return showErrorMessage('Nama dan kelas santri wajib diisi!');
                 }
                 // Sanitasi sederhana: menghapus tag HTML dasar (tidak sepenuhnya aman dari XSS, tapi lebih baik dari tidak sama sekali)
@@ -862,6 +945,7 @@
                 const sanitizedKelas = kelas.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
                 if (!db || !appState.currentUser) { // Pastikan db dan user sudah ada
+                    hideLoading(); // Sembunyikan loading jika db/user tidak siap
                     return showErrorMessage('Database tidak siap atau pengguna belum login!');
                 }
                 
@@ -870,6 +954,7 @@
                     const q = query(collection(db, `users/${appState.currentUser}/students`), where("nama", "==", sanitizedNama));
                     const querySnapshot = await getDocs(q);
                     if (!querySnapshot.empty) {
+                        hideLoading(); // Sembunyikan loading
                         return showErrorMessage(`Santri "${sanitizedNama}" sudah ada.`);
                     }
                     
@@ -882,6 +967,8 @@
                 } catch (error) {
                     console.error("Error adding student:", error);
                     showErrorMessage('Gagal menambah santri: ' + error.message);
+                } finally {
+                    hideLoading(); // Sembunyikan loading
                 }
             }
 
@@ -929,6 +1016,7 @@
              */
             async function deleteStudent(id, nama) {
                 showMessageModal('confirm', 'Konfirmasi Hapus', `Yakin hapus santri: ${nama}?\nSemua data absensinya juga akan terhapus!`, 'Ya, Hapus', 'Batal', async () => {
+                    showLoading(); // Tampilkan loading
                     try {
                         if (!appState.currentUser) {
                             showErrorMessage('Pengguna belum login.');
@@ -949,8 +1037,10 @@
                     } catch (error) {
                         console.error("Error deleting student:", error);
                         showErrorMessage('Gagal hapus santri: ' + error.message);
+                    } finally {
+                        hideLoading(); // Sembunyikan loading
+                        hideMessageModal();
                     }
-                    hideMessageModal();
                 }, hideMessageModal);
             }
 
@@ -958,8 +1048,10 @@
              * Menyimpan data absensi ke Firestore.
              */
             async function saveAttendance() {
+                showLoading(); // Tampilkan loading
                 const date = appState.currentAttendanceDate;
                 if (!date) {
+                    hideLoading(); // Sembunyikan loading
                     return showErrorMessage('Pilih tanggal absensi!');
                 }
                 
@@ -988,11 +1080,13 @@
                 });
 
                 if (updates.length === 0) {
+                    hideLoading(); // Sembunyikan loading
                     return showErrorMessage('Tidak ada data absensi untuk disimpan. Pastikan Anda telah memilih status kehadiran.');
                 }
                 
                 try {
                     if (!appState.currentUser) {
+                        hideLoading(); // Sembunyikan loading
                         showErrorMessage('Pengguna belum login.');
                         return;
                     }
@@ -1017,6 +1111,8 @@
                 } catch (error) {
                     console.error("Error saving attendance:", error);
                     showErrorMessage('Gagal menyimpan absensi: ' + error.message);
+                } finally {
+                    hideLoading(); // Sembunyikan loading
                 }
             }
 
@@ -1099,11 +1195,14 @@
              * Mengekspor semua data santri dan absensi pengguna saat ini ke file JSON.
              */
             async function exportData() {
+                showLoading(); // Tampilkan loading
                 if (!appState.currentUser) {
+                    hideLoading(); // Sembunyikan loading
                     showErrorMessage('Anda harus login untuk mengekspor data.');
                     return;
                 }
                 if (!db) {
+                    hideLoading(); // Sembunyikan loading
                     showErrorMessage('Database tidak siap.');
                     return;
                 }
@@ -1142,6 +1241,8 @@
                 } catch (error) {
                     console.error("Error exporting data:", error);
                     showErrorMessage('Gagal mengekspor data: ' + error.message);
+                } finally {
+                    hideLoading(); // Sembunyikan loading
                 }
             }
 
@@ -1151,21 +1252,26 @@
              * Termasuk validasi dan sanitasi yang lebih ketat.
              */
             async function importData(event) {
+                showLoading(); // Tampilkan loading
                 if (!appState.currentUser) {
+                    hideLoading(); // Sembunyikan loading
                     showErrorMessage('Anda harus login untuk mengimpor data.');
                     return;
                 }
                 if (!db) {
+                    hideLoading(); // Sembunyikan loading
                     showErrorMessage('Database tidak siap.');
                     return;
                 }
 
                 const file = event.target.files[0];
                 if (!file) {
+                    hideLoading(); // Sembunyikan loading
                     return; // Tidak ada file yang dipilih
                 }
 
                 if (file.type !== 'application/json') {
+                    hideLoading(); // Sembunyikan loading
                     showErrorMessage('Format file tidak didukung. Harap unggah file JSON.');
                     return;
                 }
@@ -1186,6 +1292,7 @@
                         if (!importedData.students || !Array.isArray(importedData.students) ||
                             !importedData.attendance || !Array.isArray(importedData.attendance)) {
                             showErrorMessage('Struktur file JSON tidak valid. Pastikan berisi array "students" dan "attendance".');
+                            hideLoading(); // Sembunyikan loading
                             return;
                         }
 
@@ -1197,6 +1304,7 @@
                                 !student.nama || typeof student.nama !== 'string' || student.nama.trim() === '' ||
                                 !student.kelas || typeof student.kelas !== 'string' || student.kelas.trim() === '') {
                                 showErrorMessage(`Data santri tidak valid: Santri dengan ID '${student.id || 'unknown'}' memiliki field wajib yang hilang atau salah tipe.`);
+                                hideLoading(); // Sembunyikan loading
                                 return; // Tolak seluruh impor jika ada satu santri yang salah
                             }
                             
@@ -1224,6 +1332,7 @@
                                 !record.timestamp || typeof record.timestamp !== 'string' || record.timestamp.trim() === '' // Validasi timestamp
                             ) {
                                 showErrorMessage(`Data absensi tidak valid: Record untuk santri ID '${record.studentId || 'unknown'}' pada tanggal '${record.tanggal || 'unknown'}' memiliki field wajib yang hilang, salah tipe, atau status tidak valid.`);
+                                hideLoading(); // Sembunyikan loading
                                 return; // Tolak seluruh impor jika ada satu record absensi yang salah
                             }
 
@@ -1244,6 +1353,7 @@
                             'Data yang ada di cloud akan dihapus dan diganti dengan data dari file ini. Lanjutkan?', 
                             'Ya, Impor', 'Batal', 
                             async () => {
+                                showLoading(); // Tampilkan loading saat konfirmasi
                                 try {
                                     const batch = writeBatch(db);
 
@@ -1285,10 +1395,12 @@
                                     console.error("Error importing data to Firestore:", error);
                                     showErrorMessage('Gagal mengimpor data ke cloud: ' + error.message);
                                 } finally {
+                                    hideLoading(); // Sembunyikan loading
                                     hideMessageModal();
                                 }
                             }, 
                             () => {
+                                hideLoading(); // Sembunyikan loading jika dibatalkan
                                 hideMessageModal(); // Tutup modal jika dibatalkan
                                 showErrorMessage('Impor data dibatalkan.');
                             }
@@ -1297,6 +1409,12 @@
                     } catch (error) {
                         console.error("Error parsing imported JSON:", error);
                         showErrorMessage('Gagal membaca file JSON. Pastikan formatnya benar.');
+                    } finally {
+                        // Jika ada error parsing atau validasi awal, loading akan disembunyikan di sini
+                        // Jika lanjut ke konfirmasi, loading akan disembunyikan di callback konfirmasi
+                        if (!messageModal.classList.contains('show')) { // Hanya sembunyikan jika modal konfirmasi tidak muncul
+                            hideLoading();
+                        }
                     }
                 };
                 reader.readAsText(file);
@@ -1349,6 +1467,16 @@
 
             // --- Event Listeners ---
             window.addEventListener('DOMContentLoaded', async () => {
+                // Mendaftarkan Service Worker
+                if ('serviceWorker' in navigator) {
+                    try {
+                        await navigator.serviceWorker.register('./service-worker.js');
+                        console.log('Service Worker berhasil didaftarkan.');
+                    } catch (error) {
+                        console.error('Pendaftaran Service Worker gagal:', error);
+                    }
+                }
+
                 // Listener Halaman Login, Navigasi, dan Absensi
                 document.getElementById('loginForm').addEventListener('submit', handleLogin);
                 document.getElementById('attendanceBtn').addEventListener('click', () => showPage('attendance'));
@@ -1406,9 +1534,8 @@
                         // Pengguna sedang login
                         appState.currentUser = user.uid; // Set UID ke appState
                         localStorage.setItem('currentUser', user.uid); // Simpan UID di localStorage
-                        const displayName = await getDisplayName(user.uid);
-                        document.getElementById('currentUser').textContent = displayName;
-                        // appState.currentUser Proxy akan menangani tampilan halaman
+                        // Inisialisasi logika aplikasi setelah login berhasil
+                        // initializeAppLogic() akan dipanggil oleh Proxy saat currentUser diatur
                     } else {
                         // Pengguna tidak login
                         appState.currentUser = null; // Set null ke appState
