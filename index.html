@@ -9,6 +9,8 @@
     <!-- Menghubungkan ke manifest.json untuk PWA -->
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#10b981">
+    <!-- Library JSZip untuk membuat file ZIP (digunakan untuk ekspor CSV ganda) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         /* Mengimpor font Inter dari Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -177,6 +179,43 @@
             margin-top: 16px;
             font-size: 1rem;
             color: #4a5568;
+        }
+
+        /* Gaya untuk dropdown ekspor */
+        .export-dropdown {
+            position: absolute;
+            top: 100%; /* Di bawah tombol trigger */
+            right: 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            z-index: 999; /* Di bawah loading overlay, di atas elemen lain */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            min-width: 200px; /* Lebar minimum untuk dropdown */
+        }
+
+        .export-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .export-dropdown button {
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #374151; /* gray-700 */
+            transition: background-color 0.2s ease;
+        }
+
+        .export-dropdown button:hover {
+            background-color: #f3f4f6; /* gray-100 */
         }
     </style>
 </head>
@@ -513,10 +552,28 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex gap-2">
-                             <button id="clearSummarySearchBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium">Reset</button>
-                             <button id="exportDataBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">Ekspor</button>
+                        <div class="flex gap-2 relative">
+                             <!-- Tombol Kembali untuk pencarian -->
+                             <button id="resetSearchBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium hidden">Kembali</button>
+                             
+                             <!-- Tombol Ekspor Utama -->
+                             <button id="mainExportBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 0a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                                </svg>
+                                Ekspor
+                             </button>
+
+                             <!-- Dropdown Pilihan Ekspor -->
+                             <div id="exportOptionsDropdown" class="export-dropdown hidden">
+                                <button id="exportJsonDataBtn" class="hover:bg-gray-100"><i class="fas fa-file-code mr-2 text-blue-600"></i>Ekspor JSON</button>
+                                <button id="exportCsvDataBtn" class="hover:bg-gray-100"><i class="fas fa-file-csv mr-2 text-emerald-600"></i>Ekspor Spreadsheet (CSV)</button>
+                                <button id="exportWordDataBtn" class="hover:bg-gray-100"><i class="fas fa-file-word mr-2 text-purple-600"></i>Ekspor Word (Teks)</button>
+                             </div>
+
                              <button id="importDataBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">Impor</button>
+                             <!-- Tombol Reset Absensi Baru -->
+                             <button id="resetAttendanceCountsBtn" class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium">Reset Absensi</button>
                              <input type="file" id="importFileInput" class="hidden" accept=".json">
                         </div>
                     </div>
@@ -749,7 +806,7 @@
                 event.preventDefault();
                 showLoading(); // Tampilkan loading
                 const email = document.getElementById('username').value.trim(); // Username sekarang adalah email
-                const password = document.getElementById('password').trim();
+                const password = document.getElementById('password').value.trim(); // Menggunakan .value.trim()
 
                 if (!email || !password) {
                     hideLoading(); // Sembunyikan loading jika validasi gagal
@@ -1231,9 +1288,25 @@
             // --- Fungsionalitas Ekspor/Impor Data ---
 
             /**
+             * Helper untuk membuat dan mengunduh file.
+             * @param {Blob} blob - Objek Blob dari file yang akan diunduh.
+             * @param {string} filename - Nama file.
+             */
+            function downloadFile(blob, filename) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            /**
              * Mengekspor semua data santri dan absensi pengguna saat ini ke file JSON.
              */
-            async function exportData() {
+            async function exportJsonData() { // Fungsi diubah namanya dari exportData
                 showLoading(); // Tampilkan loading
                 if (!appState.currentUser) {
                     hideLoading(); // Sembunyikan loading
@@ -1264,24 +1337,175 @@
 
                     const jsonString = JSON.stringify(exportObject, null, 2); // Format JSON dengan indentasi
                     const blob = new Blob([jsonString], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-
-                    const a = document.createElement('a');
-                    a.href = url;
                     const date = new Date().toISOString().slice(0, 10);
-                    a.download = `absensi_data_${appState.currentUser}_${date}.json`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
+                    downloadFile(blob, `absensi_data_${appState.currentUser}_${date}.json`);
 
-                    showSuccessMessage('Data berhasil diekspor!');
+                    showSuccessMessage('Data berhasil diekspor ke JSON!');
 
                 } catch (error) {
                     console.error("Error exporting data:", error);
                     showErrorMessage('Gagal mengekspor data: ' + error.message);
                 } finally {
                     hideLoading(); // Sembunyikan loading
+                }
+            }
+
+            /**
+             * Mengekspor data santri dan rekap absensi ke file CSV (dalam format ZIP).
+             */
+            async function exportCsvData() {
+                showLoading();
+                if (!appState.currentUser) {
+                    hideLoading();
+                    showErrorMessage('Anda harus login untuk mengekspor data.');
+                    return;
+                }
+                if (!db) {
+                    hideLoading();
+                    showErrorMessage('Database tidak siap.');
+                    return;
+                }
+
+                try {
+                    const studentsData = appState.savedStudents; // Sudah diurutkan berdasarkan nama
+                    const attendanceData = appState.attendanceData;
+
+                    // Buat CSV untuk Data Santri
+                    let studentCsvContent = "ID,Nama,Kelas\n";
+                    studentsData.forEach(student => {
+                        // Menggunakan kutip ganda untuk menangani koma dalam data dan mengganti kutip ganda dengan dua kutip ganda
+                        studentCsvContent += `"${student.id}","${student.nama.replace(/"/g, '""')}","${student.kelas.replace(/"/g, '""')}"\n`;
+                    });
+
+                    // Buat CSV untuk Rekapitulasi Absensi
+                    let attendanceSummaryCsvContent = "ID Santri,Nama Santri,Kelas,Total Hadir,Total Sakit,Total Izin,Total Alpha\n";
+                    const summaryMap = new Map(); // Map untuk menyimpan jumlah absensi per santri
+
+                    studentsData.forEach(student => {
+                        summaryMap.set(student.id, {
+                            nama: student.nama,
+                            kelas: student.kelas,
+                            hadir: 0,
+                            sakit: 0,
+                            izin: 0,
+                            alpha: 0
+                        });
+                    });
+
+                    summaryMap.forEach((summary, studentId) => {
+                        attendanceData.filter(record => record.studentId === studentId).forEach(record => {
+                            if (record.status === 'hadir') summary.hadir++;
+                            else if (record.status === 'sakit') summary.sakit++;
+                            else if (record.status === 'izin') summary.izin++;
+                            else if (record.status === 'alpha') summary.alpha++;
+                        });
+                        attendanceSummaryCsvContent += `"${studentId}","${summary.nama.replace(/"/g, '""')}","${summary.kelas.replace(/"/g, '""')}",${summary.hadir},${summary.sakit},${summary.izin},${summary.alpha}\n`;
+                    });
+
+
+                    // Buat file ZIP yang berisi kedua CSV
+                    const zip = new JSZip();
+                    zip.file(`santri_data_${appState.currentUser}.csv`, studentCsvContent);
+                    zip.file(`rekap_absensi_${appState.currentUser}.csv`, attendanceSummaryCsvContent);
+
+                    const content = await zip.generateAsync({ type: "blob" });
+
+                    const date = new Date().toISOString().slice(0, 10);
+                    downloadFile(content, `absensi_data_${appState.currentUser}_${date}.zip`);
+
+                    showSuccessMessage('Data berhasil diekspor ke Spreadsheet (CSV) dalam format ZIP!');
+
+                } catch (error) {
+                    console.error("Error exporting CSV data:", error);
+                    showErrorMessage('Gagal mengekspor data ke Spreadsheet (CSV): ' + error.message);
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            /**
+             * Mengekspor data ke file teks dasar yang dapat dibuka di Word.
+             * Catatan: Ini adalah ekspor teks sederhana, bukan file .docx yang diformat penuh.
+             */
+            async function exportWordReportData() {
+                showLoading();
+                if (!appState.currentUser) {
+                    hideLoading();
+                    showErrorMessage('Anda harus login untuk mengekspor data.');
+                    return;
+                }
+                if (!db) {
+                    hideLoading();
+                    showErrorMessage('Database tidak siap.');
+                    return;
+                }
+
+                try {
+                    const studentsData = appState.savedStudents;
+                    const attendanceData = appState.attendanceData;
+                    const userId = appState.currentUser;
+                    const exportedAt = new Date().toLocaleString('id-ID');
+
+                    let reportContent = `Laporan Absensi Madrasah Diniyah Nurul Yusuf\n`;
+                    reportContent += `Diekspor oleh: ${userId}\n`;
+                    reportContent += `Tanggal Ekspor: ${exportedAt}\n\n`;
+
+                    reportContent += `====================================\n`;
+                    reportContent += `Daftar Santri:\n`;
+                    reportContent += `====================================\n`;
+                    if (studentsData.length === 0) {
+                        reportContent += "Tidak ada data santri.\n\n";
+                    } else {
+                        studentsData.forEach((student, index) => {
+                            reportContent += `${index + 1}. Nama: ${student.nama}, Kelas: ${student.kelas} (ID: ${student.id})\n`;
+                        });
+                        reportContent += "\n";
+                    }
+
+                    reportContent += `====================================\n`;
+                    reportContent += `Rekapitulasi Absensi:\n`;
+                    reportContent += `====================================\n`;
+                    if (attendanceData.length === 0) {
+                        reportContent += "Tidak ada catatan absensi.\n\n";
+                    } else {
+                        // Kelompokkan absensi berdasarkan santri untuk pelaporan yang lebih mudah
+                        const attendanceByStudent = attendanceData.reduce((acc, record) => {
+                            if (!acc[record.studentId]) {
+                                acc[record.studentId] = [];
+                            }
+                            acc[record.studentId].push(record);
+                            return acc;
+                        }, {});
+
+                        studentsData.forEach(student => {
+                            reportContent += `\n--- Absensi untuk ${student.nama} (Kelas: ${student.kelas}) ---\n`;
+                            const studentRecords = attendanceByStudent[student.id] || [];
+                            if (studentRecords.length === 0) {
+                                reportContent += "Tidak ada catatan absensi.\n";
+                            } else {
+                                studentRecords.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)); // Urutkan berdasarkan tanggal
+                                studentRecords.forEach(record => {
+                                    reportContent += `- Tanggal: ${record.tanggal}, Status: ${record.status.toUpperCase()}`;
+                                    if (record.keterangan) {
+                                        reportContent += `, Keterangan: ${record.keterangan}`;
+                                    }
+                                    reportContent += `\n`;
+                                });
+                            }
+                        });
+                    }
+
+                    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+                    const date = new Date().toISOString().slice(0, 10);
+                    downloadFile(blob, `laporan_absensi_${appState.currentUser}_${date}.txt`); // Simpan sebagai .txt
+
+                    showSuccessMessage('Laporan berhasil diekspor ke file Teks. Anda bisa mencoba mengubah ekstensi menjadi .doc untuk membukanya di Word, namun formatnya akan sangat dasar.');
+
+                } catch (error) {
+                    console.error("Error exporting Word report data:", error);
+                    showErrorMessage('Gagal mengekspor laporan Word: ' + error.message);
+                } finally {
+                    hideLoading();
                 }
             }
 
@@ -1455,6 +1679,62 @@
                 reader.readAsText(file);
             }
 
+            /**
+             * Menghapus semua data absensi untuk pengguna saat ini.
+             * Ini akan mereset hitungan absensi menjadi nol.
+             */
+            async function resetAttendanceCounts() {
+                showMessageModal('confirm', 'Konfirmasi Reset Absensi', 
+                    'Anda yakin ingin menghapus SEMUA data absensi (Hadir, Sakit, Izin, Alpha) untuk semua santri? Tindakan ini TIDAK DAPAT DIBATALKAN.', 
+                    'Ya, Hapus Semua', 'Batal', 
+                    async () => {
+                        showLoading();
+                        try {
+                            if (!appState.currentUser) {
+                                showErrorMessage('Pengguna belum login.');
+                                hideMessageModal();
+                                return;
+                            }
+                            if (!db) {
+                                showErrorMessage('Database tidak siap.');
+                                hideMessageModal();
+                                return;
+                            }
+
+                            const attendanceColRef = collection(db, `users/${appState.currentUser}/attendance`);
+                            const snapshot = await getDocs(attendanceColRef);
+                            
+                            if (snapshot.empty) {
+                                showSuccessMessage('Tidak ada data absensi untuk direset.');
+                                hideLoading();
+                                hideMessageModal();
+                                return;
+                            }
+
+                            const batch = writeBatch(db);
+                            snapshot.docs.forEach(docSnap => {
+                                batch.delete(docSnap.ref);
+                            });
+                            await batch.commit();
+
+                            showSuccessMessage('Semua data absensi berhasil direset (dihapus)!');
+                            // appState.attendanceData akan diperbarui oleh onSnapshot listener Firebase,
+                            // yang kemudian akan memicu pembaruan statistik dashboard dan tabel ringkasan.
+                        } catch (error) {
+                            console.error("Error resetting attendance counts:", error);
+                            showErrorMessage('Gagal mereset data absensi: ' + error.message);
+                        } finally {
+                            hideLoading();
+                            hideMessageModal();
+                        }
+                    }, 
+                    () => {
+                        hideMessageModal();
+                        showErrorMessage('Reset absensi dibatalkan.');
+                    }
+                );
+            }
+
             // --- Fungsionalitas PWA & Offline ---
             let deferredPrompt; // Variabel untuk menyimpan event beforeinstallprompt
 
@@ -1528,17 +1808,88 @@
                 document.getElementById('saveAttendanceBtn').addEventListener('click', saveAttendance);
 
                 // Listener Dashboard
-                document.getElementById('exportDataBtn').addEventListener('click', exportData); // Menggunakan fungsi exportData
+                const summarySearchInput = document.getElementById('summarySearchInput');
+                const resetSearchBtn = document.getElementById('resetSearchBtn');
+                const mainExportBtn = document.getElementById('mainExportBtn');
+                const exportOptionsDropdown = document.getElementById('exportOptionsDropdown');
+                const resetAttendanceCountsBtn = document.getElementById('resetAttendanceCountsBtn'); // Dapatkan tombol baru
+
+                // Logika visibilitas tombol "Kembali" untuk pencarian
+                const updateResetSearchButtonVisibility = () => {
+                    if (summarySearchInput.value.trim() === '') {
+                        resetSearchBtn.classList.add('hidden');
+                    } else {
+                        resetSearchBtn.classList.remove('hidden');
+                    }
+                };
+
+                // Panggil saat halaman dimuat
+                updateResetSearchButtonVisibility(); 
+                // Panggil saat input berubah
+                summarySearchInput.addEventListener('keyup', updateResetSearchButtonVisibility);
+                // Panggil saat input fokus (untuk memastikan tombol muncul jika diklik tanpa mengetik)
+                summarySearchInput.addEventListener('focus', () => {
+                    resetSearchBtn.classList.remove('hidden');
+                });
+                // Panggil saat input blur (untuk menyembunyikan jika kosong)
+                summarySearchInput.addEventListener('blur', () => {
+                    if (summarySearchInput.value.trim() === '') {
+                        // Beri sedikit delay agar klik pada tombol "Kembali" sempat terdeteksi
+                        setTimeout(() => {
+                            resetSearchBtn.classList.add('hidden');
+                        }, 100); 
+                    }
+                });
+
+                // Event listener untuk tombol "Kembali" (reset pencarian)
+                resetSearchBtn.addEventListener('click', () => {
+                    summarySearchInput.value = '';
+                    searchSummary(); // Reset pencarian
+                    resetSearchBtn.classList.add('hidden'); // Sembunyikan setelah reset
+                });
+
+                // Toggle dropdown saat tombol utama diklik
+                mainExportBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Mencegah event menyebar ke document
+                    exportOptionsDropdown.classList.toggle('hidden');
+                    exportOptionsDropdown.classList.toggle('show');
+                });
+
+                // Sembunyikan dropdown saat klik di luar area dropdown
+                document.addEventListener('click', (e) => {
+                    if (!exportOptionsDropdown.contains(e.target) && !mainExportBtn.contains(e.target)) {
+                        exportOptionsDropdown.classList.remove('show');
+                        exportOptionsDropdown.classList.add('hidden');
+                    }
+                });
+
+                // Event listener untuk setiap pilihan di dropdown
+                document.getElementById('exportJsonDataBtn').addEventListener('click', () => {
+                    exportJsonData();
+                    exportOptionsDropdown.classList.remove('show'); // Sembunyikan setelah klik
+                    exportOptionsDropdown.classList.add('hidden');
+                });
+                document.getElementById('exportCsvDataBtn').addEventListener('click', () => {
+                    exportCsvData();
+                    exportOptionsDropdown.classList.remove('show'); // Sembunyikan setelah klik
+                    exportOptionsDropdown.classList.add('hidden');
+                });
+                document.getElementById('exportWordDataBtn').addEventListener('click', () => {
+                    exportWordReportData();
+                    exportOptionsDropdown.classList.remove('show'); // Sembunyikan setelah klik
+                    exportOptionsDropdown.classList.add('hidden');
+                });
+
                 document.getElementById('importDataBtn').addEventListener('click', () => {
                     document.getElementById('importFileInput').click();
                 });
-                document.getElementById('importFileInput').addEventListener('change', importData); // Menggunakan fungsi importData
+                document.getElementById('importFileInput').addEventListener('change', importData);
+
+                // Event listener untuk tombol "Reset Absensi" yang baru
+                resetAttendanceCountsBtn.addEventListener('click', resetAttendanceCounts);
                 
                 document.getElementById('summarySearchInput').addEventListener('keyup', searchSummary);
-                document.getElementById('clearSummarySearchBtn').addEventListener('click', () => {
-                    document.getElementById('summarySearchInput').value = '';
-                    searchSummary(); // Reset pencarian
-                });
+                // Event listener untuk tombol "Kembali" sudah diatur di atas
 
                 // Delegasi Event untuk tabel santri (menangani klik tombol hapus dan perubahan radio button)
                 document.getElementById('studentTableBody').addEventListener('click', (e) => {
