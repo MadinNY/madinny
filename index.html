@@ -219,7 +219,7 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen">
+<body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen flex flex-col">
     <!-- Overlay Loading -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner"></div>
@@ -301,11 +301,13 @@
                     Link ini dapat dibagikan kepada guru lain
                 </p>
             </div>
+            <!-- Copyright untuk halaman Login -->
+            <p class="text-xs text-gray-500 text-center mt-6">&copy; 2025 Madrasah Diniyah Nurul Yusuf. All rights reserved.</p>
         </div>
     </div>
 
     <!-- Aplikasi Utama -->
-    <div id="mainApp" class="hidden">
+    <div id="mainApp" class="hidden flex-grow flex flex-col">
         <!-- Navigasi -->
         <nav class="bg-emerald-500 text-white p-4 shadow-lg">
             <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
@@ -342,7 +344,7 @@
         </nav>
 
         <!-- Halaman Absensi -->
-        <div id="attendancePage" class="container mx-auto px-4 py-8">
+        <div id="attendancePage" class="container mx-auto px-4 py-8 flex-grow">
             <!-- Pilihan Tanggal -->
             <div class="bg-white rounded-lg shadow-md p-4 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-3 text-center">Pilih Tanggal Absensi</h3>
@@ -504,7 +506,7 @@
         </div>
 
         <!-- Halaman Dashboard (Didesain Ulang) -->
-        <div id="dashboardPage" class="container mx-auto px-4 py-8 hidden">
+        <div id="dashboardPage" class="container mx-auto px-4 py-8 flex-grow">
             <div class="mb-8">
                 <h2 class="text-3xl font-bold text-gray-800">Dashboard Rekapan</h2>
                 <p class="text-gray-600 mt-1">Analisis dan kelola semua data absensi dari sini.</p>
@@ -552,7 +554,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex gap-2 relative">
+                        <div class="flex gap-2 relative flex-wrap justify-center">
                              <!-- Tombol Kembali untuk pencarian -->
                              <button id="resetSearchBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium hidden">Kembali</button>
                              
@@ -598,6 +600,13 @@
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-gray-300 py-6 mt-auto">
+            <div class="container mx-auto px-4 text-center text-sm">
+                <p class="mb-2">&copy; 2025 Madrasah Diniyah Nurul Yusuf. All rights reserved.</p>
+            </div>
+        </footer>
 
         <script type="module">
             // Mengimpor SDK Firebase
@@ -1832,20 +1841,25 @@
                     resetSearchBtn.classList.remove('hidden');
                 });
                 // Panggil saat input blur (untuk menyembunyikan jika kosong)
-                summarySearchInput.addEventListener('blur', () => {
-                    if (summarySearchInput.value.trim() === '') {
-                        // Beri sedikit delay agar klik pada tombol "Kembali" sempat terdeteksi
-                        setTimeout(() => {
-                            resetSearchBtn.classList.add('hidden');
-                        }, 100); 
-                    }
+                summarySearchInput.addEventListener('blur', (e) => {
+                    // Beri sedikit delay agar klik pada tombol "Kembali" sempat terdeteksi
+                    // dan tidak langsung menyembunyikan tombol jika blur karena klik tombol itu sendiri
+                    setTimeout(() => {
+                        if (!e.relatedTarget || (e.relatedTarget !== resetSearchBtn && !resetSearchBtn.contains(e.relatedTarget))) {
+                            if (summarySearchInput.value.trim() === '') {
+                                resetSearchBtn.classList.add('hidden');
+                            }
+                        }
+                    }, 100); 
                 });
 
                 // Event listener untuk tombol "Kembali" (reset pencarian)
-                resetSearchBtn.addEventListener('click', () => {
+                resetSearchBtn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Mencegah form submit jika tombol ada di dalam form
                     summarySearchInput.value = '';
                     searchSummary(); // Reset pencarian
                     resetSearchBtn.classList.add('hidden'); // Sembunyikan setelah reset
+                    summarySearchInput.focus(); // Kembalikan fokus ke input pencarian
                 });
 
                 // Toggle dropdown saat tombol utama diklik
@@ -1888,7 +1902,8 @@
                 // Event listener untuk tombol "Reset Absensi" yang baru
                 resetAttendanceCountsBtn.addEventListener('click', resetAttendanceCounts);
                 
-                document.getElementById('summarySearchInput').addEventListener('keyup', searchSummary);
+                // Event listener untuk summarySearchInput sudah diatur di atas untuk visibilitas tombol Kembali
+                // searchSummary() akan dipanggil oleh keyup listener di summarySearchInput
                 // Event listener untuk tombol "Kembali" sudah diatur di atas
 
                 // Delegasi Event untuk tabel santri (menangani klik tombol hapus dan perubahan radio button)
