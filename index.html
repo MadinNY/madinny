@@ -282,13 +282,13 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end mt-2 sm:mt-0">
                     <button 
                         id="attendanceBtn"
-                        class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 transition-colors text-sm sm:text-base"
+                        class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors text-sm sm:text-base"
                     >
                         Absensi
                     </button>
                     <button 
                         id="dashboardBtn"
-                        class="px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm sm:text-base"
+                        class="px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors text-sm sm:text-base"
                     >
                         Rekapan Absen
                     </button>
@@ -1338,6 +1338,7 @@
 
                             // Sanitasi field teks
                             sanitizedAttendance.push({
+                                id: sanitizeString(record.id), // Pastikan ID juga disanitasi dan disertakan
                                 studentId: sanitizeString(record.studentId),
                                 tanggal: sanitizeString(record.tanggal),
                                 nama: sanitizeString(record.nama),
@@ -1359,31 +1360,26 @@
 
                                     // Hapus semua data santri yang ada untuk pengguna ini
                                     const currentStudentsSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/students`));
-                                    currentStudentsSnapshot.forEach(docSnap => batch.delete(docSnap.ref));
+                                    currentStudentsSnapshot.docs.forEach(docSnap => batch.delete(docSnap.ref));
 
                                     // Hapus semua data absensi yang ada untuk pengguna ini
                                     const currentAttendanceSnapshot = await getDocs(collection(db, `users/${appState.currentUser}/attendance`));
-                                    currentAttendanceSnapshot.forEach(docSnap => batch.delete(docSnap.ref));
+                                    currentAttendanceSnapshot.docs.forEach(docSnap => batch.delete(docSnap.ref));
 
                                     // Tambahkan data santri dari file yang sudah divalidasi dan disanitasi
                                     sanitizedStudents.forEach(student => {
-                                        const studentRef = doc(db, `users/${appState.currentUser}/students`, student.id); // Gunakan ID asli
-                                        batch.set(studentRef, { nama: student.nama, kelas: student.kelas });
+                                        // Gunakan ID dari file impor untuk setDoc (upsert)
+                                        const studentRef = doc(db, `users/${appState.currentUser}/students`, student.id); 
+                                        const { id, ...studentDataWithoutId } = student; // Pisahkan 'id' dari objek data
+                                        batch.set(studentRef, studentDataWithoutId);
                                     });
 
                                     // Tambahkan data absensi dari file yang sudah divalidasi dan disanitasi
                                     sanitizedAttendance.forEach(record => {
-                                        // Firestore akan membuat ID dokumen absensi baru
-                                        const attendanceRef = doc(collection(db, `users/${appState.currentUser}/attendance`)); 
-                                        batch.set(attendanceRef, { 
-                                            studentId: record.studentId, 
-                                            tanggal: record.tanggal, 
-                                            nama: record.nama, 
-                                            kelas: record.kelas, 
-                                            status: record.status, 
-                                            keterangan: record.keterangan, 
-                                            timestamp: record.timestamp 
-                                        });
+                                        // Gunakan ID dari file impor untuk setDoc (upsert)
+                                        const attendanceRef = doc(db, `users/${appState.currentUser}/attendance`, record.id); 
+                                        const { id, ...attendanceDataWithoutId } = record; // Pisahkan 'id' dari objek data
+                                        batch.set(attendanceRef, attendanceDataWithoutId);
                                     });
 
                                     await batch.commit();
