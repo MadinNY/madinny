@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Library JSZip untuk membuat file ZIP (digunakan untuk ekspor CSV ganda) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- Library docx untuk membuat file Word -->
-    <script src="https://unpkg.com/docx@8.2.2/build/index.js"></script>
     <!-- Library FileSaver.js untuk menyimpan file -->
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <style>
@@ -112,7 +110,7 @@
     </div>
 
     <!-- Aplikasi Utama -->
-    <div id="mainApp" class="hidden flex-grow flex flex-col">
+    <div id="mainApp" class="hidden flex-grow flex-col">
         <!-- Navigasi -->
         <nav class="bg-emerald-500 text-white p-4 shadow-lg">
             <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
@@ -124,9 +122,9 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end mt-2 sm:mt-0">
-                    <button id="attendanceBtn" class="px-4 py-2 rounded-lg bg-emerald-700">Absensi</button>
-                    <button id="dashboardBtn" class="px-4 py-2 rounded-lg hover:bg-emerald-600">Rekapan Absen</button>
-                    <button id="logoutBtn" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700">Logout</button>
+                    <button id="attendanceBtn" class="px-4 py-2 rounded-lg transition-colors">Absensi</button>
+                    <button id="dashboardBtn" class="px-4 py-2 rounded-lg transition-colors">Rekapan Absen</button>
+                    <button id="logoutBtn" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors">Logout</button>
                 </div>
             </div>
         </nav>
@@ -202,12 +200,12 @@
                     <div class="flex flex-col md:flex-row gap-4 items-center">
                         <input type="text" id="summarySearchInput" placeholder="Cari nama atau kelas santri..." class="w-full md:flex-grow pl-4 pr-4 py-2 border rounded-lg">
                         <div class="flex gap-2 relative flex-wrap justify-center">
-                             <button id="printReportBtn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium">Cetak Laporan</button>
+                             <button id="printReportBtn" data-dropdown-trigger data-target="printReportDropdown" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium">Cetak Laporan</button>
                              <div id="printReportDropdown" class="custom-dropdown">
                                 <button id="printWordReportBtn"><svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm5.5 14H7.5V9.5h2V16zm3-4.5H10v-2h2.5a1.5 1.5 0 010 3zm-3-3.5H7.5V6h5a1.5 1.5 0 010 3H10V8z" clip-rule="evenodd"></path></svg>Format Word</button>
                                 <button id="printSpreadsheetReportBtn"><svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 2a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V4a2 2 0 00-2-2H2zm8.5 3.5a.5.5 0 01.5.5v2a.5.5 0 01-1 0v-2a.5.5 0 01.5-.5zM9 9a1 1 0 112 0v4a1 1 0 11-2 0V9zm-3 2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zm4 0a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1z"></path></svg>Format Spreadsheet</button>
                              </div>
-                             <button id="mainExportBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">Ekspor</button>
+                             <button id="mainExportBtn" data-dropdown-trigger data-target="exportOptionsDropdown" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">Ekspor</button>
                              <div id="exportOptionsDropdown" class="custom-dropdown">
                                 <button id="exportJsonDataBtn"><svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>Data JSON</button>
                              </div>
@@ -264,9 +262,12 @@
         </footer>
 
         <script type="module">
+            // Import Firebase modules
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
             import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
             import { getFirestore, collection, doc, getDoc, setDoc, deleteDoc, onSnapshot, query, addDoc, getDocs, writeBatch, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+            // Import docx library modules directly
+            import { Packer, Document, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType } from "https://unpkg.com/docx@8.2.2/build/index.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyCoSrJb8Gu9wOj85WRcGKfasRqP4BFi1F4",
@@ -382,6 +383,7 @@
                 document.getElementById('currentUser').textContent = displayName;
                 document.getElementById('attendanceDate').value = appState.currentAttendanceDate;
                 updateDateDisplay();
+                showPage('attendance'); // Set initial page and button style
                 hideLoading();
             }
 
@@ -622,6 +624,7 @@
                                 const collections = [collection(db, `users/${appState.currentUser}/students`), collection(db, `users/${appState.currentUser}/attendance`)];
                                 for (const collRef of collections) {
                                     const snapshot = await getDocs(collRef);
+                                    if(snapshot.empty) continue;
                                     const deleteBatch = writeBatch(db);
                                     snapshot.docs.forEach(d => deleteBatch.delete(d.ref));
                                     await deleteBatch.commit();
@@ -685,36 +688,103 @@
             }
 
             function generateReport(format) {
-                const { Packer, Document, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType } = docx;
-                const { students, attendance, currentDisplayName } = appState;
-                let className = students.length > 0 && students.every(s => s.kelas === students[0].kelas) ? students[0].kelas : "Berbagai Kelas";
-                const reportData = students.map(student => ({
-                    nama: student.nama,
-                    ...attendance.filter(d => d.studentId === student.id).reduce((acc, {status}) => { acc[status] = (acc[status] || 0) + 1; return acc; }, { hadir: 0, sakit: 0, izin: 0, alpha: 0 })
-                }));
+                try {
+                    // Pastikan ada data santri untuk membuat laporan
+                    if (appState.savedStudents.length === 0) {
+                        return showErrorMessage("Tidak ada data santri untuk membuat laporan.");
+                    }
 
-                if (format === 'spreadsheet') {
-                    let csvContent = `Laporan Absensi\nNama Guru,${currentDisplayName}\nKelas,${className}\n\nNo,Nama Santri,Hadir,Sakit,Izin,Alpha\n`;
-                    reportData.forEach((row, i) => { csvContent += `${i + 1},"${row.nama}",${row.hadir},${row.sakit},${row.izin},${row.alpha}\n`; });
-                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                    saveAs(blob, `laporan_absensi_${className}_${getTodayWIB()}.csv`);
-                } else {
-                    const tableHeader = new TableRow({ children: [ "No", "Nama Santri", "Hadir", "Sakit", "Izin", "Alpha" ].map(text => new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text, bold: true })]})] })) });
-                    const tableRows = reportData.map((row, i) => new TableRow({ children: [
-                        new TableCell({ children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ children: [new Paragraph(row.nama)] }),
-                        new TableCell({ children: [new Paragraph({ text: `${row.hadir}`, alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ children: [new Paragraph({ text: `${row.sakit}`, alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ children: [new Paragraph({ text: `${row.izin}`, alignment: AlignmentType.CENTER })] }),
-                        new TableCell({ children: [new Paragraph({ text: `${row.alpha}`, alignment: AlignmentType.CENTER })] }),
-                    ]}));
-                    const doc = new Document({ sections: [{ children: [
-                        new Paragraph({ children: [new TextRun({ text: "Laporan Absensi", bold: true, size: 32 })], alignment: AlignmentType.CENTER }),
-                        new Paragraph(`Nama Guru: ${currentDisplayName}`), new Paragraph(`Kelas: ${className}`), new Paragraph(""),
-                        new Table({ rows: [tableHeader, ...tableRows], width: { size: 100, type: WidthType.PERCENTAGE } }),
-                    ]}]});
-                    Packer.toBlob(doc).then(blob => saveAs(blob, `laporan_absensi_${className}_${getTodayWIB()}.docx`));
+                    // Tentukan nama kelas. Jika semua santri dari kelas yang sama, gunakan nama kelas itu.
+                    // Jika tidak, gunakan "Berbagai Kelas".
+                    let className = appState.savedStudents.every(s => s.kelas === appState.savedStudents[0].kelas) ? appState.savedStudents[0].kelas : "Berbagai Kelas";
+                    
+                    // Siapkan data laporan dengan menghitung status absensi untuk setiap santri
+                    const reportData = appState.savedStudents.map(student => ({
+                        nama: student.nama,
+                        ...appState.attendanceData.filter(d => d.studentId === student.id)
+                            .reduce((acc, {status}) => { acc[status] = (acc[status] || 0) + 1; return acc; }, { hadir: 0, sakit: 0, izin: 0, alpha: 0 })
+                    }));
+
+                    if (format === 'spreadsheet') {
+                        // Buat konten CSV
+                        let csvContent = `Laporan Absensi\nNama Guru,${appState.currentDisplayName}\nKelas,${className}\n\nNo,Nama Santri,Hadir,Sakit,Izin,Alpha\n`;
+                        reportData.forEach((row, i) => { 
+                            csvContent += `${i + 1},"${row.nama.replace(/"/g, '""')}",${row.hadir},${row.sakit},${row.izin},${row.alpha}\n`; 
+                        });
+                        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                        saveAs(blob, `laporan_absensi_${className}_${getTodayWIB()}.csv`);
+                        showSuccessMessage('Laporan Spreadsheet (CSV) berhasil dibuat.');
+                    } else { // Word format
+                        // Buat header tabel untuk dokumen Word
+                        const tableHeader = new TableRow({ 
+                            children: [ "No", "Nama Santri", "Hadir", "Sakit", "Izin", "Alpha" ].map(text => 
+                                new TableCell({ 
+                                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text, bold: true })]})] 
+                                })
+                            ) 
+                        });
+                        
+                        // Buat baris tabel untuk setiap santri
+                        const tableRows = reportData.map((row, i) => new TableRow({ 
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })] }),
+                                new TableCell({ children: [new Paragraph(row.nama)] }),
+                                new TableCell({ children: [new Paragraph({ text: `${row.hadir}`, alignment: AlignmentType.CENTER })] }),
+                                new TableCell({ children: [new Paragraph({ text: `${row.sakit}`, alignment: AlignmentType.CENTER })] }),
+                                new TableCell({ children: [new Paragraph({ text: `${row.izin}`, alignment: AlignmentType.CENTER })] }),
+                                new TableCell({ children: [new Paragraph({ text: `${row.alpha}`, alignment: AlignmentType.CENTER })] }),
+                            ]
+                        }));
+                        
+                        // Buat dokumen Word
+                        const doc = new Document({ 
+                            sections: [{ 
+                                children: [
+                                    new Paragraph({ children: [new TextRun({ text: "Laporan Absensi", bold: true, size: 32 })], alignment: AlignmentType.CENTER }),
+                                    new Paragraph(`Nama Guru: ${appState.currentDisplayName}`), 
+                                    new Paragraph(`Kelas: ${className}`), 
+                                    new Paragraph(""), // Paragraf kosong untuk spasi
+                                    new Table({ 
+                                        rows: [tableHeader, ...tableRows], 
+                                        width: { size: 100, type: WidthType.PERCENTAGE } 
+                                    }),
+                                ]
+                            }]
+                        });
+                        
+                        // Konversi dokumen ke Blob dan simpan
+                        Packer.toBlob(doc).then(blob => {
+                            saveAs(blob, `laporan_absensi_${className}_${getTodayWIB()}.docx`);
+                            showSuccessMessage('Laporan Word (.docx) berhasil dibuat.');
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error generating report:", error);
+                    showErrorMessage("Gagal membuat laporan: " + error.message);
                 }
+            }
+            
+            // --- Page & Navigation Logic ---
+            function showPage(pageId) {
+                // Sembunyikan semua halaman
+                document.getElementById('attendancePage').classList.add('hidden');
+                document.getElementById('dashboardPage').classList.add('hidden');
+
+                // Nonaktifkan semua tombol navigasi
+                const attendanceBtn = document.getElementById('attendanceBtn');
+                const dashboardBtn = document.getElementById('dashboardBtn');
+                attendanceBtn.classList.remove('bg-emerald-700');
+                dashboardBtn.classList.remove('bg-emerald-700');
+                attendanceBtn.classList.add('hover:bg-emerald-600');
+                dashboardBtn.classList.add('hover:bg-emerald-600');
+
+                // Tampilkan halaman yang dipilih
+                document.getElementById(pageId + 'Page').classList.remove('hidden');
+
+                // Aktifkan tombol yang dipilih
+                const activeBtn = document.getElementById(pageId + 'Btn');
+                activeBtn.classList.add('bg-emerald-700');
+                activeBtn.classList.remove('hover:bg-emerald-600');
             }
 
             // --- Event Listeners ---
@@ -728,18 +798,8 @@
             });
 
             document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
-            document.getElementById('attendanceBtn').addEventListener('click', () => {
-                document.getElementById('attendancePage').classList.remove('hidden');
-                document.getElementById('dashboardPage').classList.add('hidden');
-                document.getElementById('attendanceBtn').classList.add('bg-emerald-700');
-                document.getElementById('dashboardBtn').classList.remove('bg-emerald-600');
-            });
-            document.getElementById('dashboardBtn').addEventListener('click', () => {
-                document.getElementById('dashboardPage').classList.remove('hidden');
-                document.getElementById('attendancePage').classList.add('hidden');
-                document.getElementById('dashboardBtn').classList.add('bg-emerald-700');
-                document.getElementById('attendanceBtn').classList.remove('bg-emerald-700');
-            });
+            document.getElementById('attendanceBtn').addEventListener('click', () => showPage('attendance'));
+            document.getElementById('dashboardBtn').addEventListener('click', () => showPage('dashboard'));
             
             document.getElementById('attendanceDate').addEventListener('change', (e) => {
                 appState.currentAttendanceDate = e.target.value;
@@ -771,14 +831,34 @@
                 renderDetailedAttendanceTable(appState.attendanceData.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(term))));
             });
             
-            function setupDropdown(triggerId, dropdownId) {
-                const trigger = document.getElementById(triggerId);
-                const dropdown = document.getElementById(dropdownId);
-                trigger.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
-                document.addEventListener('click', (e) => { if (!dropdown.contains(e.target) && !trigger.contains(e.target)) dropdown.classList.remove('show'); });
-            }
-            setupDropdown('mainExportBtn', 'exportOptionsDropdown');
-            setupDropdown('printReportBtn', 'printReportDropdown');
+            // Dropdown Logic
+            document.addEventListener('click', (e) => {
+                const trigger = e.target.closest('[data-dropdown-trigger]');
+                const allDropdowns = document.querySelectorAll('.custom-dropdown');
+
+                if (trigger) {
+                    const targetDropdownId = trigger.dataset.target;
+                    const targetDropdown = document.getElementById(targetDropdownId);
+                    
+                    allDropdowns.forEach(d => {
+                        if (d.id !== targetDropdownId) {
+                            d.classList.remove('show');
+                        }
+                    });
+
+                    targetDropdown.classList.toggle('show');
+                } else {
+                    let clickedInsideDropdown = false;
+                    allDropdowns.forEach(d => {
+                        if (d.contains(e.target)) {
+                            clickedInsideDropdown = true;
+                        }
+                    });
+                    if (!clickedInsideDropdown) {
+                        allDropdowns.forEach(d => d.classList.remove('show'));
+                    }
+                }
+            });
 
             document.getElementById('exportJsonDataBtn').addEventListener('click', exportJsonData);
             document.getElementById('importDataBtn').addEventListener('click', () => document.getElementById('importFileInput').click());
