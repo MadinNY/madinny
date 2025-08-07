@@ -233,34 +233,28 @@
                 </div>
             </div>
 
-            <!-- PERUBAHAN: Tabel Detail Absensi Harian dengan Virtual Scroll -->
-            <div class="bg-white rounded-lg shadow-md flex flex-col mt-8">
+            <!-- Tabel Detail Absensi Harian -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
                 <div class="px-6 py-4 bg-emerald-600 text-white"><h3 class="text-xl font-semibold">Detail Absensi Harian</h3></div>
                 <div class="p-4 bg-gray-50 border-b">
                     <input type="text" id="detailedAttendanceSearchInput" placeholder="Cari nama, tanggal (YYYY-MM-DD), kelas, atau status..." class="w-full pl-4 pr-4 py-2 border rounded-lg">
                 </div>
-                <!-- Container untuk virtual scroll -->
-                <div id="detailedAttendanceContainer" class="overflow-auto relative" style="height: 500px;">
-                    <!-- Sizer untuk menentukan tinggi total scrollbar -->
-                    <div id="detailedAttendanceSizer" class="relative w-full">
-                        <!-- Tabel diposisikan secara absolut di dalam sizer -->
-                        <table class="w-full absolute top-0 left-0">
-                            <thead class="bg-gray-50 sticky top-0 z-10">
-                                <tr>
-                                    <th class="px-2 py-3 text-center text-xs font-semibold uppercase w-12">No</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Tanggal</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Nama Santri</th>
-                                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Kelas</th>
-                                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Status</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="detailedAttendanceTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-                        </table>
-                    </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-2 py-3 text-center text-xs font-semibold uppercase w-12">No</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Tanggal</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Nama Santri</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Kelas</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailedAttendanceTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
                 </div>
             </div>
-            <!-- AKHIR PERUBAHAN -->
         </div>
         
         <footer class="bg-gray-800 text-gray-300 py-4 mt-auto">
@@ -299,16 +293,6 @@
                 savedStudents: [],
                 attendanceData: [],
                 currentAttendanceDate: getTodayWIB()
-            };
-
-            // PERUBAHAN: State untuk virtual scroll
-            const virtualScrollState = {
-                records: [],
-                itemHeight: 53, // Perkiraan tinggi satu baris tabel (px)
-                buffer: 5,      // Jumlah item ekstra untuk dirender di atas dan di bawah area terlihat
-                startIndex: 0,
-                endIndex: 0,
-                rafId: null     // ID untuk requestAnimationFrame
             };
 
             // --- UI Helpers (Modal, Loading) ---
@@ -595,66 +579,22 @@
                 }).join('') : `<tr><td colspan="7" class="p-8 text-center text-gray-500">Tidak ada data.</td></tr>`;
             }
             
-            // PERUBAHAN: Fungsi untuk merender bagian virtual scroll
-            function renderVirtualDetailedAttendance() {
-                const container = document.getElementById('detailedAttendanceContainer');
+            function renderDetailedAttendanceTable(filteredRecords = null) {
                 const tableBody = document.getElementById('detailedAttendanceTableBody');
-                const sizer = document.getElementById('detailedAttendanceSizer');
-                
-                const scrollTop = container.scrollTop;
-                const totalHeight = virtualScrollState.records.length * virtualScrollState.itemHeight;
-                
-                let startIndex = Math.floor(scrollTop / virtualScrollState.itemHeight);
-                let endIndex = Math.ceil((scrollTop + container.clientHeight) / virtualScrollState.itemHeight);
+                const recordsToShow = (filteredRecords || appState.attendanceData).sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
 
-                startIndex = Math.max(0, startIndex - virtualScrollState.buffer);
-                endIndex = Math.min(virtualScrollState.records.length, endIndex + virtualScrollState.buffer);
-
-                if (startIndex === virtualScrollState.startIndex && endIndex === virtualScrollState.endIndex && tableBody.children.length > 1) {
-                    return; // Tidak perlu render ulang jika tidak ada perubahan signifikan
-                }
-
-                virtualScrollState.startIndex = startIndex;
-                virtualScrollState.endIndex = endIndex;
-                sizer.style.height = `${totalHeight}px`;
-
-                const visibleRecords = virtualScrollState.records.slice(startIndex, endIndex);
-
-                tableBody.innerHTML = visibleRecords.map((record, index) => {
-                    const originalIndex = startIndex + index;
+                tableBody.innerHTML = recordsToShow.length > 0 ? recordsToShow.map((record, index) => {
                     const statusColors = { hadir: 'text-emerald-700', sakit: 'text-blue-700', izin: 'text-yellow-700', alpha: 'text-red-700' };
                     return `
-                        <tr class="hover:bg-gray-50" style="height: ${virtualScrollState.itemHeight}px;">
-                            <td class="px-2 py-3 text-sm text-center">${originalIndex + 1}</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-2 py-3 text-sm text-center">${index + 1}</td>
                             <td class="px-4 py-3 text-sm">${new Date(record.tanggal + 'T00:00:00').toLocaleDateString('id-ID')}</td>
                             <td class="px-4 py-3 text-sm">${record.nama}</td>
                             <td class="px-4 py-3 text-sm text-center">${record.kelas}</td>
                             <td class="px-4 py-3 text-sm text-center font-semibold ${statusColors[record.status] || ''}">${record.status}</td>
                             <td class="px-4 py-3 text-sm">${record.keterangan || '-'}</td>
                         </tr>`;
-                }).join('');
-
-                tableBody.parentElement.style.transform = `translateY(${startIndex * virtualScrollState.itemHeight}px)`;
-            }
-
-            // PERUBAHAN: Fungsi utama untuk inisialisasi tabel detail absensi
-            function renderDetailedAttendanceTable(filteredRecords = null) {
-                const recordsToShow = (filteredRecords || appState.attendanceData).sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                virtualScrollState.records = recordsToShow;
-                
-                const tableBody = document.getElementById('detailedAttendanceTableBody');
-                const sizer = document.getElementById('detailedAttendanceSizer');
-                const container = document.getElementById('detailedAttendanceContainer');
-
-                if (recordsToShow.length === 0) {
-                    sizer.style.height = 'auto';
-                    tableBody.parentElement.style.transform = 'translateY(0px)';
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-gray-500">Tidak ada catatan absensi.</td></tr>`;
-                    return;
-                }
-                
-                container.scrollTop = 0; // Selalu reset scroll ke atas saat data berubah
-                renderVirtualDetailedAttendance(); // Lakukan render pertama
+                }).join('') : `<tr><td colspan="6" class="p-8 text-center text-gray-500">Tidak ada catatan absensi.</td></tr>`;
             }
 
             // --- Import/Export/Report Logic ---
@@ -749,10 +689,16 @@
 
             function generateReport(format) {
                 try {
+                    // Pastikan ada data santri untuk membuat laporan
                     if (appState.savedStudents.length === 0) {
                         return showErrorMessage("Tidak ada data santri untuk membuat laporan.");
                     }
+
+                    // Tentukan nama kelas. Jika semua santri dari kelas yang sama, gunakan nama kelas itu.
+                    // Jika tidak, gunakan "Berbagai Kelas".
                     let className = appState.savedStudents.every(s => s.kelas === appState.savedStudents[0].kelas) ? appState.savedStudents[0].kelas : "Berbagai Kelas";
+                    
+                    // Siapkan data laporan dengan menghitung status absensi untuk setiap santri
                     const reportData = appState.savedStudents.map(student => ({
                         nama: student.nama,
                         ...appState.attendanceData.filter(d => d.studentId === student.id)
@@ -760,6 +706,7 @@
                     }));
 
                     if (format === 'spreadsheet') {
+                        // Buat konten CSV
                         let csvContent = `Laporan Absensi\nNama Guru,${appState.currentDisplayName}\nKelas,${className}\n\nNo,Nama Santri,Hadir,Sakit,Izin,Alpha\n`;
                         reportData.forEach((row, i) => { 
                             csvContent += `${i + 1},"${row.nama.replace(/"/g, '""')}",${row.hadir},${row.sakit},${row.izin},${row.alpha}\n`; 
@@ -768,6 +715,7 @@
                         saveAs(blob, `laporan_absensi_${className}_${getTodayWIB()}.csv`);
                         showSuccessMessage('Laporan Spreadsheet (CSV) berhasil dibuat.');
                     } else { // Word format
+                        // Buat header tabel untuk dokumen Word
                         const tableHeader = new TableRow({ 
                             children: [ "No", "Nama Santri", "Hadir", "Sakit", "Izin", "Alpha" ].map(text => 
                                 new TableCell({ 
@@ -775,6 +723,8 @@
                                 })
                             ) 
                         });
+                        
+                        // Buat baris tabel untuk setiap santri
                         const tableRows = reportData.map((row, i) => new TableRow({ 
                             children: [
                                 new TableCell({ children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })] }),
@@ -785,13 +735,15 @@
                                 new TableCell({ children: [new Paragraph({ text: `${row.alpha}`, alignment: AlignmentType.CENTER })] }),
                             ]
                         }));
+                        
+                        // Buat dokumen Word
                         const doc = new Document({ 
                             sections: [{ 
                                 children: [
                                     new Paragraph({ children: [new TextRun({ text: "Laporan Absensi", bold: true, size: 32 })], alignment: AlignmentType.CENTER }),
                                     new Paragraph(`Nama Guru: ${appState.currentDisplayName}`), 
                                     new Paragraph(`Kelas: ${className}`), 
-                                    new Paragraph(""),
+                                    new Paragraph(""), // Paragraf kosong untuk spasi
                                     new Table({ 
                                         rows: [tableHeader, ...tableRows], 
                                         width: { size: 100, type: WidthType.PERCENTAGE } 
@@ -799,6 +751,8 @@
                                 ]
                             }]
                         });
+                        
+                        // Konversi dokumen ke Blob dan simpan
                         Packer.toBlob(doc).then(blob => {
                             saveAs(blob, `laporan_absensi_${className}_${getTodayWIB()}.docx`);
                             showSuccessMessage('Laporan Word (.docx) berhasil dibuat.');
@@ -812,15 +766,22 @@
             
             // --- Page & Navigation Logic ---
             function showPage(pageId) {
+                // Sembunyikan semua halaman
                 document.getElementById('attendancePage').classList.add('hidden');
                 document.getElementById('dashboardPage').classList.add('hidden');
+
+                // Nonaktifkan semua tombol navigasi
                 const attendanceBtn = document.getElementById('attendanceBtn');
                 const dashboardBtn = document.getElementById('dashboardBtn');
                 attendanceBtn.classList.remove('bg-emerald-700');
                 dashboardBtn.classList.remove('bg-emerald-700');
                 attendanceBtn.classList.add('hover:bg-emerald-600');
                 dashboardBtn.classList.add('hover:bg-emerald-600');
+
+                // Tampilkan halaman yang dipilih
                 document.getElementById(pageId + 'Page').classList.remove('hidden');
+
+                // Aktifkan tombol yang dipilih
                 const activeBtn = document.getElementById(pageId + 'Btn');
                 activeBtn.classList.add('bg-emerald-700');
                 activeBtn.classList.remove('hover:bg-emerald-600');
@@ -865,20 +826,9 @@
                 const term = e.target.value.toLowerCase();
                 updateSummaryTable(appState.savedStudents.filter(s => s.nama.toLowerCase().includes(term) || s.kelas.toLowerCase().includes(term)));
             });
-
-            // PERUBAHAN: Event listener untuk pencarian dan scroll pada tabel virtual
             document.getElementById('detailedAttendanceSearchInput').addEventListener('keyup', (e) => {
                 const term = e.target.value.toLowerCase();
-                const filtered = appState.attendanceData.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(term)));
-                renderDetailedAttendanceTable(filtered);
-            });
-
-            document.getElementById('detailedAttendanceContainer').addEventListener('scroll', () => {
-                // Gunakan requestAnimationFrame untuk mencegah pemanggilan render yang berlebihan
-                if (virtualScrollState.rafId) {
-                    cancelAnimationFrame(virtualScrollState.rafId);
-                }
-                virtualScrollState.rafId = requestAnimationFrame(renderVirtualDetailedAttendance);
+                renderDetailedAttendanceTable(appState.attendanceData.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(term))));
             });
             
             // Dropdown Logic
